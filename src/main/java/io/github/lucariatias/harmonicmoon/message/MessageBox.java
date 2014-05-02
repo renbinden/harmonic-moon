@@ -33,7 +33,9 @@ public class MessageBox {
 
     public void queueMessage(String message) {
         if (hidden) {
-            this.message = message + " \u21b2";
+            queuedMessages.add(message + " \u21b2");
+            nextMessage();
+            setHidden(false);
         } else {
             queuedMessages.add(message + " \u21b2");
         }
@@ -41,14 +43,35 @@ public class MessageBox {
 
     public void nextMessage() {
         if (!queuedMessages.isEmpty()) {
+            charactersShown = 0;
             this.message = queuedMessages.poll();
         } else {
             setHidden(true);
         }
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getCharactersShown() {
+        return charactersShown;
+    }
+
+    public void setCharactersShown(int charactersShown) {
+        this.charactersShown = charactersShown;
+    }
+
+    public void showAllCharacters() {
+        setCharactersShown(message.length());
+    }
+
     public void onTick() {
-        if (hidden) y++; else y--;
+        if (hidden) y = y < harmonicMoon.getHeight() ? y + 8 : harmonicMoon.getHeight(); else y = y > harmonicMoon.getHeight() - image.getHeight() ? y - 8 : harmonicMoon.getHeight() - image.getHeight();
         if (y == harmonicMoon.getHeight() - image.getHeight()) {
             if (message.length() > charactersShown) {
                 charactersShown++;

@@ -60,7 +60,8 @@ public class DebugKeyListener extends KeyAdapter {
                 harmonicMoon.setPanel("fight");
             }
             if (event.getKeyCode() == KeyEvent.VK_P) {
-                harmonicMoon.getMessageBox().queueMessage("Test");
+                harmonicMoon.getMessageBox().queueMessage("This is a test. This is a test. This is a test. This is a test.");
+                harmonicMoon.getMessageBox().queueMessage("This is another test. This is another test.");
             }
         }
     }

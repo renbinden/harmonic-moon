@@ -56,7 +56,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
         setDoubleBuffered(true);
         try {
             this.titleFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/AftaSerifThin-Regular.otf"));
-            this.messageFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/AftaSerifThin-Regular.otf"));
+            this.messageFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/AftaSerifThin-Regular.otf")).deriveFont(12F);
         } catch (FontFormatException | IOException exception) {
             exception.printStackTrace();
         }
