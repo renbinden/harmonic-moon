@@ -56,6 +56,10 @@ public class MessageBox {
         return message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public int getCharactersShown() {
         return charactersShown;
     }
