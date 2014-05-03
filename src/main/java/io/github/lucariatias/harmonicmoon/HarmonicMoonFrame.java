@@ -21,7 +21,10 @@ public class HarmonicMoonFrame extends JFrame {
     }
 
     public HarmonicMoonFrame() {
-        add(new HarmonicMoon(this));
+        long startTime = System.currentTimeMillis();
+        HarmonicMoon harmonicMoon = new HarmonicMoon(this);
+        add(harmonicMoon);
+        harmonicMoon.getLogger().info("Set up game (" + (System.currentTimeMillis() - startTime) + "ms)");
         setTitle("Harmonic Moon");
         setResizable(false);
         setFocusable(true);

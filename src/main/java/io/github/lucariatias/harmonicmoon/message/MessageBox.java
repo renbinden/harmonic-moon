@@ -22,7 +22,9 @@ public class MessageBox {
     public MessageBox(HarmonicMoon harmonicMoon) {
         this.harmonicMoon = harmonicMoon;
         try {
+            long startTime = System.currentTimeMillis();
             this.image = ImageIO.read(getClass().getResourceAsStream("/message.png"));
+            harmonicMoon.getLogger().info("Loaded message box image (" + (System.currentTimeMillis() - startTime) + "ms)");
         } catch (IOException exception) {
             exception.printStackTrace();
         }

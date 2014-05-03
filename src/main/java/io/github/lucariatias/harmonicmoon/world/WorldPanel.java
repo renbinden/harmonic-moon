@@ -32,20 +32,28 @@ public class WorldPanel extends JPanel {
         setBackground(Color.BLACK);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setDoubleBuffered(true);
-
+        long startTime = System.currentTimeMillis();
         try {
             world = new World(harmonicMoon, ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-back.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-back-top.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/objects.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-front.png")), new TileSheet(this, ImageIO.read(getClass().getResourceAsStream("/tiles.png")), 16, 16));
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-
+        harmonicMoon.getLogger().info("Created world (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
         player = new Player(harmonicMoon);
+        harmonicMoon.getLogger().info("Created player (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
         world.populate();
+        harmonicMoon.getLogger().info("Populated world (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
         camera = new Camera(player);
+        harmonicMoon.getLogger().info("Set up camera (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
         playerController = new KeyboardPlayerController(player);
         playerController.setActive(true);
         harmonicMoon.getFrame().addKeyListener(playerController);
         harmonicMoon.getFrame().addKeyListener(new DebugKeyListener(harmonicMoon));
+        harmonicMoon.getLogger().info("Set up key listeners (" + (System.currentTimeMillis() - startTime) + "ms)");
     }
 
     public boolean isActive() {

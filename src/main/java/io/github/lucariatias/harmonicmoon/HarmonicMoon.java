@@ -55,22 +55,41 @@ public class HarmonicMoon extends JPanel implements Runnable {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setDoubleBuffered(true);
         try {
+            long startTime = System.currentTimeMillis();
             this.titleFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/AftaSerifThin-Regular.otf"));
             this.messageFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/AftaSerifThin-Regular.otf")).deriveFont(12F);
+            getLogger().info("Loaded fonts (" + (System.currentTimeMillis() - startTime) + "ms)");
         } catch (FontFormatException | IOException exception) {
             exception.printStackTrace();
         }
+        long startTime = System.currentTimeMillis();
         characterManager = new CharacterManager(this);
+        getLogger().info("Loaded characters (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
         enemyManager = new EnemyManager();
+        getLogger().info("Loaded enemies (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
         eventManager = new EventManager(this);
+        getLogger().info("Set up event manager (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
         jobManager = new JobManager();
+        getLogger().info("Loaded jobs (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
         particleManager = new ParticleManager(this);
+        getLogger().info("Set up particle systems (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
         add(new MainMenu(this), "menu");
+        getLogger().info("Set up main menu (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
         worldPanel = new WorldPanel(this);
         add(worldPanel, "world");
+        getLogger().info("Set up world panel (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
         fightPanel = new FightPanel(this);
         add(fightPanel, "fight");
+        getLogger().info("Set up fight panel (" + (System.currentTimeMillis() - startTime) + "ms)");
         setPanel("menu");
+        startTime = System.currentTimeMillis();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -78,8 +97,11 @@ public class HarmonicMoon extends JPanel implements Runnable {
                 musicPlayer.loop("/music/prelude_to_adventure.ogg");
             }
         }).start();
+        getLogger().info("Set up thread for music (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
         messageBox = new MessageBox(this);
         frame.addKeyListener(new MessageKeyListener(messageBox));
+        getLogger().info("Set up message box (" + (System.currentTimeMillis() - startTime) + "ms)");
     }
 
     public HarmonicMoonFrame getFrame() {
