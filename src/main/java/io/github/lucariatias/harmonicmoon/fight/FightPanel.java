@@ -20,7 +20,7 @@ public class FightPanel extends JPanel {
 
     public FightPanel(HarmonicMoon harmonicMoon) {
         this.harmonicMoon = harmonicMoon;
-        harmonicMoon.getEventManager().registerListener(new FightCharacterMoveListener(harmonicMoon));
+        //harmonicMoon.getEventManager().registerListener(new FightCharacterMoveListener(harmonicMoon));
     }
 
     public void prepareFight(Fight fight) {
