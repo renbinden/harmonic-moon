@@ -14,6 +14,7 @@ public class Tile {
     private List<WorldLocation> backLocations = new ArrayList<>();
     private List<WorldLocation> backTopLocations = new ArrayList<>();
     private List<WorldLocation> frontLocations = new ArrayList<>();
+    private List<WorldLocation> frontTopLocations = new ArrayList<>();
     private Image image;
 
     public Tile(WorldPanel worldPanel, Image image) {
@@ -45,6 +46,14 @@ public class Tile {
         }
     }
 
+    public void renderFrontTop(Graphics graphics) {
+        for (WorldLocation location : frontTopLocations) {
+            if (worldPanel.getCamera().getLocation().distanceSquared(location) > 640000) continue;
+            if (!(location.getX() >= worldPanel.getCamera().getLocation().getX() - 16 && location.getY() >= worldPanel.getCamera().getLocation().getY() - 16)) continue;
+            graphics.drawImage(image, location.getX(), location.getY(), null);
+        }
+    }
+
     public void addBackLocation(WorldLocation location) {
         backLocations.add(location);
     }
@@ -55,6 +64,10 @@ public class Tile {
 
     public void addFrontLocation(WorldLocation location) {
         frontLocations.add(location);
+    }
+
+    public void addFrontTopLocation(WorldLocation location) {
+        frontTopLocations.add(location);
     }
 
 }

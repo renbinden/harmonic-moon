@@ -17,19 +17,22 @@ public class World {
     private BufferedImage backTopTileMap;
     private BufferedImage objectMap;
     private BufferedImage frontTileMap;
+    private BufferedImage frontTopTileMap;
     private TileSheet tileSheet;
 
     private Set<Tile> backTiles = new HashSet<>();
     private Set<Tile> backTopTiles = new HashSet<>();
     private Set<WorldObject> objects = new HashSet<>();
     private Set<Tile> frontTiles = new HashSet<>();
+    private Set<Tile> frontTopTiles = new HashSet<>();
 
-    public World(HarmonicMoon harmonicMoon, BufferedImage backTileMap, BufferedImage backTopTileMap, BufferedImage objectMap, BufferedImage frontTileMap, TileSheet tileSheet) {
+    public World(HarmonicMoon harmonicMoon, BufferedImage backTileMap, BufferedImage backTopTileMap, BufferedImage objectMap, BufferedImage frontTileMap, BufferedImage frontTopTileMap, TileSheet tileSheet) {
         this.harmonicMoon = harmonicMoon;
         this.backTileMap = backTileMap;
         this.backTopTileMap = backTopTileMap;
         this.objectMap = objectMap;
         this.frontTileMap = frontTileMap;
+        this.frontTopTileMap = frontTopTileMap;
         this.tileSheet = tileSheet;
     }
 
@@ -52,6 +55,9 @@ public class World {
         for (Tile tile : frontTiles) {
             tile.renderFront(graphics);
         }
+        for (Tile tile : frontTopTiles) {
+            tile.renderFrontTop(graphics);
+        }
     }
 
     public Set<WorldObject> getObjects() {
@@ -71,6 +77,7 @@ public class World {
         populateBackTopTiles();
         populateObjects();
         populateFrontTiles();
+        populateFrontTopTiles();
     }
 
     private void populateBackTiles() {
@@ -120,6 +127,23 @@ public class World {
             }
         }
         frontTileMap.flush();
+    }
+
+    private void populateFrontTopTiles() {
+        int width = frontTopTileMap.getWidth();
+        int height = frontTopTileMap.getHeight();
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                int pixel = frontTileMap.getRGB(x, y);
+                Color colour = new Color((pixel >> 16) & 0xff, (pixel >> 8) & 0xff, pixel & 0xff);
+                if (!colour.equals(Color.BLACK)) {
+                    Tile tile = tileSheet.getTile(colour.getRed(), colour.getGreen());
+                    tile.addFrontTopLocation(new WorldLocation(this, x * 16, y * 16));
+                    frontTopTiles.add(tile);
+                }
+            }
+        }
+        frontTopTileMap.flush();
     }
 
     private void populateObjects() {

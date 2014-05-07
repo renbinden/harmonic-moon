@@ -34,7 +34,7 @@ public class WorldPanel extends JPanel {
         setDoubleBuffered(true);
         long startTime = System.currentTimeMillis();
         try {
-            world = new World(harmonicMoon, ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-back.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-back-top.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/objects.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-front.png")), new TileSheet(this, ImageIO.read(getClass().getResourceAsStream("/tiles.png")), 16, 16));
+            world = new World(harmonicMoon, ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-back.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-back-top.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/objects.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-front.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-front-top.png")), new TileSheet(this, ImageIO.read(getClass().getResourceAsStream("/tiles.png")), 16, 16));
         } catch (IOException exception) {
             exception.printStackTrace();
         }
