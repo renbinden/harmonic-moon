@@ -3,36 +3,30 @@ package io.github.lucariatias.harmonicmoon.world;
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.block.Block;
 import io.github.lucariatias.harmonicmoon.tile.Tile;
+import io.github.lucariatias.harmonicmoon.tile.TileLayer;
 import io.github.lucariatias.harmonicmoon.tile.TileSheet;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class World {
 
     private HarmonicMoon harmonicMoon;
-    private BufferedImage backTileMap;
-    private BufferedImage backTopTileMap;
+    private Map<TileLayer, BufferedImage> tileMaps;
     private BufferedImage objectMap;
-    private BufferedImage frontTileMap;
-    private BufferedImage frontTopTileMap;
     private TileSheet tileSheet;
 
-    private Set<Tile> backTiles = new HashSet<>();
-    private Set<Tile> backTopTiles = new HashSet<>();
+    private Map<TileLayer, Set<Tile>> tiles = new EnumMap<>(TileLayer.class);
     private Set<WorldObject> objects = new HashSet<>();
-    private Set<Tile> frontTiles = new HashSet<>();
-    private Set<Tile> frontTopTiles = new HashSet<>();
 
-    public World(HarmonicMoon harmonicMoon, BufferedImage backTileMap, BufferedImage backTopTileMap, BufferedImage objectMap, BufferedImage frontTileMap, BufferedImage frontTopTileMap, TileSheet tileSheet) {
+    public World(HarmonicMoon harmonicMoon, Map<TileLayer, BufferedImage> tileMaps, BufferedImage objectMap, TileSheet tileSheet) {
         this.harmonicMoon = harmonicMoon;
-        this.backTileMap = backTileMap;
-        this.backTopTileMap = backTopTileMap;
+        this.tileMaps = tileMaps;
         this.objectMap = objectMap;
-        this.frontTileMap = frontTileMap;
-        this.frontTopTileMap = frontTopTileMap;
         this.tileSheet = tileSheet;
     }
 
@@ -42,21 +36,32 @@ public class World {
         }
     }
 
-    public void render(Graphics graphics) {
-        for (Tile tile : backTiles) {
-            tile.renderBack(graphics);
+    public BufferedImage getTileMap(TileLayer layer) {
+        return tileMaps.get(layer);
+    }
+
+    public Set<Tile> getTiles(TileLayer layer) {
+        if (tiles.get(layer) == null) {
+            tiles.put(layer, new HashSet<Tile>());
         }
-        for (Tile tile : backTopTiles) {
-            tile.renderBackTop(graphics);
+        return tiles.get(layer);
+    }
+
+    public void render(Graphics graphics) {
+        for (Tile tile : getTiles(TileLayer.BACK)) {
+            tile.render(graphics, TileLayer.BACK);
+        }
+        for (Tile tile : getTiles(TileLayer.BACK_TOP)) {
+            tile.render(graphics, TileLayer.BACK_TOP);
         }
         for (WorldObject object : objects) {
             object.render(graphics);
         }
-        for (Tile tile : frontTiles) {
-            tile.renderFront(graphics);
+        for (Tile tile : getTiles(TileLayer.FRONT)) {
+            tile.render(graphics, TileLayer.FRONT);
         }
-        for (Tile tile : frontTopTiles) {
-            tile.renderFrontTop(graphics);
+        for (Tile tile : getTiles(TileLayer.FRONT_TOP)) {
+            tile.render(graphics, TileLayer.FRONT_TOP);
         }
     }
 
@@ -73,77 +78,29 @@ public class World {
     }
 
     public void populate() {
-        populateBackTiles();
-        populateBackTopTiles();
+        populateTiles(TileLayer.BACK);
+        populateTiles(TileLayer.BACK_TOP);
         populateObjects();
-        populateFrontTiles();
-        populateFrontTopTiles();
+        populateTiles(TileLayer.FRONT);
+        populateTiles(TileLayer.FRONT_TOP);
     }
 
-    private void populateBackTiles() {
-        int width = backTileMap.getWidth();
-        int height = backTileMap.getHeight();
+    private void populateTiles(TileLayer layer) {
+        BufferedImage tileMap = getTileMap(layer);
+        int width = tileMap.getWidth();
+        int height = tileMap.getHeight();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                int pixel = backTileMap.getRGB(x, y);
+                int pixel = tileMap.getRGB(x, y);
                 Color colour = new Color((pixel >> 16) & 0xff, (pixel >> 8) & 0xff, pixel & 0xff);
-                Tile tile = tileSheet.getTile(colour.getRed(), colour.getGreen());
-                tile.addBackLocation(new WorldLocation(this, x * 16, y * 16));
-                backTiles.add(tile);
-            }
-        }
-        backTileMap.flush();
-    }
-
-    private void populateBackTopTiles() {
-        int width = backTopTileMap.getWidth();
-        int height = backTopTileMap.getHeight();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                int pixel = backTopTileMap.getRGB(x, y);
-                Color colour = new Color((pixel >> 16) & 0xff, (pixel >> 8) & 0xff, pixel & 0xff);
-                if (!colour.equals(Color.BLACK)) {
+                if (!colour.equals(Color.BLACK) || layer == TileLayer.BACK) {
                     Tile tile = tileSheet.getTile(colour.getRed(), colour.getGreen());
-                    tile.addBackTopLocation(new WorldLocation(this, x * 16, y * 16));
-                    backTopTiles.add(tile);
+                    tile.getLocations(layer).add(new WorldLocation(this, x * 16, y * 16));
+                    getTiles(layer).add(tile);
                 }
             }
         }
-        backTopTileMap.flush();
-    }
-
-    private void populateFrontTiles() {
-        int width = frontTileMap.getWidth();
-        int height = frontTileMap.getHeight();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                int pixel = frontTileMap.getRGB(x, y);
-                Color colour = new Color((pixel >> 16) & 0xff, (pixel >> 8) & 0xff, pixel & 0xff);
-                if (!colour.equals(Color.BLACK)) {
-                    Tile tile = tileSheet.getTile(colour.getRed(), colour.getGreen());
-                    tile.addFrontLocation(new WorldLocation(this, x * 16, y * 16));
-                    frontTiles.add(tile);
-                }
-            }
-        }
-        frontTileMap.flush();
-    }
-
-    private void populateFrontTopTiles() {
-        int width = frontTopTileMap.getWidth();
-        int height = frontTopTileMap.getHeight();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                int pixel = frontTileMap.getRGB(x, y);
-                Color colour = new Color((pixel >> 16) & 0xff, (pixel >> 8) & 0xff, pixel & 0xff);
-                if (!colour.equals(Color.BLACK)) {
-                    Tile tile = tileSheet.getTile(colour.getRed(), colour.getGreen());
-                    tile.addFrontTopLocation(new WorldLocation(this, x * 16, y * 16));
-                    frontTopTiles.add(tile);
-                }
-            }
-        }
-        frontTopTileMap.flush();
+        tileMap.flush();
     }
 
     private void populateObjects() {

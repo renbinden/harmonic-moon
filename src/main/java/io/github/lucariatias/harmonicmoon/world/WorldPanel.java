@@ -5,12 +5,16 @@ import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.player.Camera;
 import io.github.lucariatias.harmonicmoon.player.KeyboardPlayerController;
 import io.github.lucariatias.harmonicmoon.player.Player;
+import io.github.lucariatias.harmonicmoon.tile.TileLayer;
 import io.github.lucariatias.harmonicmoon.tile.TileSheet;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class WorldPanel extends JPanel {
 
@@ -34,7 +38,12 @@ public class WorldPanel extends JPanel {
         setDoubleBuffered(true);
         long startTime = System.currentTimeMillis();
         try {
-            world = new World(harmonicMoon, ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-back.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-back-top.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/objects.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-front.png")), ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-front-top.png")), new TileSheet(this, ImageIO.read(getClass().getResourceAsStream("/tiles.png")), 16, 16));
+            Map<TileLayer, BufferedImage> tileMaps = new EnumMap<>(TileLayer.class);
+            tileMaps.put(TileLayer.BACK, ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-back.png")));
+            tileMaps.put(TileLayer.BACK_TOP, ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-back-top.png")));
+            tileMaps.put(TileLayer.FRONT, ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-front.png")));
+            tileMaps.put(TileLayer.FRONT_TOP, ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-front-top.png")));
+            world = new World(harmonicMoon, tileMaps, ImageIO.read(getClass().getResourceAsStream("/maps/world/objects.png")), new TileSheet(this, ImageIO.read(getClass().getResourceAsStream("/tiles.png")), 16, 16));
         } catch (IOException exception) {
             exception.printStackTrace();
         }

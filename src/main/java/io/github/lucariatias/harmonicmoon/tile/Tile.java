@@ -5,16 +5,15 @@ import io.github.lucariatias.harmonicmoon.world.WorldPanel;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Tile {
 
     private WorldPanel worldPanel;
 
-    private List<WorldLocation> backLocations = new ArrayList<>();
-    private List<WorldLocation> backTopLocations = new ArrayList<>();
-    private List<WorldLocation> frontLocations = new ArrayList<>();
-    private List<WorldLocation> frontTopLocations = new ArrayList<>();
+    private Map<TileLayer, List<WorldLocation>> locations = new HashMap<>();
     private Image image;
 
     public Tile(WorldPanel worldPanel, Image image) {
@@ -22,52 +21,23 @@ public class Tile {
         this.image = image;
     }
 
-    public void renderBack(Graphics graphics) {
-        for (WorldLocation location : backLocations) {
+    public void render(Graphics graphics, TileLayer layer) {
+        for (WorldLocation location : getLocations(layer)) {
             if (worldPanel.getCamera().getLocation().distanceSquared(location) > 640000) continue;
             if (!(location.getX() >= worldPanel.getCamera().getLocation().getX() - 16 && location.getY() >= worldPanel.getCamera().getLocation().getY() - 16)) continue;
             graphics.drawImage(image, location.getX(), location.getY(), null);
         }
     }
 
-    public void renderBackTop(Graphics graphics) {
-        for (WorldLocation location : backTopLocations) {
-            if (worldPanel.getCamera().getLocation().distanceSquared(location) > 640000) continue;
-            if (!(location.getX() >= worldPanel.getCamera().getLocation().getX() - 16 && location.getY() >= worldPanel.getCamera().getLocation().getY() - 16)) continue;
-            graphics.drawImage(image, location.getX(), location.getY(), null);
+    public List<WorldLocation> getLocations(TileLayer layer) {
+        if (locations.get(layer) == null) {
+            locations.put(layer, new ArrayList<WorldLocation>());
         }
+        return locations.get(layer);
     }
 
-    public void renderFront(Graphics graphics) {
-        for (WorldLocation location : frontLocations) {
-            if (worldPanel.getCamera().getLocation().distanceSquared(location) > 640000) continue;
-            if (!(location.getX() >= worldPanel.getCamera().getLocation().getX() - 16 && location.getY() >= worldPanel.getCamera().getLocation().getY() - 16)) continue;
-            graphics.drawImage(image, location.getX(), location.getY(), null);
-        }
-    }
-
-    public void renderFrontTop(Graphics graphics) {
-        for (WorldLocation location : frontTopLocations) {
-            if (worldPanel.getCamera().getLocation().distanceSquared(location) > 640000) continue;
-            if (!(location.getX() >= worldPanel.getCamera().getLocation().getX() - 16 && location.getY() >= worldPanel.getCamera().getLocation().getY() - 16)) continue;
-            graphics.drawImage(image, location.getX(), location.getY(), null);
-        }
-    }
-
-    public void addBackLocation(WorldLocation location) {
-        backLocations.add(location);
-    }
-
-    public void addBackTopLocation(WorldLocation location) {
-        backTopLocations.add(location);
-    }
-
-    public void addFrontLocation(WorldLocation location) {
-        frontLocations.add(location);
-    }
-
-    public void addFrontTopLocation(WorldLocation location) {
-        frontTopLocations.add(location);
+    public Image getImage() {
+        return image;
     }
 
 }
