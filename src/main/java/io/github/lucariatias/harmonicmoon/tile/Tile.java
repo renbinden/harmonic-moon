@@ -23,8 +23,8 @@ public class Tile {
 
     public void render(Graphics graphics, TileLayer layer) {
         for (WorldLocation location : getLocations(layer)) {
-            if (worldPanel.getCamera().getLocation().distanceSquared(location) > 640000) continue;
-            if (!(location.getX() >= worldPanel.getCamera().getLocation().getX() - 16 && location.getY() >= worldPanel.getCamera().getLocation().getY() - 16)) continue;
+            if (worldPanel.getCamera().getLocation().distanceSquared(location) > 713728) continue;
+            if (!(location.getX() >= worldPanel.getCamera().getLocation().getX() - 32 && location.getY() >= worldPanel.getCamera().getLocation().getY() - 32)) continue;
             graphics.drawImage(image, location.getX(), location.getY(), null);
         }
     }

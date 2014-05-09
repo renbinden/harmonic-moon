@@ -86,8 +86,8 @@ public class CharacterWorldInfo extends WorldObject {
 
     @Override
     public void render(Graphics graphics) {
-        if (harmonicMoon.getWorldPanel().getCamera().getLocation().distanceSquared(getLocation()) < 640000
-                && getLocation().getX() >= harmonicMoon.getWorldPanel().getCamera().getLocation().getX() && getLocation().getY() >= harmonicMoon.getWorldPanel().getCamera().getLocation().getY())
+        if (harmonicMoon.getWorldPanel().getCamera().getLocation().distanceSquared(getLocation()) < 713728
+                && getLocation().getX() >= harmonicMoon.getWorldPanel().getCamera().getLocation().getX() - 32 && getLocation().getY() >= harmonicMoon.getWorldPanel().getCamera().getLocation().getY() - 32)
             graphics.drawImage(getImage(), getLocation().getX(), getLocation().getY() - (getImage().getHeight() / 2), null);
     }
 

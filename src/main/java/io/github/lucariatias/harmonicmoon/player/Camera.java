@@ -7,7 +7,9 @@ public class Camera {
 
     private WorldLocation location;
     private Player player;
-    private static final double SPEED = 0.05D;
+
+    private boolean smoothMovementEnabled;
+    private double speed = 0.05D;
 
     public Camera(Player player) {
         this.player = player;
@@ -15,10 +17,13 @@ public class Camera {
     }
 
     public void onTick() {
-        int targetX = player.getCharacter().getWorldInfo().getLocation().getX() - 320;
-        int targetY = player.getCharacter().getWorldInfo().getLocation().getY() - 240;
-        location = location.getRelative(new Vector((int) Math.round((double) (targetX - location.getX()) * SPEED), (int) Math.round((double) (targetY - location.getY()) * SPEED)));
-        //location = new WorldLocation(player.getCharacter().getWorldInfo().getLocation().getWorld(), player.getCharacter().getWorldInfo().getLocation().getX() - (WorldPanel.WIDTH / 2), player.getCharacter().getWorldInfo().getLocation().getY() - (WorldPanel.HEIGHT / 2));
+        if (smoothMovementEnabled) {
+            int targetX = player.getCharacter().getWorldInfo().getLocation().getX() - 320;
+            int targetY = player.getCharacter().getWorldInfo().getLocation().getY() - 240;
+            location = location.getRelative(new Vector((int) Math.round((double) (targetX - location.getX()) * speed), (int) Math.round((double) (targetY - location.getY()) * speed)));
+        } else {
+            location = new WorldLocation(player.getCharacter().getWorldInfo().getLocation().getWorld(), player.getCharacter().getWorldInfo().getLocation().getX() - 320, player.getCharacter().getWorldInfo().getLocation().getY() - 240);
+        }
     }
 
     public WorldLocation getLocation() {
@@ -29,4 +34,11 @@ public class Camera {
         this.location = location;
     }
 
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
 }
