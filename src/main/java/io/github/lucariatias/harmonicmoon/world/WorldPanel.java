@@ -92,14 +92,14 @@ public class WorldPanel extends JPanel {
         if (active) {
             world.onTick();
             playerController.onTick();
-            if (player.getCharacter() != null) camera.onTick();
             harmonicMoon.getMessageBox().onTick();
+            if (player.getCharacter() != null) camera.onTick();
         }
     }
 
     public void render(Graphics graphics) {
         Graphics2D graphics2D = (Graphics2D) graphics;
-        graphics2D.translate( - camera.getLocation().getX(),  - camera.getLocation().getY());
+        graphics2D.translate(-camera.getLocation().getX(), -camera.getLocation().getY());
         world.render(graphics);
         harmonicMoon.getParticleManager().render(graphics);
         graphics2D.translate(camera.getLocation().getX(), camera.getLocation().getY());
