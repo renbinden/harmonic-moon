@@ -35,10 +35,10 @@ public class CharacterWorldInfo extends WorldObject {
         this.character = character;
         this.movementState = MovementState.WAITING;
         this.spriteSheet = spriteSheet;
-        sprites.put(Direction.DOWN, spriteSheet.getSprite(0, 0, 3));
-        sprites.put(Direction.RIGHT, spriteSheet.getSprite(3, 0, 3));
-        sprites.put(Direction.LEFT, spriteSheet.getSprite(6, 0, 3));
-        sprites.put(Direction.UP, spriteSheet.getSprite(9, 0, 3));
+        sprites.put(Direction.DOWN, spriteSheet.getSprite(0, 0, 4));
+        sprites.put(Direction.RIGHT, spriteSheet.getSprite(4, 0, 4));
+        sprites.put(Direction.LEFT, spriteSheet.getSprite(8, 0, 4));
+        sprites.put(Direction.UP, spriteSheet.getSprite(12, 0, 4));
         this.sprite = sprites.get(Direction.DOWN);
         setSolid(true);
     }
