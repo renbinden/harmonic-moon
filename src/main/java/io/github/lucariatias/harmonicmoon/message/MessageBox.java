@@ -1,9 +1,12 @@
 package io.github.lucariatias.harmonicmoon.message;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
+import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxResponseSelectEvent;
 
 import javax.imageio.ImageIO;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -38,6 +41,27 @@ public class MessageBox {
         this.message = "";
         this.y = 480;
         this.hidden = true;
+        harmonicMoon.getFrame().addMouseListener(new MouseInputAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent event) {
+                if (responses != null) {
+                    int responseX = MessageBox.this.harmonicMoon.getWidth() - responseBoxImage.getWidth() + 16;
+                    int responseY = responseBoxY + 16;
+                    for (String response : responses) {
+                        int mouseX = event.getX();
+                        int mouseY = event.getY();
+                        if (mouseX >= responseX - 16
+                                && mouseX <= responseX - 16 + responseBoxImage.getWidth()
+                                && mouseY >= responseY
+                                && mouseY <= responseY + 16) {
+                            MessageBoxResponseSelectEvent messageBoxResponseSelectEvent = new MessageBoxResponseSelectEvent(MessageBox.this, message, responses, response);
+                            MessageBox.this.harmonicMoon.getEventManager().dispatchEvent(messageBoxResponseSelectEvent);
+                        }
+                        responseY += 16;
+                    }
+                }
+            }
+        });
     }
 
     public void queueMessage(String message) {
