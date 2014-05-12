@@ -36,6 +36,7 @@ public abstract class NPC extends WorldObject {
         sprites.put(Direction.LEFT, spriteSheet.getSprite(6, 0, 3));
         sprites.put(Direction.UP, spriteSheet.getSprite(9, 0, 3));
         this.sprite = sprites.get(Direction.DOWN);
+        setSolid(true);
     }
 
     public BufferedImage getImage() {
@@ -108,7 +109,7 @@ public abstract class NPC extends WorldObject {
         for (WorldObject object : getLocation().getWorld().getObjects()) {
             WorldLocation relativeLocation = getLocation().getRelative(direction);
             Rectangle relativeBounds = getBoundsAtPosition(relativeLocation);
-            if (relativeBounds.intersects(object.getBounds()) && object.isSolid()) {
+            if (relativeBounds.intersects(object.getBounds()) && object.isSolid() && object != this) {
                 return true;
             }
         }

@@ -150,7 +150,7 @@ public class World {
         }
         objectMap.flush();
         TestNPC testNPC = new TestNPC(harmonicMoon);
-        testNPC.setLocation(harmonicMoon.getCharacterManager().getCharacter("lonyre").world().getLocation());
+        testNPC.setLocation(harmonicMoon.getCharacterManager().getCharacter("lonyre").world().getLocation().getRelative(Direction.UP, 16));
         testNPC.setNeutralPosition();
         addObject(testNPC);
     }
