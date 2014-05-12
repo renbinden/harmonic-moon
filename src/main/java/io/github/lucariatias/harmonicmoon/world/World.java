@@ -2,6 +2,7 @@ package io.github.lucariatias.harmonicmoon.world;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.block.Block;
+import io.github.lucariatias.harmonicmoon.npc.TestNPC;
 import io.github.lucariatias.harmonicmoon.tile.Tile;
 import io.github.lucariatias.harmonicmoon.tile.TileLayer;
 import io.github.lucariatias.harmonicmoon.tile.TileSheet;
@@ -54,7 +55,9 @@ public class World {
         for (Tile tile : getTiles(TileLayer.BACK_TOP)) {
             tile.render(graphics, TileLayer.BACK_TOP);
         }
-        for (WorldObject object : objects) {
+        WorldObject[] sortedObjects = objects.toArray(new WorldObject[objects.size()]);
+        quickSort(sortedObjects);
+        for (WorldObject object : sortedObjects) {
             object.render(graphics);
         }
         for (Tile tile : getTiles(TileLayer.FRONT)) {
@@ -75,6 +78,34 @@ public class World {
 
     public void removeObject(WorldObject object) {
         objects.remove(object);
+    }
+
+    private int partition(WorldObject[] objects, int left, int right) {
+        int i = left, j = right;
+        WorldObject tmp;
+        WorldObject pivot = objects[(left + right) / 2];
+        while (i <= j) {
+            while (objects[i].getLocation().getY() < pivot.getLocation().getY()) i++;
+            while (objects[j].getLocation().getY() > pivot.getLocation().getY()) j--;
+            if (i <= j) {
+                tmp = objects[i];
+                objects[i] = objects[j];
+                objects[j] = tmp;
+                i++;
+                j--;
+            }
+        }
+        return i;
+    }
+
+    private void quickSort(WorldObject[] objects, int left, int right) {
+        int index = partition(objects, left, right);
+        if (left < index - 1) quickSort(objects, left, index - 1);
+        if (index < right) quickSort(objects, index, right);
+    }
+
+    private void quickSort(WorldObject[] objects) {
+        quickSort(objects, 0, objects.length - 1);
     }
 
     public void populate() {
@@ -118,6 +149,10 @@ public class World {
             }
         }
         objectMap.flush();
+        TestNPC testNPC = new TestNPC(harmonicMoon);
+        testNPC.setLocation(harmonicMoon.getCharacterManager().getCharacter("lonyre").world().getLocation());
+        testNPC.setNeutralPosition();
+        addObject(testNPC);
     }
 
     private WorldObject getObjectFromColour(Color colour) {
