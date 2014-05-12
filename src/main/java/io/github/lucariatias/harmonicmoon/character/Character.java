@@ -133,11 +133,11 @@ public abstract class Character {
         return job.getStatValueAtLevel(stat, getLevel());
     }
 
-    public CharacterWorldInfo getWorldInfo() {
+    public CharacterWorldInfo world() {
         return worldInfo;
     }
 
-    public CharacterFightInfo getFightInfo() {
+    public CharacterFightInfo fight() {
         return fightInfo;
     }
 }

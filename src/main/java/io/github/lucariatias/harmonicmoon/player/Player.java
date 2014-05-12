@@ -25,7 +25,7 @@ public class Player {
 
     public void move(Direction direction) {
         if (character != null) {
-            character.getWorldInfo().move(direction);
+            character.world().move(direction);
         }
     }
 

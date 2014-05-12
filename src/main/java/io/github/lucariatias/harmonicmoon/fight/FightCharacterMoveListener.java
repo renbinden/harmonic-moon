@@ -23,7 +23,7 @@ public class FightCharacterMoveListener extends CharacterMoveListener {
         Random random = new Random();
         if (random.nextInt(100) < 2) {
             EnemyManager enemyManager = harmonicMoon.getEnemyManager();
-            Fight fight = new Fight(FightArea.GRASS, new CharacterParty(event.getCharacter().getFightInfo()), new EnemyParty(new Slime(harmonicMoon, enemyManager.getSpriteSheet(Slime.class), enemyManager.getWaitSprite(Slime.class), enemyManager.getAttackSprite(Slime.class), enemyManager.getInjuredSprite(Slime.class))));
+            Fight fight = new Fight(FightArea.GRASS, new CharacterParty(event.getCharacter().fight()), new EnemyParty(new Slime(harmonicMoon, enemyManager.getSpriteSheet(Slime.class), enemyManager.getWaitSprite(Slime.class), enemyManager.getAttackSprite(Slime.class), enemyManager.getInjuredSprite(Slime.class))));
             harmonicMoon.getFightPanel().prepareFight(fight);
             harmonicMoon.getFightPanel().startFight();
             harmonicMoon.setPanel("fight");

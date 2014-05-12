@@ -128,7 +128,7 @@ public class World {
                         switch (colour.getBlue()) {
                             case 0: return null;
                             case 1: return new Block();
-                            case 2: return harmonicMoon.getCharacterManager().getCharacter("lonyre").getWorldInfo();
+                            case 2: return harmonicMoon.getCharacterManager().getCharacter("lonyre").world();
                             default: return null;
                         }
                     default: return null;

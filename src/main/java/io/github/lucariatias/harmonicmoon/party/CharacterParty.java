@@ -21,7 +21,7 @@ public class CharacterParty extends Party {
     }
 
     public void addMember(Character character) {
-        members.add(character.getFightInfo());
+        members.add(character.fight());
     }
 
     public void removeMember(Combatant combatant) {
@@ -29,7 +29,7 @@ public class CharacterParty extends Party {
     }
 
     public void removeMember(Character character) {
-        members.remove(character.getFightInfo());
+        members.remove(character.fight());
     }
 
     public List<? extends CharacterFightInfo> getMembers() {

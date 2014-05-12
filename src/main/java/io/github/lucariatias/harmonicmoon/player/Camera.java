@@ -13,16 +13,16 @@ public class Camera {
 
     public Camera(Player player) {
         this.player = player;
-        this.location = player.getCharacter().getWorldInfo().getLocation().getRelative(new Vector(-320, -240));
+        this.location = player.getCharacter().world().getLocation().getRelative(new Vector(-320, -240));
     }
 
     public void onTick() {
         if (smoothMovementEnabled) {
-            int targetX = player.getCharacter().getWorldInfo().getLocation().getX() - 320;
-            int targetY = player.getCharacter().getWorldInfo().getLocation().getY() - 240;
+            int targetX = player.getCharacter().world().getLocation().getX() - 320;
+            int targetY = player.getCharacter().world().getLocation().getY() - 240;
             location = location.getRelative(new Vector((int) Math.round((double) (targetX - location.getX()) * speed), (int) Math.round((double) (targetY - location.getY()) * speed)));
         } else {
-            location = new WorldLocation(player.getCharacter().getWorldInfo().getLocation().getWorld(), player.getCharacter().getWorldInfo().getLocation().getX() - 320, player.getCharacter().getWorldInfo().getLocation().getY() - 240);
+            location = new WorldLocation(player.getCharacter().world().getLocation().getWorld(), player.getCharacter().world().getLocation().getX() - 320, player.getCharacter().world().getLocation().getY() - 240);
         }
     }
 
