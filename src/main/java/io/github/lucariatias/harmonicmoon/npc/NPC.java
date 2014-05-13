@@ -1,7 +1,11 @@
 package io.github.lucariatias.harmonicmoon.npc;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
+import io.github.lucariatias.harmonicmoon.character.CharacterWorldInfo;
+import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseEvent;
+import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseListener;
 import io.github.lucariatias.harmonicmoon.event.npc.NPCMoveEvent;
+import io.github.lucariatias.harmonicmoon.message.Message;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 import io.github.lucariatias.harmonicmoon.world.Direction;
@@ -37,10 +41,20 @@ public abstract class NPC extends WorldObject {
         sprites.put(Direction.UP, spriteSheet.getSprite(12, 0, 4));
         this.sprite = sprites.get(Direction.DOWN);
         setSolid(true);
+        harmonicMoon.getEventManager().registerListener(new MessageBoxCloseListener() {
+            @Override
+            public void onMessageBoxClose(MessageBoxCloseEvent event) {
+                getPath().setFrozen(false);
+            }
+        });
     }
 
     public BufferedImage getImage() {
         return sprite.getImage();
+    }
+
+    public void face(Direction direction) {
+        sprite = sprites.get(direction);
     }
 
     public void move(Direction direction) {
@@ -84,7 +98,7 @@ public abstract class NPC extends WorldObject {
     @Override
     public void onTick() {
         switch (movementState) {
-            case WAITING: getPath().step(this); break;
+            case WAITING: getPath().step(); break;
             case TRANSITIONING_UP: setLocation(getLocation().getRelative(Direction.UP, 2)); sprite.onTick(); break;
             case TRANSITIONING_DOWN: setLocation(getLocation().getRelative(Direction.DOWN, 2)); sprite.onTick(); break;
             case TRANSITIONING_LEFT: setLocation(getLocation().getRelative(Direction.LEFT, 2)); sprite.onTick(); break;
@@ -105,15 +119,27 @@ public abstract class NPC extends WorldObject {
         return new Rectangle(location.getX(), location.getY(), getImage().getWidth(), getImage().getHeight() / 2);
     }
 
-    private boolean isCollision(Direction direction) {
-        for (WorldObject object : getLocation().getWorld().getObjects()) {
-            WorldLocation relativeLocation = getLocation().getRelative(direction);
-            Rectangle relativeBounds = getBoundsAtPosition(relativeLocation);
-            if (relativeBounds.intersects(object.getBounds()) && object.isSolid() && object != this) {
-                return true;
+    public void say(String... messages) {
+        for (Direction direction : Direction.values()) {
+            if (getCollision(direction) instanceof CharacterWorldInfo) {
+                face(direction);
             }
         }
-        return false;
+        getPath().setFrozen(true);
+        if (harmonicMoon.getMessageBox().isHidden()) {
+            for (String message : messages) {
+                harmonicMoon.getMessageBox().queueMessage(message);
+            }
+        }
+    }
+
+    public void say(Message... messages) {
+        getPath().setFrozen(true);
+        if (harmonicMoon.getMessageBox().isHidden()) {
+            for (Message message : messages) {
+                harmonicMoon.getMessageBox().queueMessage(message);
+            }
+        }
     }
 
 }

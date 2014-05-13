@@ -64,7 +64,7 @@ public class DebugKeyListener extends KeyAdapter {
                 harmonicMoon.getMessageBox().queueMessage("This is another test. This is another test.");
             }
             if (event.getKeyCode() == KeyEvent.VK_O) {
-                harmonicMoon.getMessageBox().queueMesssage("This is a question.", "Yes", "No");
+                harmonicMoon.getMessageBox().queueMessage("This is a question.", "Yes", "No");
             }
         }
     }

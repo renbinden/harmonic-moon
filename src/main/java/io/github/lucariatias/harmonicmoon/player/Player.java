@@ -29,6 +29,10 @@ public class Player {
         }
     }
 
-
+    public void interact(Direction direction) {
+        if (character != null) {
+            character.world().interact(direction);
+        }
+    }
 
 }

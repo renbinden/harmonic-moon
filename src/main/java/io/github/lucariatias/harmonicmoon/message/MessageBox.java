@@ -1,6 +1,7 @@
 package io.github.lucariatias.harmonicmoon.message;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
+import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseEvent;
 import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxResponseSelectEvent;
 
 import javax.imageio.ImageIO;
@@ -64,6 +65,13 @@ public class MessageBox {
         });
     }
 
+    public void queueMessage(Message message) {
+        if (message instanceof Question) {
+            Question question = (Question) message;
+            queueMessage(question.getText(), question.getResponses());
+        }
+    }
+
     public void queueMessage(String message) {
         if (hidden) {
             queuedMessages.add(message);
@@ -74,7 +82,7 @@ public class MessageBox {
         }
     }
 
-    public void queueMesssage(String message, String... responses) {
+    public void queueMessage(String message, String... responses) {
         queuedResponses.put(message, responses);
         queueMessage(message);
     }
@@ -90,6 +98,8 @@ public class MessageBox {
                 this.responses = null;
             }
         } else {
+            MessageBoxCloseEvent event = new MessageBoxCloseEvent(this);
+            harmonicMoon.getEventManager().dispatchEvent(event);
             setHidden(true);
         }
     }

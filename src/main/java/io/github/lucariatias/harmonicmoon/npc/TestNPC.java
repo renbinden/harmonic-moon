@@ -5,13 +5,23 @@ import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 
 public class TestNPC extends NPC {
 
+    private HarmonicMoon harmonicMoon;
+
     public TestNPC(HarmonicMoon harmonicMoon) {
         super(harmonicMoon, new SpriteSheet("/npcs/template.png", 32, 16));
-        setPath(new BoringPath(getLocation()));
+        this.harmonicMoon = harmonicMoon;
+        setPath(new BoringPath(this));
+    }
+
+    @Override
+    public void interact() {
+        say("Hello. I am a test NPC.");
     }
 
     public void setNeutralPosition() {
-        setPath(new BoringPath(getLocation()));
+        if (getPath() instanceof BoringPath) {
+            ((BoringPath) getPath()).setNeutralPosition();
+        }
     }
 
 }

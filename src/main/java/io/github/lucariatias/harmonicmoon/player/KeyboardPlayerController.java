@@ -22,6 +22,7 @@ public class KeyboardPlayerController extends PlayerController implements KeyLis
             case VK_A:case VK_LEFT: setActionEnabled(MOVE_LEFT, true); break;
             case VK_S:case VK_DOWN: setActionEnabled(MOVE_DOWN, true); break;
             case VK_D:case VK_RIGHT: setActionEnabled(MOVE_RIGHT, true); break;
+            case VK_Z: setActionEnabled(INTERACT, true); break;
         }
     }
 
@@ -32,6 +33,7 @@ public class KeyboardPlayerController extends PlayerController implements KeyLis
             case VK_A:case VK_LEFT: setActionEnabled(MOVE_LEFT, false); break;
             case VK_S:case VK_DOWN: setActionEnabled(MOVE_DOWN, false); break;
             case VK_D:case VK_RIGHT: setActionEnabled(MOVE_RIGHT, false); break;
+            case VK_Z: setActionEnabled(INTERACT, false); break;
         }
     }
 }

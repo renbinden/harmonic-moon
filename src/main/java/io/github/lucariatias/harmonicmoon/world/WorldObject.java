@@ -32,4 +32,30 @@ public abstract class WorldObject {
     public void setLocation(WorldLocation location) {
         this.location = location;
     }
+
+    public boolean isCollision(Direction direction) {
+        return isCollision(direction, true);
+    }
+
+    public boolean isCollision(Direction direction, boolean solidOnly) {
+        return getCollision(direction, solidOnly) != null;
+    }
+
+    public WorldObject getCollision(Direction direction) {
+        return getCollision(direction, true);
+    }
+
+    public WorldObject getCollision(Direction direction, boolean solidOnly) {
+        for (WorldObject object : getLocation().getWorld().getObjects()) {
+            WorldLocation relativeLocation = getLocation().getRelative(direction, 8);
+            Rectangle relativeBounds = getBoundsAtPosition(relativeLocation);
+            if (relativeBounds.intersects(object.getBounds()) && (!solidOnly || object.isSolid()) && object != this) {
+                return object;
+            }
+        }
+        return null;
+    }
+
+    public void interact() {}
+
 }

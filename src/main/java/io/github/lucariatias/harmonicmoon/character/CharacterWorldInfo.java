@@ -23,12 +23,15 @@ public class CharacterWorldInfo extends WorldObject {
 
     private Character character;
 
+    private int interactDelay;
+
     // Graphics
     private SpriteSheet spriteSheet;
     private Sprite sprite;
     private Map<Direction, Sprite> sprites = new EnumMap<>(Direction.class);
 
     private MovementState movementState;
+    private Direction direction = Direction.DOWN;
 
     public CharacterWorldInfo(HarmonicMoon harmonicMoon, Character character, SpriteSheet spriteSheet) {
         this.harmonicMoon = harmonicMoon;
@@ -49,6 +52,7 @@ public class CharacterWorldInfo extends WorldObject {
 
     public void move(Direction direction) {
         if (movementState == MovementState.WAITING) {
+            this.direction = direction;
             if (!isCollision(direction)) {
                 CharacterMoveEvent event = new CharacterMoveEvent(character, getLocation(), getLocation().getRelative(direction, 16));
                 harmonicMoon.getEventManager().dispatchEvent(event);
@@ -75,6 +79,7 @@ public class CharacterWorldInfo extends WorldObject {
 
     @Override
     public void onTick() {
+        interactDelay = interactDelay > 0 ? interactDelay - 1 : 0;
         switch (movementState) {
             case WAITING: break;
             case TRANSITIONING_UP: setLocation(getLocation().getRelative(Direction.UP, 2)); sprite.onTick(); break;
@@ -97,15 +102,18 @@ public class CharacterWorldInfo extends WorldObject {
         return new Rectangle(location.getX(), location.getY(), getImage().getWidth(), getImage().getHeight() / 2);
     }
 
-    private boolean isCollision(Direction direction) {
-        for (WorldObject object : getLocation().getWorld().getObjects()) {
-            WorldLocation relativeLocation = getLocation().getRelative(direction);
-            Rectangle relativeBounds = getBoundsAtPosition(relativeLocation);
-            if (relativeBounds.intersects(object.getBounds()) && object.isSolid() && object != this) {
-                return true;
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void interact(Direction direction) {
+        if (interactDelay == 0) {
+            WorldObject object = getCollision(direction);
+            if (object != null) {
+                interactDelay = 10;
+                object.interact();
             }
         }
-        return false;
     }
 
 }

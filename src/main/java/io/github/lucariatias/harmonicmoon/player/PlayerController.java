@@ -46,6 +46,7 @@ public  abstract class PlayerController {
             if (isActionEnabled(PlayerAction.MOVE_LEFT)) player.move(Direction.LEFT);
             if (isActionEnabled(PlayerAction.MOVE_RIGHT)) player.move(Direction.RIGHT);
             if (isActionEnabled(PlayerAction.MOVE_DOWN)) player.move(Direction.DOWN);
+            if (isActionEnabled(PlayerAction.INTERACT)) player.interact(player.getCharacter().world().getDirection());
         }
     }
 

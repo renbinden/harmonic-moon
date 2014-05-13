@@ -10,52 +10,67 @@ public class BoringPath extends Path {
     private WorldLocation neutralPosition;
     private int tickDelay;
 
-    public BoringPath(WorldLocation neutralPosition) {
-        this.neutralPosition = neutralPosition;
+    public BoringPath(NPC npc) {
+        super(npc);
+        this.neutralPosition = npc.getLocation();
+    }
+
+    public void setNeutralPosition() {
+        this.neutralPosition = getNpc().getLocation();
     }
 
     @Override
-    public void step(NPC npc) {
-        if (npc.getLocation().distanceSquared(neutralPosition) <= 8) {
-            if (tickDelay >= 40) {
-                Random random = new Random();
-                switch (random.nextInt(4)) {
-                    case 0: npc.move(Direction.UP); break;
-                    case 1: npc.move(Direction.DOWN); break;
-                    case 2: npc.move(Direction.LEFT); break;
-                    case 3: npc.move(Direction.RIGHT); break;
+    public void step() {
+        if (!isFrozen()) {
+            if (getNpc().getLocation().distanceSquared(neutralPosition) <= 8) {
+                if (tickDelay >= 40) {
+                    Random random = new Random();
+                    switch (random.nextInt(4)) {
+                        case 0:
+                            getNpc().move(Direction.UP);
+                            break;
+                        case 1:
+                            getNpc().move(Direction.DOWN);
+                            break;
+                        case 2:
+                            getNpc().move(Direction.LEFT);
+                            break;
+                        case 3:
+                            getNpc().move(Direction.RIGHT);
+                            break;
+                    }
+                    tickDelay = 0;
+                } else {
+                    tickDelay++;
                 }
-                tickDelay = 0;
-            } else {
-                tickDelay++;
-            }
-        } else if (npc.getLocation().getRelative(Direction.UP, 16).distanceSquared(neutralPosition) <= 8) {
-            if (tickDelay >= 40) {
-                npc.move(Direction.UP);
-                tickDelay = 0;
-            } else {
-                tickDelay++;
-            }
-        } else if (npc.getLocation().getRelative(Direction.DOWN, 16).distanceSquared(neutralPosition) <= 8) {
-            if (tickDelay >= 40) {
-                npc.move(Direction.DOWN);
-                tickDelay = 0;
-            } else {
-                tickDelay++;
-            }
-        } else if (npc.getLocation().getRelative(Direction.RIGHT, 16).distanceSquared(neutralPosition) <= 8) {
-            if (tickDelay >= 40) {
-                npc.move(Direction.RIGHT);
-                tickDelay = 0;
-            } else {
-                tickDelay++;
-            }
-        } else if (npc.getLocation().getRelative(Direction.LEFT, 16).distanceSquared(neutralPosition) <= 8) {
-            if (tickDelay >= 40) {
-                npc.move(Direction.LEFT);
-                tickDelay = 0;
-            } else {
-                tickDelay++;
+            } else if (getNpc().getLocation().getRelative(Direction.UP, 16).distanceSquared(neutralPosition) <= 8) {
+                if (tickDelay >= 40) {
+                    getNpc().move(Direction.UP);
+                    tickDelay = 0;
+                } else {
+                    tickDelay++;
+                }
+            } else if (getNpc().getLocation().getRelative(Direction.DOWN, 16).distanceSquared(neutralPosition) <= 8) {
+                if (tickDelay >= 40) {
+                    getNpc().move(Direction.DOWN);
+                    tickDelay = 0;
+                } else {
+                    tickDelay++;
+                }
+            } else if (getNpc().getLocation().getRelative(Direction.RIGHT, 16).distanceSquared(neutralPosition) <= 8) {
+                if (tickDelay >= 40) {
+                    getNpc().move(Direction.RIGHT);
+                    tickDelay = 0;
+                } else {
+                    tickDelay++;
+                }
+            } else if (getNpc().getLocation().getRelative(Direction.LEFT, 16).distanceSquared(neutralPosition) <= 8) {
+                if (tickDelay >= 40) {
+                    getNpc().move(Direction.LEFT);
+                    tickDelay = 0;
+                } else {
+                    tickDelay++;
+                }
             }
         }
     }
