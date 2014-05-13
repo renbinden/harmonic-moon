@@ -11,11 +11,17 @@ import io.github.lucariatias.harmonicmoon.message.MessageBox;
 import io.github.lucariatias.harmonicmoon.message.MessageKeyListener;
 import io.github.lucariatias.harmonicmoon.music.MusicPlayer;
 import io.github.lucariatias.harmonicmoon.particle.ParticleManager;
+import io.github.lucariatias.harmonicmoon.player.Camera;
+import io.github.lucariatias.harmonicmoon.player.KeyboardPlayerController;
+import io.github.lucariatias.harmonicmoon.player.Player;
+import io.github.lucariatias.harmonicmoon.world.World;
 import io.github.lucariatias.harmonicmoon.world.WorldPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class HarmonicMoon extends JPanel implements Runnable {
@@ -36,6 +42,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
     private boolean debug;
 
     private WorldPanel worldPanel;
+    private Map<String, WorldPanel> worldPanels = new HashMap<>();
     private FightPanel fightPanel;
 
     private CharacterManager characterManager;
@@ -46,6 +53,10 @@ public class HarmonicMoon extends JPanel implements Runnable {
 
     private MusicPlayer musicPlayer;
     private MessageBox messageBox;
+
+    private KeyboardPlayerController playerController;
+    private Player player;
+    private Camera camera;
 
     public HarmonicMoon(HarmonicMoonFrame frame) {
         this.frame = frame;
@@ -81,9 +92,20 @@ public class HarmonicMoon extends JPanel implements Runnable {
         add(new MainMenu(this), "menu");
         getLogger().info("Set up main menu (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
-        worldPanel = new WorldPanel(this);
-        add(worldPanel, "world");
-        getLogger().info("Set up world panel (" + (System.currentTimeMillis() - startTime) + "ms)");
+        player = new Player(this);
+        getLogger().info("Created player (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
+        playerController = new KeyboardPlayerController(player);
+        playerController.setActive(true);
+        getFrame().addKeyListener(playerController);
+        getFrame().addKeyListener(new DebugKeyListener(this));
+        getLogger().info("Set up key listeners (" + (System.currentTimeMillis() - startTime) + "ms)");
+        worldPanel = new WorldPanel(this, "world");
+        worldPanels.put("world", worldPanel);
+        add(worldPanel, "map_world");
+        startTime = System.currentTimeMillis();
+        camera = new Camera(player);
+        getLogger().info("Set up camera (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
         fightPanel = new FightPanel(this);
         add(fightPanel, "fight");
@@ -127,6 +149,33 @@ public class HarmonicMoon extends JPanel implements Runnable {
     public void setPanel(String panel) {
         CardLayout layout = (CardLayout) getLayout();
         layout.show(this, panel);
+    }
+
+    public void showWorld(String map) {
+        worldPanel.setActive(false);
+        if (!worldPanels.containsKey(map)) {
+            long startTime = System.currentTimeMillis();
+            worldPanel = new WorldPanel(this, map);
+            worldPanels.put(map, worldPanel);
+            add(worldPanel, "map_" + map);
+            getLogger().info("Loaded world " + map + " (" + (System.currentTimeMillis() - startTime) + "ms)");
+        } else {
+            worldPanel = worldPanels.get(map);
+        }
+        setPanel("map_" + map);
+        getCamera().setLocation(getPlayer().getCharacter().world().getLocation());
+        worldPanel.setActive(true);
+    }
+
+    public World getWorld(String name) {
+        if (!worldPanels.containsKey(name)) {
+            long startTime = System.currentTimeMillis();
+            worldPanel = new WorldPanel(this, name);
+            worldPanels.put(name, worldPanel);
+            add(worldPanel, "map_" + name);
+            getLogger().info("Loaded world " + name + " (" + (System.currentTimeMillis() - startTime) + "ms)");
+        }
+        return worldPanels.get(name).getWorld();
     }
 
     public boolean isDebug() {
@@ -212,5 +261,17 @@ public class HarmonicMoon extends JPanel implements Runnable {
 
     public MessageBox getMessageBox() {
         return messageBox;
+    }
+
+    public KeyboardPlayerController getPlayerController() {
+        return playerController;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Camera getCamera() {
+        return camera;
     }
 }

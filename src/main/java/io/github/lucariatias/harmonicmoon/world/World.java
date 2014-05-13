@@ -2,7 +2,8 @@ package io.github.lucariatias.harmonicmoon.world;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.block.Block;
-import io.github.lucariatias.harmonicmoon.npc.TestNPC;
+import io.github.lucariatias.harmonicmoon.character.CharacterWorldInfo;
+import io.github.lucariatias.harmonicmoon.door.Door;
 import io.github.lucariatias.harmonicmoon.tile.Tile;
 import io.github.lucariatias.harmonicmoon.tile.TileLayer;
 import io.github.lucariatias.harmonicmoon.tile.TileSheet;
@@ -17,6 +18,7 @@ import java.util.Set;
 public class World {
 
     private HarmonicMoon harmonicMoon;
+    private String name;
     private Map<TileLayer, BufferedImage> tileMaps;
     private BufferedImage objectMap;
     private TileSheet tileSheet;
@@ -24,11 +26,16 @@ public class World {
     private Map<TileLayer, Set<Tile>> tiles = new EnumMap<>(TileLayer.class);
     private Set<WorldObject> objects = new HashSet<>();
 
-    public World(HarmonicMoon harmonicMoon, Map<TileLayer, BufferedImage> tileMaps, BufferedImage objectMap, TileSheet tileSheet) {
+    public World(HarmonicMoon harmonicMoon, String name, Map<TileLayer, BufferedImage> tileMaps, BufferedImage objectMap, TileSheet tileSheet) {
         this.harmonicMoon = harmonicMoon;
+        this.name = name;
         this.tileMaps = tileMaps;
         this.objectMap = objectMap;
         this.tileSheet = tileSheet;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void onTick() {
@@ -74,10 +81,12 @@ public class World {
 
     public void addObject(WorldObject object) {
         objects.add(object);
+        if (object instanceof CharacterWorldInfo) harmonicMoon.debug(((CharacterWorldInfo) object).getCharacter().getName() + " added to " + getName());
     }
 
     public void removeObject(WorldObject object) {
         objects.remove(object);
+        if (object instanceof CharacterWorldInfo) harmonicMoon.debug(((CharacterWorldInfo) object).getCharacter().getName() + " removed from " + getName());
     }
 
     private int partition(WorldObject[] objects, int left, int right) {
@@ -149,10 +158,6 @@ public class World {
             }
         }
         objectMap.flush();
-        TestNPC testNPC = new TestNPC(harmonicMoon);
-        testNPC.setLocation(harmonicMoon.getCharacterManager().getCharacter("lonyre").world().getLocation().getRelative(Direction.UP, 16));
-        testNPC.setNeutralPosition();
-        addObject(testNPC);
     }
 
     private WorldObject getObjectFromColour(Color colour) {
@@ -163,8 +168,19 @@ public class World {
                         switch (colour.getBlue()) {
                             case 0: return null;
                             case 1: return new Block();
-                            case 2: return harmonicMoon.getCharacterManager().getCharacter("lonyre").world();
+                            case 2: return new Door(harmonicMoon);
                             default: return null;
+                        }
+                    case 1:
+                        switch (colour.getBlue()) {
+                            case 0: return harmonicMoon.getCharacterManager().getCharacter("lonyre").world();
+                            case 1: return harmonicMoon.getCharacterManager().getCharacter("tivor").world();
+                            case 2: return harmonicMoon.getCharacterManager().getCharacter("kesowa").world();
+                            case 3: return harmonicMoon.getCharacterManager().getCharacter("namapo").world();
+                            case 4: return harmonicMoon.getCharacterManager().getCharacter("syalae").world();
+                            case 5: return harmonicMoon.getCharacterManager().getCharacter("anaria").world();
+                            case 6: return harmonicMoon.getCharacterManager().getCharacter("idain").world();
+                            case 7: return harmonicMoon.getCharacterManager().getCharacter("seuri").world();
                         }
                     default: return null;
                 }

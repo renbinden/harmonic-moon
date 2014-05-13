@@ -46,6 +46,10 @@ public class CharacterWorldInfo extends WorldObject {
         setSolid(true);
     }
 
+    public Character getCharacter() {
+        return character;
+    }
+
     public BufferedImage getImage() {
         return sprite.getImage();
     }
@@ -93,7 +97,7 @@ public class CharacterWorldInfo extends WorldObject {
     @Override
     public void render(Graphics graphics) {
         if (harmonicMoon.getWorldPanel().getCamera().getLocation().distanceSquared(getLocation()) < 713728
-                && getLocation().getX() >= harmonicMoon.getWorldPanel().getCamera().getLocation().getX() - 32 && getLocation().getY() >= harmonicMoon.getWorldPanel().getCamera().getLocation().getY() - 32)
+                && getLocation().getX() >= harmonicMoon.getCamera().getLocation().getX() - 32 && getLocation().getY() >= harmonicMoon.getCamera().getLocation().getY() - 32)
             graphics.drawImage(getImage(), getLocation().getX(), getLocation().getY() - (getImage().getHeight() / 2), null);
     }
 

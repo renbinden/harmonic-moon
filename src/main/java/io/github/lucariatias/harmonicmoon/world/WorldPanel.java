@@ -1,10 +1,9 @@
 package io.github.lucariatias.harmonicmoon.world;
 
-import io.github.lucariatias.harmonicmoon.DebugKeyListener;
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.player.Camera;
-import io.github.lucariatias.harmonicmoon.player.KeyboardPlayerController;
 import io.github.lucariatias.harmonicmoon.player.Player;
+import io.github.lucariatias.harmonicmoon.player.PlayerController;
 import io.github.lucariatias.harmonicmoon.tile.TileLayer;
 import io.github.lucariatias.harmonicmoon.tile.TileSheet;
 
@@ -27,11 +26,7 @@ public class WorldPanel extends JPanel {
 
     private World world;
 
-    private KeyboardPlayerController playerController;
-    private Player player;
-    private Camera camera;
-
-    public WorldPanel(HarmonicMoon harmonicMoon) {
+    public WorldPanel(HarmonicMoon harmonicMoon, String map) {
         this.harmonicMoon = harmonicMoon;
         setBackground(Color.BLACK);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -39,30 +34,18 @@ public class WorldPanel extends JPanel {
         long startTime = System.currentTimeMillis();
         try {
             Map<TileLayer, BufferedImage> tileMaps = new EnumMap<>(TileLayer.class);
-            tileMaps.put(TileLayer.BACK, ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-back.png")));
-            tileMaps.put(TileLayer.BACK_TOP, ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-back-top.png")));
-            tileMaps.put(TileLayer.FRONT, ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-front.png")));
-            tileMaps.put(TileLayer.FRONT_TOP, ImageIO.read(getClass().getResourceAsStream("/maps/world/tiles-front-top.png")));
-            world = new World(harmonicMoon, tileMaps, ImageIO.read(getClass().getResourceAsStream("/maps/world/objects.png")), new TileSheet(this, ImageIO.read(getClass().getResourceAsStream("/tiles.png")), 16, 16));
+            tileMaps.put(TileLayer.BACK, ImageIO.read(getClass().getResourceAsStream("/maps/" + map + "/tiles-back.png")));
+            tileMaps.put(TileLayer.BACK_TOP, ImageIO.read(getClass().getResourceAsStream("/maps/" + map + "/tiles-back-top.png")));
+            tileMaps.put(TileLayer.FRONT, ImageIO.read(getClass().getResourceAsStream("/maps/" + map + "/tiles-front.png")));
+            tileMaps.put(TileLayer.FRONT_TOP, ImageIO.read(getClass().getResourceAsStream("/maps/" + map + "/tiles-front-top.png")));
+            world = new World(harmonicMoon, map, tileMaps, ImageIO.read(getClass().getResourceAsStream("/maps/" + map + "/objects.png")), new TileSheet(this, ImageIO.read(getClass().getResourceAsStream("/maps/" + map + "/tilesheet.png")), 16, 16));
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        harmonicMoon.getLogger().info("Created world (" + (System.currentTimeMillis() - startTime) + "ms)");
-        startTime = System.currentTimeMillis();
-        player = new Player(harmonicMoon);
-        harmonicMoon.getLogger().info("Created player (" + (System.currentTimeMillis() - startTime) + "ms)");
+        harmonicMoon.getLogger().info("Created world '" + map + "' (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
         world.populate();
-        harmonicMoon.getLogger().info("Populated world (" + (System.currentTimeMillis() - startTime) + "ms)");
-        startTime = System.currentTimeMillis();
-        camera = new Camera(player);
-        harmonicMoon.getLogger().info("Set up camera (" + (System.currentTimeMillis() - startTime) + "ms)");
-        startTime = System.currentTimeMillis();
-        playerController = new KeyboardPlayerController(player);
-        playerController.setActive(true);
-        harmonicMoon.getFrame().addKeyListener(playerController);
-        harmonicMoon.getFrame().addKeyListener(new DebugKeyListener(harmonicMoon));
-        harmonicMoon.getLogger().info("Set up key listeners (" + (System.currentTimeMillis() - startTime) + "ms)");
+        harmonicMoon.getLogger().info("Populated world '" + map + "' (" + (System.currentTimeMillis() - startTime) + "ms)");
     }
 
     public boolean isActive() {
@@ -77,12 +60,16 @@ public class WorldPanel extends JPanel {
         return world;
     }
 
+    public PlayerController getPlayerController() {
+        return harmonicMoon.getPlayerController();
+    }
+
     public Player getPlayer() {
-        return player;
+        return harmonicMoon.getPlayer();
     }
 
     public Camera getCamera() {
-        return camera;
+        return harmonicMoon.getCamera();
     }
 
     public void reset() {
@@ -91,18 +78,18 @@ public class WorldPanel extends JPanel {
     public void onTick() {
         if (active) {
             world.onTick();
-            playerController.onTick();
+            getPlayerController().onTick();
             harmonicMoon.getMessageBox().onTick();
-            if (player.getCharacter() != null) camera.onTick();
+            if (getPlayer().getCharacter() != null) getCamera().onTick();
         }
     }
 
     public void render(Graphics graphics) {
         Graphics2D graphics2D = (Graphics2D) graphics;
-        graphics2D.translate(-camera.getLocation().getX(), -camera.getLocation().getY());
+        graphics2D.translate(-getCamera().getLocation().getX(), -getCamera().getLocation().getY());
         world.render(graphics);
         harmonicMoon.getParticleManager().render(graphics);
-        graphics2D.translate(camera.getLocation().getX(), camera.getLocation().getY());
+        graphics2D.translate(getCamera().getLocation().getX(), getCamera().getLocation().getY());
         harmonicMoon.getMessageBox().render(graphics);
         harmonicMoon.getParticleManager().renderHUD(graphics);
     }
