@@ -46,9 +46,9 @@ public abstract class WorldObject {
     }
 
     public WorldObject getCollision(Direction direction, boolean solidOnly) {
+        WorldLocation relativeLocation = getLocation().getRelative(direction, 8);
+        Rectangle relativeBounds = getBoundsAtPosition(relativeLocation);
         for (WorldObject object : getLocation().getWorld().getObjects()) {
-            WorldLocation relativeLocation = getLocation().getRelative(direction, 8);
-            Rectangle relativeBounds = getBoundsAtPosition(relativeLocation);
             if (relativeBounds.intersects(object.getBounds()) && (!solidOnly || object.isSolid()) && object != this) {
                 return object;
             }
