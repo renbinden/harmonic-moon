@@ -6,7 +6,7 @@ import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 public class TestNPC extends NPC {
 
     public TestNPC(HarmonicMoon harmonicMoon) {
-        super(harmonicMoon, new SpriteSheet("/npcs/test.png", 32, 16));
+        super(harmonicMoon, new SpriteSheet("/npcs/template.png", 32, 16));
         setPath(new BoringPath(getLocation()));
     }
 
