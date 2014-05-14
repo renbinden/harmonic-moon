@@ -65,7 +65,9 @@ public class World {
         WorldObject[] sortedObjects = objects.toArray(new WorldObject[objects.size()]);
         quickSort(sortedObjects);
         for (WorldObject object : sortedObjects) {
-            object.render(graphics);
+            if (harmonicMoon.getCamera().getLocation().distanceSquared(object.getLocation()) <= 640000 && object.getLocation().getX() >= harmonicMoon.getCamera().getLocation().getX() - 32 && object.getLocation().getY() >= harmonicMoon.getCamera().getLocation().getY() - 32) {
+                object.render(graphics);
+            }
         }
         for (Tile tile : getTiles(TileLayer.FRONT)) {
             tile.render(graphics, TileLayer.FRONT);

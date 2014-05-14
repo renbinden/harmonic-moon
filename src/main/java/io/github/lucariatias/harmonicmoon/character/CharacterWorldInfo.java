@@ -55,29 +55,31 @@ public class CharacterWorldInfo extends WorldObject {
     }
 
     public void move(Direction direction) {
-        if (movementState == MovementState.WAITING) {
-            this.direction = direction;
-            if (!isCollision(direction)) {
-                CharacterMoveEvent event = new CharacterMoveEvent(character, getLocation(), getLocation().getRelative(direction, 16));
-                harmonicMoon.getEventManager().dispatchEvent(event);
-                if (!event.isCancelled()) {
-                    switch (direction) {
-                        case UP:
-                            movementState = MovementState.TRANSITIONING_UP;
-                            break;
-                        case DOWN:
-                            movementState = MovementState.TRANSITIONING_DOWN;
-                            break;
-                        case LEFT:
-                            movementState = MovementState.TRANSITIONING_LEFT;
-                            break;
-                        case RIGHT:
-                            movementState = MovementState.TRANSITIONING_RIGHT;
-                            break;
+        if (harmonicMoon.getMessageBox().isHidden()) {
+            if (movementState == MovementState.WAITING) {
+                this.direction = direction;
+                if (!isCollision(direction)) {
+                    CharacterMoveEvent event = new CharacterMoveEvent(character, getLocation(), getLocation().getRelative(direction, 16));
+                    harmonicMoon.getEventManager().dispatchEvent(event);
+                    if (!event.isCancelled()) {
+                        switch (direction) {
+                            case UP:
+                                movementState = MovementState.TRANSITIONING_UP;
+                                break;
+                            case DOWN:
+                                movementState = MovementState.TRANSITIONING_DOWN;
+                                break;
+                            case LEFT:
+                                movementState = MovementState.TRANSITIONING_LEFT;
+                                break;
+                            case RIGHT:
+                                movementState = MovementState.TRANSITIONING_RIGHT;
+                                break;
+                        }
                     }
                 }
+                sprite = sprites.get(direction);
             }
-            sprite = sprites.get(direction);
         }
     }
 
@@ -96,9 +98,7 @@ public class CharacterWorldInfo extends WorldObject {
 
     @Override
     public void render(Graphics graphics) {
-        if (harmonicMoon.getWorldPanel().getCamera().getLocation().distanceSquared(getLocation()) < 713728
-                && getLocation().getX() >= harmonicMoon.getCamera().getLocation().getX() - 32 && getLocation().getY() >= harmonicMoon.getCamera().getLocation().getY() - 32)
-            graphics.drawImage(getImage(), getLocation().getX(), getLocation().getY() - (getImage().getHeight() / 2), null);
+        graphics.drawImage(getImage(), getLocation().getX(), getLocation().getY() - (getImage().getHeight() / 2), null);
     }
 
     @Override

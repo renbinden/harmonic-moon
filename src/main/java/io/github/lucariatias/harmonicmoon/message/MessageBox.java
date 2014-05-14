@@ -140,7 +140,7 @@ public class MessageBox {
     }
 
     public void render(Graphics graphics) {
-        if (y >= harmonicMoon.getHeight()) return;
+        if (responseBoxY >= harmonicMoon.getHeight() && y >= harmonicMoon.getHeight()) return;
         graphics.setColor(Color.WHITE);
         graphics.setFont(harmonicMoon.getMessageFont());
         if (responses != null) {
