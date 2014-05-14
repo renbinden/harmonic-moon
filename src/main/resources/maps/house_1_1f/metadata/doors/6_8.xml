@@ -2,8 +2,8 @@
     <door>
         <entryLocation>
             <world>house_1_2f</world>
-            <x></x>
-            <y></y>
+            <x>9</x>
+            <y>8</y>
         </entryLocation>
     </door>
 </root>
