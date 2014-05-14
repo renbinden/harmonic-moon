@@ -17,6 +17,8 @@ public class Menu extends JPanel {
     private String title;
     private List<MenuItem> menuItems = new ArrayList<>();
 
+    private boolean mousePressed;
+
     private static final int MENU_ITEM_WIDTH = 384;
 
     public Menu(final HarmonicMoon harmonicMoon) {
@@ -43,6 +45,17 @@ public class Menu extends JPanel {
                 }
             }
         });
+        addMouseListener(new MouseInputAdapter() {
+            @Override
+            public void mousePressed(MouseEvent event) {
+                Menu.this.mousePressed = true;
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent event) {
+                Menu.this.mousePressed = false;
+            }
+        });
     }
 
     @Override
@@ -58,11 +71,19 @@ public class Menu extends JPanel {
         for (MenuItem menuItem : getMenuItems()) {
             Point mouse = MouseInfo.getPointerInfo().getLocation();
             if (mouse.getX() - getLocationOnScreen().getX() >= x && mouse.getY() - getLocationOnScreen().getY() >= y && mouse.getX() - getLocationOnScreen().getX() <= getWidth() - x && mouse.getY() - getLocationOnScreen().getY() <= y + 32 + graphics.getFontMetrics().getMaxAscent()) {
-                graphics.setColor(Color.BLUE);
-                graphics.fillRoundRect(x - 8, y - 8, MENU_ITEM_WIDTH + 16, 32 + graphics.getFontMetrics().getMaxAscent() + 16, 16, 16);
-                graphics.setColor(Color.BLACK);
-                graphics.fillRoundRect(x + 8, y + 8, MENU_ITEM_WIDTH - 16, 32 + graphics.getFontMetrics().getMaxAscent() - 16, 16, 16);
-                graphics.setColor(Color.CYAN);
+                if (mousePressed) {
+                    graphics.setColor(new Color(0, 0, 40));
+                    graphics.fillRoundRect(x - 8, y - 8, MENU_ITEM_WIDTH + 16, 32 + graphics.getFontMetrics().getMaxAscent() + 16, 16, 16);
+                    graphics.setColor(Color.BLACK);
+                    graphics.fillRoundRect(x + 8, y + 8, MENU_ITEM_WIDTH - 16, 32 + graphics.getFontMetrics().getMaxAscent() - 16, 16, 16);
+                    graphics.setColor(Color.BLUE);
+                } else {
+                    graphics.setColor(Color.BLUE);
+                    graphics.fillRoundRect(x - 8, y - 8, MENU_ITEM_WIDTH + 16, 32 + graphics.getFontMetrics().getMaxAscent() + 16, 16, 16);
+                    graphics.setColor(Color.BLACK);
+                    graphics.fillRoundRect(x + 8, y + 8, MENU_ITEM_WIDTH - 16, 32 + graphics.getFontMetrics().getMaxAscent() - 16, 16, 16);
+                    graphics.setColor(Color.CYAN);
+                }
             } else {
                 graphics.setColor(Color.WHITE);
             }
