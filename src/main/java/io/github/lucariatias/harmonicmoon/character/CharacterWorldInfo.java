@@ -2,6 +2,7 @@ package io.github.lucariatias.harmonicmoon.character;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.event.character.CharacterMoveEvent;
+import io.github.lucariatias.harmonicmoon.event.collision.CollisionEvent;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 import io.github.lucariatias.harmonicmoon.world.Direction;
@@ -58,7 +59,8 @@ public class CharacterWorldInfo extends WorldObject {
         if (harmonicMoon.getMessageBox().isHidden()) {
             if (movementState == MovementState.WAITING) {
                 this.direction = direction;
-                if (!isCollision(direction)) {
+                WorldObject colliding = getCollision(direction);
+                if (colliding == null) {
                     CharacterMoveEvent event = new CharacterMoveEvent(character, getLocation(), getLocation().getRelative(direction, 16));
                     harmonicMoon.getEventManager().dispatchEvent(event);
                     if (!event.isCancelled()) {
@@ -77,6 +79,9 @@ public class CharacterWorldInfo extends WorldObject {
                                 break;
                         }
                     }
+                } else {
+                    CollisionEvent collisionEvent = new CollisionEvent(this, colliding);
+                    harmonicMoon.getEventManager().dispatchEvent(collisionEvent);
                 }
                 sprite = sprites.get(direction);
             }

@@ -2,6 +2,7 @@ package io.github.lucariatias.harmonicmoon.npc;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.character.CharacterWorldInfo;
+import io.github.lucariatias.harmonicmoon.event.collision.CollisionEvent;
 import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseEvent;
 import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseListener;
 import io.github.lucariatias.harmonicmoon.event.npc.NPCMoveEvent;
@@ -60,7 +61,8 @@ public abstract class NPC extends WorldObject {
 
     public void move(Direction direction) {
         if (movementState == MovementState.WAITING) {
-            if (!isCollision(direction)) {
+            WorldObject colliding = getCollision(direction);
+            if (colliding == null) {
                 NPCMoveEvent event = new NPCMoveEvent(this, getLocation(), getLocation().getRelative(direction, 16));
                 harmonicMoon.getEventManager().dispatchEvent(event);
                 if (!event.isCancelled()) {
@@ -83,6 +85,9 @@ public abstract class NPC extends WorldObject {
                             break;
                     }
                 }
+            } else {
+                CollisionEvent collisionEvent = new CollisionEvent(this, colliding);
+                harmonicMoon.getEventManager().dispatchEvent(collisionEvent);
             }
             sprite = sprites.get(direction);
         }
