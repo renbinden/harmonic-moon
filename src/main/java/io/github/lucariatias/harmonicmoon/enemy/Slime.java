@@ -1,13 +1,11 @@
 package io.github.lucariatias.harmonicmoon.enemy;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
-import io.github.lucariatias.harmonicmoon.sprite.Sprite;
-import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 
 public class Slime extends Monster {
 
-    public Slime(HarmonicMoon harmonicMoon, SpriteSheet spriteSheet, Sprite waitingSprite, Sprite attackingSprite, Sprite injuredSprite) {
-        super(harmonicMoon, "Slime", spriteSheet, waitingSprite, attackingSprite, injuredSprite);
+    public Slime(HarmonicMoon harmonicMoon) {
+        super(harmonicMoon, "Slime", harmonicMoon.getEnemyManager().getWaitSprite(Slime.class), harmonicMoon.getEnemyManager().getAttackSprite(Slime.class), harmonicMoon.getEnemyManager().getInjuredSprite(Slime.class));
     }
 
 }

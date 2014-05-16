@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public enum FightArea {
 
+    PALACE("/fight-backgrounds/palace.png"),
     GRASS("/fight-backgrounds/grass.png");
 
     private String backgroundPath;

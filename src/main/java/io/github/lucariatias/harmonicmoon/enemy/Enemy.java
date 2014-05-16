@@ -21,10 +21,9 @@ public abstract class Enemy extends Combatant {
 
     private int health;
 
-    public Enemy(HarmonicMoon harmonicMoon, String name, SpriteSheet spriteSheet, Sprite waitingSprite, Sprite attackingSprite, Sprite injuredSprite) {
+    public Enemy(HarmonicMoon harmonicMoon, String name, Sprite waitingSprite, Sprite attackingSprite, Sprite injuredSprite) {
         this.harmonicMoon = harmonicMoon;
         this.name = name;
-        this.spriteSheet = spriteSheet;
         this.waitingSprite = waitingSprite;
         this.attackingSprite = attackingSprite;
         this.injuredSprite = injuredSprite;
