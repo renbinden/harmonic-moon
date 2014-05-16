@@ -6,6 +6,7 @@ import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseEvent;
 import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseListener;
 import io.github.lucariatias.harmonicmoon.event.npc.NPCMoveEvent;
 import io.github.lucariatias.harmonicmoon.message.Message;
+import io.github.lucariatias.harmonicmoon.npc.path.Path;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 import io.github.lucariatias.harmonicmoon.world.Direction;

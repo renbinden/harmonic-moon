@@ -1,6 +1,7 @@
 package io.github.lucariatias.harmonicmoon.npc;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
+import io.github.lucariatias.harmonicmoon.npc.path.BoringPath;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 
 public class TestNPC extends NPC {

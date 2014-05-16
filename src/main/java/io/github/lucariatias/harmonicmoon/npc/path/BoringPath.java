@@ -1,5 +1,6 @@
-package io.github.lucariatias.harmonicmoon.npc;
+package io.github.lucariatias.harmonicmoon.npc.path;
 
+import io.github.lucariatias.harmonicmoon.npc.NPC;
 import io.github.lucariatias.harmonicmoon.world.Direction;
 import io.github.lucariatias.harmonicmoon.world.WorldLocation;
 

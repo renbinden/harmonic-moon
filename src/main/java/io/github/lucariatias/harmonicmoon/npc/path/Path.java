@@ -1,4 +1,6 @@
-package io.github.lucariatias.harmonicmoon.npc;
+package io.github.lucariatias.harmonicmoon.npc.path;
+
+import io.github.lucariatias.harmonicmoon.npc.NPC;
 
 public abstract class Path {
 
