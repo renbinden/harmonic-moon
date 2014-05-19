@@ -105,10 +105,10 @@ public abstract class NPC extends WorldObject {
     public void onTick() {
         switch (movementState) {
             case WAITING: getPath().step(); break;
-            case TRANSITIONING_UP: setLocation(getLocation().getRelative(Direction.UP, 2)); sprite.onTick(); break;
-            case TRANSITIONING_DOWN: setLocation(getLocation().getRelative(Direction.DOWN, 2)); sprite.onTick(); break;
-            case TRANSITIONING_LEFT: setLocation(getLocation().getRelative(Direction.LEFT, 2)); sprite.onTick(); break;
-            case TRANSITIONING_RIGHT: setLocation(getLocation().getRelative(Direction.RIGHT, 2)); sprite.onTick(); break;
+            case TRANSITIONING_UP: setLocation(getLocation().getRelative(Direction.UP, 1)); sprite.onTick(); break;
+            case TRANSITIONING_DOWN: setLocation(getLocation().getRelative(Direction.DOWN, 1)); sprite.onTick(); break;
+            case TRANSITIONING_LEFT: setLocation(getLocation().getRelative(Direction.LEFT, 1)); sprite.onTick(); break;
+            case TRANSITIONING_RIGHT: setLocation(getLocation().getRelative(Direction.RIGHT, 1)); sprite.onTick(); break;
         }
         if (getLocation().getX() % 16 == 0 && getLocation().getY() % 16 == 0) movementState = MovementState.WAITING;
     }
