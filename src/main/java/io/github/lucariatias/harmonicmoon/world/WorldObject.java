@@ -49,9 +49,8 @@ public abstract class WorldObject {
         WorldLocation relativeLocation = getLocation().getRelative(direction, 8);
         Rectangle relativeBounds = getBoundsAtPosition(relativeLocation);
         for (WorldObject object : getLocation().getWorld().getObjects()) {
-            if (relativeBounds.intersects(object.getBounds()) && (!solidOnly || object.isSolid()) && object != this) {
-                return object;
-            }
+            if (object.getLocation().distanceSquared(getLocation()) > 800) continue;
+            if (relativeBounds.intersects(object.getBounds()) && (!solidOnly || object.isSolid()) && object != this) return object;
         }
         return null;
     }
