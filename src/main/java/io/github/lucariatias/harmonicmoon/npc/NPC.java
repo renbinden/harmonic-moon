@@ -16,7 +16,9 @@ import io.github.lucariatias.harmonicmoon.world.WorldObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class NPC extends WorldObject {
@@ -124,20 +126,19 @@ public abstract class NPC extends WorldObject {
     }
 
     public void say(String... messages) {
+        List<Message> messagesToSend = new ArrayList<>();
+        for (String message : messages) {
+            messagesToSend.add(new Message(this, message));
+        }
+        say(messagesToSend.toArray(new Message[messagesToSend.size()]));
+    }
+
+    public void say(Message... messages) {
         for (Direction direction : Direction.values()) {
             if (getCollision(direction) instanceof CharacterWorldInfo) {
                 face(direction);
             }
         }
-        getPath().setFrozen(true);
-        if (harmonicMoon.getMessageBox().isHidden()) {
-            for (String message : messages) {
-                harmonicMoon.getMessageBox().queueMessage(message);
-            }
-        }
-    }
-
-    public void say(Message... messages) {
         getPath().setFrozen(true);
         if (harmonicMoon.getMessageBox().isHidden()) {
             for (Message message : messages) {

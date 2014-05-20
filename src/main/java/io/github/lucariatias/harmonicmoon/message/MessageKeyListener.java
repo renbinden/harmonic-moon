@@ -14,7 +14,7 @@ public class MessageKeyListener extends KeyAdapter {
     @Override
     public void keyReleased(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (messageBox.getCharactersShown() < messageBox.getMessage().length()) messageBox.showAllCharacters(); else messageBox.nextMessage();
+            if (messageBox.getCharactersShown() < messageBox.getMessage().getText().length()) messageBox.showAllCharacters(); else messageBox.nextMessage();
         }
     }
 }

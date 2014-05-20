@@ -3,6 +3,7 @@ package io.github.lucariatias.harmonicmoon.message;
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseEvent;
 import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxResponseSelectEvent;
+import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxShowMessageEvent;
 
 import javax.imageio.ImageIO;
 import javax.swing.event.MouseInputAdapter;
@@ -10,8 +11,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -20,10 +19,8 @@ public class MessageBox {
     private HarmonicMoon harmonicMoon;
     private BufferedImage image;
     private BufferedImage responseBoxImage;
-    private String message;
-    private String[] responses;
-    private Queue<String> queuedMessages = new ConcurrentLinkedQueue<>();
-    private Map<String, String[]> queuedResponses = new HashMap<>();
+    private Message message;
+    private Queue<Message> queuedMessages = new ConcurrentLinkedQueue<>();
     private int charactersShown;
     private int y;
     private int responseBoxY;
@@ -39,23 +36,24 @@ public class MessageBox {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        this.message = "";
+        this.message = new Message("");
         this.y = 480;
         this.hidden = true;
         harmonicMoon.getFrame().addMouseListener(new MouseInputAdapter() {
             @Override
             public void mouseClicked(MouseEvent event) {
-                if (responses != null) {
+                if (message instanceof Question) {
+                    Question question = (Question) message;
                     int responseX = MessageBox.this.harmonicMoon.getWidth() - responseBoxImage.getWidth() + 16;
                     int responseY = responseBoxY + 16;
-                    for (String response : responses) {
+                    for (String response : question.getResponses()) {
                         int mouseX = event.getX();
                         int mouseY = event.getY();
                         if (mouseX >= responseX - 16
                                 && mouseX <= responseX - 16 + responseBoxImage.getWidth()
                                 && mouseY >= responseY
                                 && mouseY <= responseY + 16) {
-                            MessageBoxResponseSelectEvent messageBoxResponseSelectEvent = new MessageBoxResponseSelectEvent(MessageBox.this, message, responses, response);
+                            MessageBoxResponseSelectEvent messageBoxResponseSelectEvent = new MessageBoxResponseSelectEvent(MessageBox.this, message, response);
                             MessageBox.this.harmonicMoon.getEventManager().dispatchEvent(messageBoxResponseSelectEvent);
                         }
                         responseY += 16;
@@ -66,13 +64,6 @@ public class MessageBox {
     }
 
     public void queueMessage(Message message) {
-        if (message instanceof Question) {
-            Question question = (Question) message;
-            queueMessage(question.getText(), question.getResponses());
-        }
-    }
-
-    public void queueMessage(String message) {
         if (hidden) {
             queuedMessages.add(message);
             nextMessage();
@@ -82,20 +73,23 @@ public class MessageBox {
         }
     }
 
+    public void queueMessage(String message) {
+        queueMessage(new Message(message));
+    }
+
     public void queueMessage(String message, String... responses) {
-        queuedResponses.put(message, responses);
-        queueMessage(message);
+        queueMessage(new Question(message, responses));
     }
 
     public void nextMessage() {
         if (!queuedMessages.isEmpty()) {
             charactersShown = 0;
-            this.message = queuedMessages.poll();
-            if (queuedResponses.get(message) != null) {
-                this.responses = queuedResponses.get(message);
-                queuedResponses.remove(message);
+            MessageBoxShowMessageEvent messageBoxShowMessageEvent = new MessageBoxShowMessageEvent(this, queuedMessages.poll());
+            harmonicMoon.getEventManager().dispatchEvent(messageBoxShowMessageEvent);
+            if (!messageBoxShowMessageEvent.isCancelled()) {
+                this.message = messageBoxShowMessageEvent.getMessage();
             } else {
-                this.responses = null;
+                queuedMessages.remove(messageBoxShowMessageEvent.getMessage());
             }
         } else {
             MessageBoxCloseEvent event = new MessageBoxCloseEvent(this);
@@ -104,11 +98,11 @@ public class MessageBox {
         }
     }
 
-    public String getMessage() {
+    public Message getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(Message message) {
         this.message = message;
     }
 
@@ -121,7 +115,7 @@ public class MessageBox {
     }
 
     public void showAllCharacters() {
-        setCharactersShown(message.length());
+        setCharactersShown(message.getText().length());
     }
 
     public void onTick() {
@@ -133,7 +127,7 @@ public class MessageBox {
             responseBoxY = responseBoxY > harmonicMoon.getHeight() - (image.getHeight() + responseBoxImage.getHeight() - 16) ? responseBoxY - 8 : harmonicMoon.getHeight() - (image.getHeight() + responseBoxImage.getHeight() - 16);
         }
         if (y == harmonicMoon.getHeight() - image.getHeight()) {
-            if (message.length() > charactersShown) {
+            if (message.getText().length() > charactersShown) {
                 charactersShown++;
             }
         }
@@ -143,18 +137,19 @@ public class MessageBox {
         if (responseBoxY >= harmonicMoon.getHeight() && y >= harmonicMoon.getHeight()) return;
         graphics.setColor(Color.WHITE);
         graphics.setFont(harmonicMoon.getMessageFont());
-        if (responses != null) {
+        if (message instanceof Question) {
             renderResponseBox(graphics);
         }
         graphics.drawImage(image, 0, y, null);
-        graphics.drawString(message.substring(0, charactersShown), 32, y + 32);
+        graphics.drawString(message.getText().substring(0, charactersShown), 32, y + 32);
     }
 
     private void renderResponseBox(Graphics graphics) {
         graphics.drawImage(responseBoxImage, harmonicMoon.getWidth() - responseBoxImage.getWidth(), responseBoxY, null);
         int responseX = harmonicMoon.getWidth() - responseBoxImage.getWidth() + 16;
         int responseY = responseBoxY + 16;
-        for (String response : responses) {
+        Question question = (Question) message;
+        for (String response : question.getResponses()) {
             Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
             int mouseXInWindow = (int) (mouseLocation.getX() - harmonicMoon.getLocationOnScreen().getX());
             int mouseYInWindow = (int) (mouseLocation.getY() - harmonicMoon.getLocationOnScreen().getY());

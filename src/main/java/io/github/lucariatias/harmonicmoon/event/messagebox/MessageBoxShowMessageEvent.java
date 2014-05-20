@@ -5,17 +5,15 @@ import io.github.lucariatias.harmonicmoon.event.Event;
 import io.github.lucariatias.harmonicmoon.message.Message;
 import io.github.lucariatias.harmonicmoon.message.MessageBox;
 
-public class MessageBoxResponseSelectEvent extends Event implements Cancellable {
+public class MessageBoxShowMessageEvent extends Event implements Cancellable {
 
     private MessageBox messageBox;
     private Message message;
-    private String selectedResponse;
     private boolean cancelled;
 
-    public MessageBoxResponseSelectEvent(MessageBox messageBox, Message message, String selectedResponse) {
+    public MessageBoxShowMessageEvent(MessageBox messageBox, Message message) {
         this.messageBox = messageBox;
         this.message = message;
-        this.selectedResponse = selectedResponse;
     }
 
     public MessageBox getMessageBox() {
@@ -26,12 +24,8 @@ public class MessageBoxResponseSelectEvent extends Event implements Cancellable 
         return message;
     }
 
-    public String getSelectedResponse() {
-        return selectedResponse;
-    }
-
-    public void setSelectedResponse(String selectedResponse) {
-        this.selectedResponse = selectedResponse;
+    public void setMessage(Message message) {
+        this.message = message;
     }
 
     @Override
