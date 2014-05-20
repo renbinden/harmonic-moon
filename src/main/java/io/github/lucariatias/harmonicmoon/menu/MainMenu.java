@@ -24,7 +24,9 @@ public class MainMenu extends Menu {
         });
         addMenuItem("Exit", new Runnable() {
             @Override
-            public void run() {}
+            public void run() {
+                System.exit(0);
+            }
         });
     }
 }
