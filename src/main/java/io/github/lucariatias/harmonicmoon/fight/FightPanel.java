@@ -22,7 +22,7 @@ public class FightPanel extends JPanel {
     public FightPanel(HarmonicMoon harmonicMoon) {
         this.harmonicMoon = harmonicMoon;
         //harmonicMoon.getEventManager().registerListener(new FightCharacterMoveListener(harmonicMoon));
-        optionBox = new FightOptionBox(harmonicMoon);
+        optionBox = new FightOptionBox(harmonicMoon, this);
     }
 
     public void prepareFight(Fight fight) {

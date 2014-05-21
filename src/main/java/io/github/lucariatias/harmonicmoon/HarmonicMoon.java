@@ -71,7 +71,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
         try {
             long startTime = System.currentTimeMillis();
             this.titleFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/AftaSerifThin-Regular.otf"));
-            this.messageFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/AftaSerifThin-Regular.otf")).deriveFont(12F);
+            this.messageFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/AftaSerifThin-Regular.otf")).deriveFont(16F);
             getLogger().info("Loaded fonts (" + (System.currentTimeMillis() - startTime) + "ms)");
         } catch (FontFormatException | IOException exception) {
             exception.printStackTrace();
