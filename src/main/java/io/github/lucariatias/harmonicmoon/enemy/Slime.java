@@ -8,4 +8,8 @@ public class Slime extends Monster {
         super(harmonicMoon, "Slime", harmonicMoon.getEnemyManager().getWaitSprite(Slime.class), harmonicMoon.getEnemyManager().getAttackSprite(Slime.class), harmonicMoon.getEnemyManager().getInjuredSprite(Slime.class));
     }
 
+    @Override
+    public int getMaxHealth() {
+        return 15;
+    }
 }

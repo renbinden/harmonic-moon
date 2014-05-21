@@ -8,4 +8,8 @@ public class Guard extends Enemy {
         super(harmonicMoon, "Guard", harmonicMoon.getEnemyManager().getWaitSprite(Guard.class), harmonicMoon.getEnemyManager().getAttackSprite(Guard.class), harmonicMoon.getEnemyManager().getInjuredSprite(Guard.class));
     }
 
+    @Override
+    public int getMaxHealth() {
+        return 10;
+    }
 }

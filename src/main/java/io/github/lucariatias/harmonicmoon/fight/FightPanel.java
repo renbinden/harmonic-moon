@@ -12,6 +12,7 @@ public class FightPanel extends JPanel {
 
     private HarmonicMoon harmonicMoon;
     private BufferedImage background;
+    private FightOptionBox optionBox;
 
     private Fight fight;
 
@@ -21,6 +22,7 @@ public class FightPanel extends JPanel {
     public FightPanel(HarmonicMoon harmonicMoon) {
         this.harmonicMoon = harmonicMoon;
         //harmonicMoon.getEventManager().registerListener(new FightCharacterMoveListener(harmonicMoon));
+        optionBox = new FightOptionBox(harmonicMoon);
     }
 
     public void prepareFight(Fight fight) {
@@ -81,6 +83,7 @@ public class FightPanel extends JPanel {
         for (Enemy enemy : fight.getEnemyParty().getMembers()) {
             enemy.render(graphics);
         }
+        optionBox.render(graphics);
     }
 
 }
