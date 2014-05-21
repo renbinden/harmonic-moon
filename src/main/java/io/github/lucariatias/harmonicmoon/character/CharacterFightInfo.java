@@ -1,6 +1,5 @@
 package io.github.lucariatias.harmonicmoon.character;
 
-import io.github.lucariatias.harmonicmoon.character.Character;
 import io.github.lucariatias.harmonicmoon.fight.Combatant;
 import io.github.lucariatias.harmonicmoon.skill.Skill;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
@@ -35,6 +34,12 @@ public class CharacterFightInfo extends Combatant {
 
     @Override
     public void render(Graphics graphics) {
+        graphics.setColor(Color.GREEN);
+        graphics.fillRect(getLocation().getX(), getLocation().getY() - 16, health, 8);
+        graphics.setColor(Color.RED);
+        graphics.fillRect(getLocation().getX() + health, getLocation().getY() - 16, getMaxHealth() - health, 8);
+        graphics.setColor(Color.BLACK);
+        graphics.drawRect(getLocation().getX(), getLocation().getY() - 16, getMaxHealth(), 8);
         graphics.drawImage(sprite.getImage(), getLocation().getX(), getLocation().getY(), null);
     }
 
@@ -51,4 +56,10 @@ public class CharacterFightInfo extends Combatant {
     public void useSkill(Skill skill) {
 
     }
+
+    @Override
+    public int getMaxHealth() {
+        return character.getMaxHealth();
+    }
+
 }

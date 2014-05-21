@@ -6,4 +6,6 @@ public abstract class Combatant extends FightObject {
 
     public abstract void setHealth(int health);
 
+    public abstract int getMaxHealth();
+
 }
