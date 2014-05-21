@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class HarmonicMoonFrame extends JFrame {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException exception) {
@@ -14,15 +14,15 @@ public class HarmonicMoonFrame extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                JFrame frame = new HarmonicMoonFrame();
+                JFrame frame = new HarmonicMoonFrame(args);
                 frame.setVisible(true);
             }
         });
     }
 
-    public HarmonicMoonFrame() {
+    public HarmonicMoonFrame(String[] args) {
         long startTime = System.currentTimeMillis();
-        HarmonicMoon harmonicMoon = new HarmonicMoon(this);
+        HarmonicMoon harmonicMoon = new HarmonicMoon(this, args);
         add(harmonicMoon);
         harmonicMoon.getLogger().info("Set up game (" + (System.currentTimeMillis() - startTime) + "ms)");
         setTitle("Harmonic Moon");

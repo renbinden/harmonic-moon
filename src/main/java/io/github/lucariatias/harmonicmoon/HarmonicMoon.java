@@ -20,8 +20,10 @@ import io.github.lucariatias.harmonicmoon.world.WorldPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class HarmonicMoon extends JPanel implements Runnable {
@@ -58,7 +60,8 @@ public class HarmonicMoon extends JPanel implements Runnable {
     private Player player;
     private Camera camera;
 
-    public HarmonicMoon(HarmonicMoonFrame frame) {
+    public HarmonicMoon(HarmonicMoonFrame frame, String[] args) {
+        List<String> argsList = Arrays.asList(args);
         this.frame = frame;
         CardLayout layout = new CardLayout();
         setLayout(layout);
@@ -111,19 +114,24 @@ public class HarmonicMoon extends JPanel implements Runnable {
         add(fightPanel, "fight");
         getLogger().info("Set up fight panel (" + (System.currentTimeMillis() - startTime) + "ms)");
         setPanel("menu");
-        startTime = System.currentTimeMillis();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                musicPlayer = new MusicPlayer();
-                musicPlayer.loop("/music/prelude_to_adventure.ogg");
-            }
-        }).start();
-        getLogger().info("Set up thread for music (" + (System.currentTimeMillis() - startTime) + "ms)");
+        if (!argsList.contains("--no-music")) {
+            startTime = System.currentTimeMillis();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    musicPlayer = new MusicPlayer();
+                    musicPlayer.loop("/music/prelude_to_adventure.ogg");
+                }
+            }).start();
+            getLogger().info("Set up thread for music (" + (System.currentTimeMillis() - startTime) + "ms)");
+        }
         startTime = System.currentTimeMillis();
         messageBox = new MessageBox(this);
         frame.addKeyListener(new MessageKeyListener(messageBox));
         getLogger().info("Set up message box (" + (System.currentTimeMillis() - startTime) + "ms)");
+        if (argsList.contains("--debug")) {
+            setDebug(true);
+        }
     }
 
     public HarmonicMoonFrame getFrame() {
