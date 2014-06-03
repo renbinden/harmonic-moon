@@ -64,7 +64,7 @@ public class Menu extends JPanel {
         graphics.fillRect(0, 0, getWidth(), getHeight());
         graphics.setFont(harmonicMoon.getTitleFont().deriveFont(48.0F));
         graphics.setColor(Color.WHITE);
-        graphics.drawString(title, (getWidth() - graphics.getFontMetrics().charsWidth(title.toCharArray(), 0, title.length())) / 2, graphics.getFontMetrics().getLeading() + graphics.getFontMetrics().getMaxAscent());
+        graphics.drawString(title, (getWidth() - graphics.getFontMetrics().charsWidth(title.toCharArray(), 0, title.length())) / 2, (graphics.getFontMetrics().getLeading() + graphics.getFontMetrics().getMaxAscent()) * 2);
         graphics.setFont(harmonicMoon.getTitleFont().deriveFont(16.0F));
         int x = (getWidth() - MENU_ITEM_WIDTH) / 2;
         int y = 128;
