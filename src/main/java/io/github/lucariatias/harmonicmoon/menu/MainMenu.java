@@ -11,7 +11,7 @@ public class MainMenu extends Menu {
         addMenuItem("New game", new Runnable() {
             @Override
             public void run() {
-                harmonicMoon.setPanel("map_world"); harmonicMoon.getWorldPanel().reset(); harmonicMoon.getWorldPanel().setActive(true);
+                harmonicMoon.setPanel("map_palace_1_2f"); harmonicMoon.getWorldPanel().reset(); harmonicMoon.getWorldPanel().setActive(true);
             }
         });
         addMenuItem("Continue", new Runnable() {

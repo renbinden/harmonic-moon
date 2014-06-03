@@ -108,9 +108,9 @@ public class HarmonicMoon extends JPanel implements Runnable {
         getFrame().addKeyListener(playerController);
         getFrame().addKeyListener(new DebugKeyListener(this));
         getLogger().info("Set up key listeners (" + (System.currentTimeMillis() - startTime) + "ms)");
-        worldPanel = new WorldPanel(this, "world");
-        worldPanels.put("world", worldPanel);
-        add(worldPanel, "map_world");
+        worldPanel = new WorldPanel(this, "palace_1_2f");
+        worldPanels.put("palace_1_2f", worldPanel);
+        add(worldPanel, "map_palace_1_2f");
         startTime = System.currentTimeMillis();
         camera = new Camera(player);
         getLogger().info("Set up camera (" + (System.currentTimeMillis() - startTime) + "ms)");
@@ -165,7 +165,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
     }
 
     public void showWorld(String map) {
-        worldPanel.setActive(false);
+        if (worldPanel != null) worldPanel.setActive(false);
         if (!worldPanels.containsKey(map)) {
             long startTime = System.currentTimeMillis();
             worldPanel = new WorldPanel(this, map);
