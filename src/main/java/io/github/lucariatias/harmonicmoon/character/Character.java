@@ -41,7 +41,7 @@ public abstract class Character {
         this.mana = getMaxMana();
         this.money = new HashMap<>();
         this.worldInfo = new CharacterWorldInfo(harmonicMoon, this, spriteSheet);
-        this.fightInfo = new CharacterFightInfo(this, fightSpriteSheet);
+        this.fightInfo = new CharacterFightInfo(harmonicMoon, this, fightSpriteSheet);
     }
 
     public String getName() {

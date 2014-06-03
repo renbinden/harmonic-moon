@@ -1,5 +1,6 @@
 package io.github.lucariatias.harmonicmoon.character;
 
+import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.fight.Combatant;
 import io.github.lucariatias.harmonicmoon.skill.Skill;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
@@ -7,7 +8,12 @@ import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 
 import java.awt.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CharacterFightInfo extends Combatant {
+
+    private HarmonicMoon harmonicMoon;
 
     private Character character;
     private int health;
@@ -18,7 +24,8 @@ public class CharacterFightInfo extends Combatant {
     private Sprite attackingSprite;
     private Sprite injuredSprite;
 
-    public CharacterFightInfo(Character character, SpriteSheet spriteSheet) {
+    public CharacterFightInfo(HarmonicMoon harmonicMoon, Character character, SpriteSheet spriteSheet) {
+        this.harmonicMoon = harmonicMoon;
         this.character = character;
         this.spriteSheet = spriteSheet;
         this.waitingSprite = spriteSheet.getSprite(0, 0, 8);
@@ -43,6 +50,10 @@ public class CharacterFightInfo extends Combatant {
         graphics.drawImage(sprite.getImage(), getLocation().getX(), getLocation().getY(), null);
     }
 
+    public Character getCharacter() {
+        return character;
+    }
+
     @Override
     public int getHealth() {
         return health;
@@ -51,6 +62,16 @@ public class CharacterFightInfo extends Combatant {
     @Override
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public List<Skill> getSkills() {
+        List<Skill> skills = new ArrayList<>();
+        for (Skill skill : harmonicMoon.getSkillManager().getSkills()) {
+            if (skill.canUse(this)) {
+                skills.add(skill);
+            }
+        }
+        return skills;
     }
 
     public void useSkill(Skill skill) {

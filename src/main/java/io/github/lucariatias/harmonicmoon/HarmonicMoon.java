@@ -14,6 +14,7 @@ import io.github.lucariatias.harmonicmoon.particle.ParticleManager;
 import io.github.lucariatias.harmonicmoon.player.Camera;
 import io.github.lucariatias.harmonicmoon.player.KeyboardPlayerController;
 import io.github.lucariatias.harmonicmoon.player.Player;
+import io.github.lucariatias.harmonicmoon.skill.SkillManager;
 import io.github.lucariatias.harmonicmoon.world.World;
 import io.github.lucariatias.harmonicmoon.world.WorldPanel;
 
@@ -52,6 +53,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
     private EventManager eventManager;
     private JobManager jobManager;
     private ParticleManager particleManager;
+    private SkillManager skillManager;
 
     private MusicPlayer musicPlayer;
     private MessageBox messageBox;
@@ -91,6 +93,9 @@ public class HarmonicMoon extends JPanel implements Runnable {
         startTime = System.currentTimeMillis();
         particleManager = new ParticleManager(this);
         getLogger().info("Set up particle systems (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
+        skillManager = new SkillManager();
+        getLogger().info("Set up skills (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
         add(new MainMenu(this), "menu");
         getLogger().info("Set up main menu (" + (System.currentTimeMillis() - startTime) + "ms)");
@@ -222,6 +227,10 @@ public class HarmonicMoon extends JPanel implements Runnable {
 
     public ParticleManager getParticleManager() {
         return particleManager;
+    }
+
+    public SkillManager getSkillManager() {
+        return skillManager;
     }
 
     @Override

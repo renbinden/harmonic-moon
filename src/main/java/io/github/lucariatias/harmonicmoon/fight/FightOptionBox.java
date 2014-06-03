@@ -1,6 +1,8 @@
 package io.github.lucariatias.harmonicmoon.fight;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
+import io.github.lucariatias.harmonicmoon.character.Character;
+import io.github.lucariatias.harmonicmoon.skill.Skill;
 
 import javax.imageio.ImageIO;
 import javax.swing.event.MouseInputAdapter;
@@ -13,18 +15,53 @@ public class FightOptionBox {
 
     private HarmonicMoon harmonicMoon;
     private BufferedImage image;
-    private String[] options;
+    private FightOption[] options;
 
     private boolean mousePressed;
 
-    public FightOptionBox(HarmonicMoon harmonicMoon, FightPanel fightPanel) {
+    private Character character;
+
+    public FightOptionBox(final HarmonicMoon harmonicMoon, FightPanel fightPanel) {
         this.harmonicMoon = harmonicMoon;
         try {
             image = ImageIO.read(getClass().getResourceAsStream("/message.png"));
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        this.options = new String[] {"Attack", "Defend", "Use item", "Run"};
+        this.options = new FightOption[] {
+                new FightOption("Use skill", new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 3; i++) {
+                            final Skill skill = character.fight().getSkills().get(i);
+                            options[i] = new FightOption(skill.getName(), new Runnable() {
+                                @Override
+                                public void run() {
+                                    character.fight().useSkill(skill);
+                                }
+                            });
+                        }
+                    }
+                }),
+                new FightOption("Defend", new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                }),
+                new FightOption("Use item", new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                }),
+                new FightOption("Run", new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                })
+        };
         fightPanel.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent event) {
@@ -38,11 +75,11 @@ public class FightOptionBox {
         });
     }
 
-    public void setOptions(String... options) {
+    public void setOptions(FightOption... options) {
         this.options = options;
     }
 
-    public String[] getOptions() {
+    public FightOption[] getOptions() {
         return options;
     }
 
@@ -50,7 +87,7 @@ public class FightOptionBox {
         graphics.drawImage(image, 0, 480 - image.getHeight(), null);
         if (options != null) {
             int x = 16, y = 496 - image.getHeight();
-            for (String option : options) {
+            for (FightOption option : options) {
                 Rectangle optionBounds = new Rectangle(x, y, image.getWidth() / 2 - 32, image.getHeight() / 2 - 32);
                 Point mousePoint = MouseInfo.getPointerInfo().getLocation();
                 mousePoint.translate(- (int) harmonicMoon.getLocationOnScreen().getX(), - (int) harmonicMoon.getLocationOnScreen().getY());
@@ -63,7 +100,7 @@ public class FightOptionBox {
                 graphics.setColor(Color.WHITE);
                 graphics.drawRect((int) optionBounds.getX(), (int) optionBounds.getY(), (int) optionBounds.getWidth(), (int) optionBounds.getHeight());
                 graphics.setFont(harmonicMoon.getMessageFont());
-                graphics.drawString(option, x + 16, y + 24);
+                graphics.drawString(option.getName(), x + 16, y + 24);
                 y += 48;
                 if ((y - (496 - image.getHeight())) / 48 == 2) {
                     y = 496 - image.getHeight();
