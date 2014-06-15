@@ -1,0 +1,9 @@
+<root>
+    <door>
+        <entryLocation>
+            <world>palace_1_1f</world>
+            <x>37</x>
+            <y>37</y>
+        </entryLocation>
+    </door>
+</root>
