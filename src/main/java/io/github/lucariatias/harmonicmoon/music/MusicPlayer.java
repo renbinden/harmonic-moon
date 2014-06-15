@@ -4,25 +4,56 @@ import javax.sound.sampled.*;
 import javax.sound.sampled.DataLine.Info;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
 import static javax.sound.sampled.AudioSystem.getAudioInputStream;
 
 public class MusicPlayer {
 
-    private List<SourceDataLine> lines = new ArrayList<>();
+    private List<SourceDataLine> lines = Collections.synchronizedList(new ArrayList<SourceDataLine>());
+    private Set<String> looping = Collections.synchronizedSet(new HashSet<String>());
 
-    public void loop(String path) {
-        while (true) {
-            play(getClass().getResourceAsStream(path));
-        }
+    public void loop(final String path) {
+        stopAll();
+        looping.add(path);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (looping.contains(path)) {
+                    playBlocking(getClass().getResourceAsStream(path));
+                }
+            }
+        }).start();
     }
 
-    public void play(InputStream inputStream) {
-        stopAll();
+    public void playNonBlocking(final InputStream inputStream) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try (final AudioInputStream in = getAudioInputStream(inputStream)) {
+                    final AudioFormat outFormat = getOutFormat(in.getFormat());
+                    final Info info = new Info(SourceDataLine.class, outFormat);
+                    try (final SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
+                        if (line != null) {
+                            lines.add(line);
+                            line.open(outFormat);
+                            line.start();
+                            stream(getAudioInputStream(outFormat, in), line);
+                            line.drain();
+                            line.stop();
+                        }
+                    }
+                } catch (UnsupportedAudioFileException
+                        | LineUnavailableException
+                        | IOException exception) {
+                    throw new IllegalStateException(exception);
+                }
+            }
+        }).start();
+    }
+
+    public void playBlocking(InputStream inputStream) {
         try (final AudioInputStream in = getAudioInputStream(inputStream)) {
             final AudioFormat outFormat = getOutFormat(in.getFormat());
             final Info info = new Info(SourceDataLine.class, outFormat);
@@ -44,6 +75,7 @@ public class MusicPlayer {
     }
 
     public void stopAll() {
+        looping.clear();
         for (Iterator<SourceDataLine> iterator = lines.iterator(); iterator.hasNext(); ) {
             SourceDataLine line = iterator.next();
             line.stop();

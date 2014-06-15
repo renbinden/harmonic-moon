@@ -34,6 +34,14 @@ public class CharacterFightInfo extends Combatant {
         this.sprite = waitingSprite;
     }
 
+    public String getName() {
+        return character.getName();
+    }
+
+    public void setName(String name) {
+        character.setName(name);
+    }
+
     @Override
     public void onTick() {
         sprite.onTick();
@@ -83,4 +91,12 @@ public class CharacterFightInfo extends Combatant {
         return character.getMaxHealth();
     }
 
+    public void attack(Combatant combatant) {
+        if (harmonicMoon.getFightPanel().isActive()) {
+            combatant.setHealth(combatant.getHealth() - 5);
+        }
+    }
+
+    public void defend() {
+    }
 }

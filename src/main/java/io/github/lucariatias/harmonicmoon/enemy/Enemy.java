@@ -30,6 +30,14 @@ public abstract class Enemy extends Combatant {
         this.sprite = waitingSprite;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public void render(Graphics graphics) {
         graphics.setColor(Color.GREEN);

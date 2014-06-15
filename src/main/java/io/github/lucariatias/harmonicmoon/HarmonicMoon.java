@@ -73,7 +73,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
         try {
             long startTime = System.currentTimeMillis();
             this.titleFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/AftaSerifThin-Regular.otf"));
-            this.messageFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/AftaSerifThin-Regular.otf")).deriveFont(16F);
+            this.messageFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/AftaSerifThin-Regular.otf")).deriveFont(12F);
             getLogger().info("Loaded fonts (" + (System.currentTimeMillis() - startTime) + "ms)");
         } catch (FontFormatException | IOException exception) {
             exception.printStackTrace();
@@ -121,13 +121,8 @@ public class HarmonicMoon extends JPanel implements Runnable {
         setPanel("menu");
         if (!argsList.contains("--no-music")) {
             startTime = System.currentTimeMillis();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    musicPlayer = new MusicPlayer();
-                    musicPlayer.loop("/music/prelude_to_adventure.ogg");
-                }
-            }).start();
+            musicPlayer = new MusicPlayer();
+            musicPlayer.loop("/music/prelude_to_adventure.ogg");
             getLogger().info("Set up thread for music (" + (System.currentTimeMillis() - startTime) + "ms)");
         }
         startTime = System.currentTimeMillis();
