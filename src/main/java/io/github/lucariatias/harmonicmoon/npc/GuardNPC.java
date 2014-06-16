@@ -1,7 +1,7 @@
 package io.github.lucariatias.harmonicmoon.npc;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
-import io.github.lucariatias.harmonicmoon.character.CharacterWorldInfo;
+import io.github.lucariatias.harmonicmoon.character.WorldCharacter;
 import io.github.lucariatias.harmonicmoon.enemy.Guard;
 import io.github.lucariatias.harmonicmoon.event.collision.CollisionEvent;
 import io.github.lucariatias.harmonicmoon.event.collision.CollisionListener;
@@ -26,8 +26,8 @@ public class GuardNPC extends NPC {
         harmonicMoon.getEventManager().registerListener(new CollisionListener() {
             @Override
             public void onCollision(CollisionEvent event) {
-                if (event.getObjects()[0] == GuardNPC.this && event.getObjects()[1] instanceof CharacterWorldInfo ||
-                        event.getObjects()[1] == GuardNPC.this && event.getObjects()[0] instanceof CharacterWorldInfo) {
+                if (event.getObjects()[0] == GuardNPC.this && event.getObjects()[1] instanceof WorldCharacter ||
+                        event.getObjects()[1] == GuardNPC.this && event.getObjects()[0] instanceof WorldCharacter) {
                     interact();
                     getPath().setFrozen(true);
                 }

@@ -1,7 +1,7 @@
 package io.github.lucariatias.harmonicmoon.npc;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
-import io.github.lucariatias.harmonicmoon.character.CharacterWorldInfo;
+import io.github.lucariatias.harmonicmoon.character.WorldCharacter;
 import io.github.lucariatias.harmonicmoon.event.collision.CollisionEvent;
 import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseEvent;
 import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseListener;
@@ -135,7 +135,7 @@ public abstract class NPC extends WorldObject {
 
     public void say(Message... messages) {
         for (Direction direction : Direction.values()) {
-            if (getCollision(direction) instanceof CharacterWorldInfo) {
+            if (getCollision(direction) instanceof WorldCharacter) {
                 face(direction);
             }
         }

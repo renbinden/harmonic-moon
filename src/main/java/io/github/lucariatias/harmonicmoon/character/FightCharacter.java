@@ -11,7 +11,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CharacterFightInfo extends Combatant {
+public class FightCharacter extends Combatant {
 
     private HarmonicMoon harmonicMoon;
 
@@ -24,7 +24,7 @@ public class CharacterFightInfo extends Combatant {
     private Sprite attackingSprite;
     private Sprite injuredSprite;
 
-    public CharacterFightInfo(HarmonicMoon harmonicMoon, Character character, SpriteSheet spriteSheet) {
+    public FightCharacter(HarmonicMoon harmonicMoon, Character character, SpriteSheet spriteSheet) {
         this.harmonicMoon = harmonicMoon;
         this.character = character;
         this.spriteSheet = spriteSheet;

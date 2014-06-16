@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class CharacterWorldInfo extends WorldObject {
+public class WorldCharacter extends WorldObject {
 
     enum MovementState {
         TRANSITIONING_UP, TRANSITIONING_DOWN, TRANSITIONING_LEFT, TRANSITIONING_RIGHT, WAITING
@@ -34,7 +34,7 @@ public class CharacterWorldInfo extends WorldObject {
     private MovementState movementState;
     private Direction direction = Direction.DOWN;
 
-    public CharacterWorldInfo(HarmonicMoon harmonicMoon, Character character, SpriteSheet spriteSheet) {
+    public WorldCharacter(HarmonicMoon harmonicMoon, Character character, SpriteSheet spriteSheet) {
         this.harmonicMoon = harmonicMoon;
         this.character = character;
         this.movementState = MovementState.WAITING;

@@ -27,8 +27,8 @@ public abstract class Character {
     //Money stuff
     private Map<Currency, Integer> money;
 
-    private CharacterWorldInfo worldInfo;
-    private CharacterFightInfo fightInfo;
+    private WorldCharacter worldInfo;
+    private FightCharacter fightInfo;
 
     public Character(HarmonicMoon harmonicMoon, String name, int age, Gender gender, Job job, SpriteSheet spriteSheet, SpriteSheet fightSpriteSheet) {
         this.harmonicMoon = harmonicMoon;
@@ -40,8 +40,8 @@ public abstract class Character {
         this.health = getMaxHealth();
         this.mana = getMaxMana();
         this.money = new HashMap<>();
-        this.worldInfo = new CharacterWorldInfo(harmonicMoon, this, spriteSheet);
-        this.fightInfo = new CharacterFightInfo(harmonicMoon, this, fightSpriteSheet);
+        this.worldInfo = new WorldCharacter(harmonicMoon, this, spriteSheet);
+        this.fightInfo = new FightCharacter(harmonicMoon, this, fightSpriteSheet);
     }
 
     public String getName() {
@@ -133,11 +133,11 @@ public abstract class Character {
         return job.getStatValueAtLevel(stat, getLevel());
     }
 
-    public CharacterWorldInfo world() {
+    public WorldCharacter world() {
         return worldInfo;
     }
 
-    public CharacterFightInfo fight() {
+    public FightCharacter fight() {
         return fightInfo;
     }
 }

@@ -2,7 +2,7 @@ package io.github.lucariatias.harmonicmoon.world;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.block.Block;
-import io.github.lucariatias.harmonicmoon.character.CharacterWorldInfo;
+import io.github.lucariatias.harmonicmoon.character.WorldCharacter;
 import io.github.lucariatias.harmonicmoon.door.Door;
 import io.github.lucariatias.harmonicmoon.npc.GuardNPC;
 import io.github.lucariatias.harmonicmoon.tile.Tile;
@@ -84,12 +84,12 @@ public class World {
 
     public void addObject(WorldObject object) {
         objects.add(object);
-        if (object instanceof CharacterWorldInfo) harmonicMoon.debug(((CharacterWorldInfo) object).getCharacter().getName() + " added to " + getName());
+        if (object instanceof WorldCharacter) harmonicMoon.debug(((WorldCharacter) object).getCharacter().getName() + " added to " + getName());
     }
 
     public void removeObject(WorldObject object) {
         objects.remove(object);
-        if (object instanceof CharacterWorldInfo) harmonicMoon.debug(((CharacterWorldInfo) object).getCharacter().getName() + " removed from " + getName());
+        if (object instanceof WorldCharacter) harmonicMoon.debug(((WorldCharacter) object).getCharacter().getName() + " removed from " + getName());
     }
 
     private int partition(WorldObject[] objects, int left, int right) {

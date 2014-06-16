@@ -1,7 +1,7 @@
 package io.github.lucariatias.harmonicmoon.fight;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
-import io.github.lucariatias.harmonicmoon.character.CharacterFightInfo;
+import io.github.lucariatias.harmonicmoon.character.FightCharacter;
 import io.github.lucariatias.harmonicmoon.enemy.Enemy;
 
 import javax.swing.*;
@@ -29,7 +29,7 @@ public class FightPanel extends JPanel {
         this.fight = fight;
         this.background = fight.getArea().getBackground();
         int x = 16;
-        for (CharacterFightInfo character : fight.getCharacterParty().getMembers()) {
+        for (FightCharacter character : fight.getCharacterParty().getMembers()) {
             character.setLocation(new FightLocation(x, 224));
             x += 144;
         }
@@ -82,7 +82,7 @@ public class FightPanel extends JPanel {
 
     public void render(Graphics graphics) {
         graphics.drawImage(background, 0, 0, null);
-        for (CharacterFightInfo character : fight.getCharacterParty().getMembers()) {
+        for (FightCharacter character : fight.getCharacterParty().getMembers()) {
             character.render(graphics);
         }
         for (Enemy enemy : fight.getEnemyParty().getMembers()) {
