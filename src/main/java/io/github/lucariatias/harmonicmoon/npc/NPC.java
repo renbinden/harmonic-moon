@@ -11,6 +11,7 @@ import io.github.lucariatias.harmonicmoon.npc.path.Path;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 import io.github.lucariatias.harmonicmoon.world.Direction;
+import io.github.lucariatias.harmonicmoon.world.MovementState;
 import io.github.lucariatias.harmonicmoon.world.WorldLocation;
 import io.github.lucariatias.harmonicmoon.world.WorldObject;
 
@@ -22,10 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class NPC extends WorldObject {
-
-    enum MovementState {
-        TRANSITIONING_UP, TRANSITIONING_DOWN, TRANSITIONING_LEFT, TRANSITIONING_RIGHT, WAITING
-    }
 
     private HarmonicMoon harmonicMoon;
 
@@ -118,11 +115,32 @@ public abstract class NPC extends WorldObject {
     @Override
     public void render(Graphics graphics) {
         graphics.drawImage(getImage(), getLocation().getX(), getLocation().getY() - (getImage().getHeight() / 2), null);
+        if (harmonicMoon.isDebug()) {
+            Rectangle bounds = getBounds();
+            graphics.setColor(Color.RED);
+            graphics.drawRect((int) bounds.getX(), (int) bounds.getY(), (int) bounds.getWidth(), (int) bounds.getHeight());
+        }
     }
 
     @Override
-    public Rectangle getBoundsAtPosition(WorldLocation location) {
-        return new Rectangle(location.getX(), location.getY(), getImage().getWidth(), getImage().getHeight() / 2);
+    public Rectangle getBoundsAtPosition(WorldLocation location, MovementState movementState) {
+        switch (movementState) {
+            case TRANSITIONING_UP:
+                return new Rectangle((location.getX() / 16) * 16, (location.getY() / 16) * 16, 16, 32);
+            case TRANSITIONING_DOWN:
+                return new Rectangle((location.getX() / 16) * 16, (location.getY() / 16) * 16, 16, 32);
+            case TRANSITIONING_LEFT:
+                return new Rectangle((location.getX() / 16) * 16, (location.getY() / 16) * 16, 32, 16);
+            case TRANSITIONING_RIGHT:
+                return new Rectangle((location.getX() / 16) * 16, (location.getY() / 16) * 16, 32, 16);
+            default:
+                return new Rectangle(location.getX(), location.getY(), 16, 16);
+        }
+    }
+
+    @Override
+    public MovementState getMovementState() {
+        return movementState;
     }
 
     public void say(String... messages) {

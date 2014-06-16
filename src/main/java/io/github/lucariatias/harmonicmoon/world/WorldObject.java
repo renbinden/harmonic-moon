@@ -15,7 +15,15 @@ public abstract class WorldObject {
         return getBoundsAtPosition(getLocation());
     }
 
-    public abstract Rectangle getBoundsAtPosition(WorldLocation location);
+    public Rectangle getBoundsAtPosition(WorldLocation location) {
+        return getBoundsAtPosition(location, getMovementState());
+    }
+
+    public abstract Rectangle getBoundsAtPosition(WorldLocation location, MovementState movementState);
+
+    public MovementState getMovementState() {
+        return MovementState.WAITING;
+    }
 
     public boolean isSolid() {
         return solid;
@@ -46,7 +54,7 @@ public abstract class WorldObject {
     }
 
     public WorldObject getCollision(Direction direction, boolean solidOnly) {
-        WorldLocation relativeLocation = getLocation().getRelative(direction, 8);
+        WorldLocation relativeLocation = getLocation().getRelative(direction, 1);
         Rectangle relativeBounds = getBoundsAtPosition(relativeLocation);
         for (WorldObject object : getLocation().getWorld().getObjects()) {
             if (object.getLocation().distanceSquared(getLocation()) > 800) continue;

@@ -1,5 +1,6 @@
 package io.github.lucariatias.harmonicmoon.block;
 
+import io.github.lucariatias.harmonicmoon.world.MovementState;
 import io.github.lucariatias.harmonicmoon.world.WorldLocation;
 import io.github.lucariatias.harmonicmoon.world.WorldObject;
 
@@ -25,7 +26,7 @@ public class Block extends WorldObject {
     }
 
     @Override
-    public Rectangle getBoundsAtPosition(WorldLocation location) {
+    public Rectangle getBoundsAtPosition(WorldLocation location, MovementState movementState) {
         return new Rectangle(location.getX(), location.getY(), 16, 16);
     }
 
