@@ -77,7 +77,12 @@ public class FightOptionBox {
                 new FightOption("Run", new Runnable() {
                     @Override
                     public void run() {
-
+                        HarmonicMoon harmonicMoon = FightOptionBox.this.harmonicMoon;
+                        harmonicMoon.getLogger().info("Run selected. Ending fight...");
+                        harmonicMoon.getFightPanel().endFight();
+                        harmonicMoon.getFightPanel().setActive(false);
+                        harmonicMoon.setPanel("map_" + harmonicMoon.getWorldPanel().getWorld().getName());
+                        harmonicMoon.getWorldPanel().setActive(true);
                     }
                 })
         };
@@ -93,15 +98,15 @@ public class FightOptionBox {
                 HarmonicMoon harmonicMoon = FightOptionBox.this.harmonicMoon;
                 int x = 16, y = 496 - image.getHeight();
                 for (FightOption option : options) {
-                    Rectangle optionBounds = new Rectangle(x, y, image.getWidth() / 2 - 32, image.getHeight() / 2 - 32);
+                    Rectangle optionBounds = new Rectangle(x, y, image.getWidth() / 2 - 32, 16);
                     Point mousePoint = MouseInfo.getPointerInfo().getLocation();
                     mousePoint.translate(- (int) harmonicMoon.getLocationOnScreen().getX(), - (int) harmonicMoon.getLocationOnScreen().getY());
                     if (optionBounds.contains(mousePoint)) {
                         option.doSelect();
                         return;
                     }
-                    y += 48;
-                    if ((y - (496 - image.getHeight())) / 48 == 2) {
+                    y += 16;
+                    if ((y - (496 - image.getHeight())) / 16 == 6) {
                         y = 496 - image.getHeight();
                         x += image.getWidth() / 2;
                     }
