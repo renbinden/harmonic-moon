@@ -6,13 +6,14 @@ import io.github.lucariatias.harmonicmoon.fight.Combatant;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CharacterParty extends Party {
 
     private List<FightCharacter> members;
 
     public CharacterParty(FightCharacter... members) {
-        this.members = Arrays.asList(members);
+        this.members = new CopyOnWriteArrayList<>(Arrays.asList(members));
     }
 
     @Override

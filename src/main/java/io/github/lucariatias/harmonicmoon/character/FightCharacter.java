@@ -9,7 +9,6 @@ import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 
 import java.awt.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +86,8 @@ public class FightCharacter extends Combatant {
 
     @Override
     public void setHealth(int health) {
-        this.health = health;
+        if (health <= 0) die();
+        this.health = Math.min(Math.max(health, 0), getMaxHealth());
     }
 
     public List<Skill> getSkills() {
@@ -150,4 +150,9 @@ public class FightCharacter extends Combatant {
 
     public void defend() {
     }
+
+    public void die() {
+        playSpriteOnce(getInjuredSprite());
+    }
+
 }

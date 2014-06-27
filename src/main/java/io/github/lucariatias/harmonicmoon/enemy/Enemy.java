@@ -4,6 +4,7 @@ import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.event.sprite.SpriteAnimationCompleteEvent;
 import io.github.lucariatias.harmonicmoon.event.sprite.SpriteAnimationCompleteListener;
 import io.github.lucariatias.harmonicmoon.fight.Combatant;
+import io.github.lucariatias.harmonicmoon.party.EnemyParty;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 
@@ -41,7 +42,10 @@ public abstract class Enemy extends Combatant {
                         setSprite(getWaitingSprite());
                         spriteTemporary = false;
                     } else if (sprite == getInjuredSprite()) {
-                        harmonicMoon.getFightPanel().getFight().getCharacterParty().removeMember(Enemy.this);
+                        EnemyParty party = harmonicMoon.getFightPanel().getFight().getEnemyParty();
+                        synchronized (party.getMembers()) {
+                            party.removeMember(Enemy.this);
+                        }
                     }
                 }
             }
@@ -79,7 +83,8 @@ public abstract class Enemy extends Combatant {
 
     @Override
     public void setHealth(int health) {
-        this.health = health;
+        if (health <= 0) die();
+        this.health = Math.min(Math.max(health, 0), getMaxHealth());
     }
 
     @Override
@@ -113,4 +118,9 @@ public abstract class Enemy extends Combatant {
     public Sprite getInjuredSprite() {
         return injuredSprite;
     }
+
+    public void die() {
+        playSpriteOnce(getInjuredSprite());
+    }
+
 }
