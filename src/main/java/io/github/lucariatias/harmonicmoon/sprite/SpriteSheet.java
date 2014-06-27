@@ -1,10 +1,14 @@
 package io.github.lucariatias.harmonicmoon.sprite;
 
+import io.github.lucariatias.harmonicmoon.HarmonicMoon;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class SpriteSheet {
+
+    private HarmonicMoon harmonicMoon;
 
     private BufferedImage image;
     private int tileHeight;
@@ -12,7 +16,8 @@ public class SpriteSheet {
 
     private BufferedImage[][] imageCache;
 
-    public SpriteSheet(String path, int tileHeight, int tileWidth) {
+    public SpriteSheet(HarmonicMoon harmonicMoon, String path, int tileHeight, int tileWidth) {
+        this.harmonicMoon = harmonicMoon;
         try {
             this.image = ImageIO.read(getClass().getResourceAsStream(path));
         } catch (IOException exception) {
@@ -23,7 +28,8 @@ public class SpriteSheet {
         imageCache = new BufferedImage[image.getWidth() / tileWidth][image.getHeight() / tileHeight];
     }
 
-    public SpriteSheet(BufferedImage image, int tileHeight, int tileWidth) {
+    public SpriteSheet(HarmonicMoon harmonicMoon, BufferedImage image, int tileHeight, int tileWidth) {
+        this.harmonicMoon = harmonicMoon;
         this.image = image;
         this.tileHeight = tileHeight;
         this.tileWidth = tileWidth;
@@ -46,7 +52,7 @@ public class SpriteSheet {
         for (int i = 0; i < images; i++) {
             frames[i] = getImage(x + i, y);
         }
-        return new Sprite(frameDelay, frames);
+        return new Sprite(harmonicMoon, frameDelay, frames);
     }
 
 }

@@ -20,7 +20,7 @@ public class GuardNPC extends NPC {
     private boolean hasSpoken;
 
     public GuardNPC(HarmonicMoon harmonicMoon) {
-        super(harmonicMoon, new SpriteSheet("/npcs/guard.png", 32, 16));
+        super(harmonicMoon, new SpriteSheet(harmonicMoon, "/npcs/guard.png", 32, 16));
         this.harmonicMoon = harmonicMoon;
         setPath(new FollowingPath(this, harmonicMoon.getPlayer(), 64));
         harmonicMoon.getEventManager().registerListener(new CollisionListener() {

@@ -9,7 +9,7 @@ public class TestNPC extends NPC {
     private HarmonicMoon harmonicMoon;
 
     public TestNPC(HarmonicMoon harmonicMoon) {
-        super(harmonicMoon, new SpriteSheet("/npcs/template.png", 32, 16));
+        super(harmonicMoon, new SpriteSheet(harmonicMoon, "/npcs/template.png", 32, 16));
         this.harmonicMoon = harmonicMoon;
         setPath(new BoringPath(this));
     }

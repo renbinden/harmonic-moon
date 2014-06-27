@@ -1,5 +1,6 @@
 package io.github.lucariatias.harmonicmoon.enemy;
 
+import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 
@@ -15,14 +16,14 @@ public class EnemyManager {
     private Map<Class<? extends Enemy>, Sprite> enemyAttackSprites = new HashMap<>();
     private Map<Class<? extends Enemy>, Sprite> enemyInjuredSprites = new HashMap<>();
 
-    public EnemyManager() {
+    public EnemyManager(HarmonicMoon harmonicMoon) {
         try {
-            SpriteSheet slimeSpriteSheet = new SpriteSheet(ImageIO.read(getClass().getResourceAsStream("/enemies/slime.png")), 64, 64);
+            SpriteSheet slimeSpriteSheet = new SpriteSheet(harmonicMoon, ImageIO.read(getClass().getResourceAsStream("/enemies/slime.png")), 64, 64);
             enemySpriteSheets.put(Slime.class, slimeSpriteSheet);
             enemyWaitSprites.put(Slime.class, slimeSpriteSheet.getSprite(0, 0, 8, 10));
             enemyAttackSprites.put(Slime.class, slimeSpriteSheet.getSprite(0, 1, 8, 5));
             enemyInjuredSprites.put(Slime.class, slimeSpriteSheet.getSprite(0, 2, 8, 5));
-            SpriteSheet guardSpriteSheet = new SpriteSheet(ImageIO.read(getClass().getResourceAsStream("/enemies/guard.png")), 64, 64);
+            SpriteSheet guardSpriteSheet = new SpriteSheet(harmonicMoon, ImageIO.read(getClass().getResourceAsStream("/enemies/guard.png")), 64, 64);
             enemySpriteSheets.put(Guard.class, guardSpriteSheet);
             enemyWaitSprites.put(Guard.class, guardSpriteSheet.getSprite(0, 0, 8, 10));
             enemyAttackSprites.put(Guard.class, guardSpriteSheet.getSprite(0, 1, 8, 5));

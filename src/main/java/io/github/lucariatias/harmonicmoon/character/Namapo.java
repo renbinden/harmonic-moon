@@ -7,7 +7,7 @@ import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 public class Namapo extends Character {
 
     public Namapo(HarmonicMoon harmonicMoon) {
-        super(harmonicMoon, "Namapo", 14, Gender.MALE, Job.DRUID, new SpriteSheet("/characters/namapo.png", 32, 16), new SpriteSheet("/characters/namapo-fight.png", 64, 64));
+        super(harmonicMoon, "Namapo", 14, Gender.MALE, Job.DRUID, new SpriteSheet(harmonicMoon, "/characters/namapo.png", 32, 16), new SpriteSheet(harmonicMoon, "/characters/namapo-fight.png", 64, 64));
     }
 
 }

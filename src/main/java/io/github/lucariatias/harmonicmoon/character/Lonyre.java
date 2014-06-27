@@ -7,7 +7,7 @@ import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 public class Lonyre extends Character {
 
     public Lonyre(HarmonicMoon harmonicMoon) {
-        super(harmonicMoon, "Lonyre", 17, Gender.FEMALE, Job.WATER_MAGE, new SpriteSheet("/characters/lonyre.png", 32, 16), new SpriteSheet("/characters/lonyre-fight.png", 64, 64));
+        super(harmonicMoon, "Lonyre", 17, Gender.FEMALE, Job.WATER_MAGE, new SpriteSheet(harmonicMoon, "/characters/lonyre.png", 32, 16), new SpriteSheet(harmonicMoon, "/characters/lonyre-fight.png", 64, 64));
     }
 
 }

@@ -82,7 +82,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
         characterManager = new CharacterManager(this);
         getLogger().info("Loaded characters (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
-        enemyManager = new EnemyManager();
+        enemyManager = new EnemyManager(this);
         getLogger().info("Loaded enemies (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
         eventManager = new EventManager(this);
