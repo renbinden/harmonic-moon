@@ -1,7 +1,7 @@
 package io.github.lucariatias.harmonicmoon.fight;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
-import io.github.lucariatias.harmonicmoon.character.Character;
+import io.github.lucariatias.harmonicmoon.character.FightCharacter;
 import io.github.lucariatias.harmonicmoon.enemy.Enemy;
 import io.github.lucariatias.harmonicmoon.party.EnemyParty;
 import io.github.lucariatias.harmonicmoon.skill.Skill;
@@ -21,7 +21,7 @@ public class FightOptionBox {
 
     private boolean mousePressed;
 
-    private Character character;
+    private FightCharacter character;
 
     public FightOptionBox(HarmonicMoon harmonicMoon, FightPanel fightPanel) {
         this.harmonicMoon = harmonicMoon;
@@ -41,7 +41,7 @@ public class FightOptionBox {
                             options[i] = new FightOption(enemy.getName(), new Runnable() {
                                 @Override
                                 public void run() {
-                                    character.fight().attack(enemy);
+                                    character.attack(enemy);
                                 }
                             });
                             i++;
@@ -51,18 +51,18 @@ public class FightOptionBox {
                 new FightOption("Defend", new Runnable() {
                     @Override
                     public void run() {
-                        character.fight().defend();
+                        character.defend();
                     }
                 }),
                 new FightOption("Use skill", new Runnable() {
                     @Override
                     public void run() {
                         for (int i = 0; i < 3; i++) {
-                            final Skill skill = character.fight().getSkills().get(i);
+                            final Skill skill = character.getSkills().get(i);
                             options[i] = new FightOption(skill.getName(), new Runnable() {
                                 @Override
                                 public void run() {
-                                    character.fight().useSkill(skill);
+                                    character.useSkill(skill);
                                 }
                             });
                         }
@@ -148,6 +148,14 @@ public class FightOptionBox {
                 }
             }
         }
+    }
+
+    public FightCharacter getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(FightCharacter character) {
+        this.character = character;
     }
 
 }

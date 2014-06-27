@@ -33,6 +33,7 @@ public class FightPanel extends JPanel {
             character.setLocation(new FightLocation(x, 224));
             x += 144;
         }
+        optionBox.setCharacter(fight.getCharacterParty().getMembers().get(0));
         x = 16;
         for (Enemy enemy : fight.getEnemyParty().getMembers()) {
             enemy.setLocation(new FightLocation(x, 96));
