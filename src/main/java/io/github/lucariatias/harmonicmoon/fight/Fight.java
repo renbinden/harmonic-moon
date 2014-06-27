@@ -1,5 +1,6 @@
 package io.github.lucariatias.harmonicmoon.fight;
 
+import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.character.FightCharacter;
 import io.github.lucariatias.harmonicmoon.enemy.Enemy;
 import io.github.lucariatias.harmonicmoon.party.CharacterParty;
@@ -7,11 +8,14 @@ import io.github.lucariatias.harmonicmoon.party.EnemyParty;
 
 public class Fight {
 
+    private HarmonicMoon harmonicMoon;
+
     private FightArea area;
     private CharacterParty characterParty;
     private EnemyParty enemyParty;
 
-    public Fight(FightArea area, CharacterParty characterParty, EnemyParty enemyParty) {
+    public Fight(HarmonicMoon harmonicMoon, FightArea area, CharacterParty characterParty, EnemyParty enemyParty) {
+        this.harmonicMoon = harmonicMoon;
         this.area = area;
         this.characterParty = characterParty;
         this.enemyParty = enemyParty;
@@ -47,6 +51,12 @@ public class Fight {
         }
         for (Enemy enemy : enemyParty.getMembers()) {
             enemy.onTick();
+        }
+        if (enemyParty.getMembers().isEmpty()) {
+            harmonicMoon.getFightPanel().endFight();
+            harmonicMoon.getFightPanel().setActive(false);
+            harmonicMoon.setPanel("map_" + harmonicMoon.getWorldPanel().getWorld().getName());
+            harmonicMoon.getWorldPanel().setActive(true);
         }
     }
 

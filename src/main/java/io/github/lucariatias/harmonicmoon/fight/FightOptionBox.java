@@ -78,7 +78,6 @@ public class FightOptionBox {
                     @Override
                     public void run() {
                         HarmonicMoon harmonicMoon = FightOptionBox.this.harmonicMoon;
-                        harmonicMoon.getLogger().info("Run selected. Ending fight...");
                         harmonicMoon.getFightPanel().endFight();
                         harmonicMoon.getFightPanel().setActive(false);
                         harmonicMoon.setPanel("map_" + harmonicMoon.getWorldPanel().getWorld().getName());

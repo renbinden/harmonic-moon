@@ -38,8 +38,9 @@ public class GuardNPC extends NPC {
             public void onMessageBoxClose(MessageBoxCloseEvent event) {
                 if (event.getMessageBox().getMessage().getNpc() != null) {
                     if (event.getMessageBox().getMessage().getNpc() == GuardNPC.this && event.getMessageBox().getMessage().getText().equals("This castle has been taken over by His Mightiness, Yirnor, no prisoners are to escape.")) {
+                        HarmonicMoon harmonicMoon = GuardNPC.this.harmonicMoon;
                         GuardNPC.this.harmonicMoon.getWorldPanel().setActive(false);
-                        Fight fight = new Fight(FightArea.PALACE, new CharacterParty(GuardNPC.this.harmonicMoon.getPlayer().getCharacter().fight()), new EnemyParty(new Guard(GuardNPC.this.harmonicMoon)));
+                        Fight fight = new Fight(harmonicMoon, FightArea.PALACE, new CharacterParty(GuardNPC.this.harmonicMoon.getPlayer().getCharacter().fight()), new EnemyParty(new Guard(GuardNPC.this.harmonicMoon)));
                         GuardNPC.this.harmonicMoon.getFightPanel().prepareFight(fight);
                         GuardNPC.this.harmonicMoon.getFightPanel().startFight();
                         GuardNPC.this.harmonicMoon.setPanel("fight");
