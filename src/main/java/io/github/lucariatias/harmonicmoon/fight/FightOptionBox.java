@@ -30,61 +30,7 @@ public class FightOptionBox {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        this.options = new FightOption[] {
-                new FightOption("Attack", new Runnable() {
-                    @Override
-                    public void run() {
-                        EnemyParty enemyParty = FightOptionBox.this.harmonicMoon.getFightPanel().getFight().getEnemyParty();
-                        options = new FightOption[enemyParty.getMembers().size()];
-                        int i = 0;
-                        for (final Enemy enemy : enemyParty.getMembers()) {
-                            options[i] = new FightOption(enemy.getName(), new Runnable() {
-                                @Override
-                                public void run() {
-                                    character.attack(enemy);
-                                }
-                            });
-                            i++;
-                        }
-                    }
-                }),
-                new FightOption("Defend", new Runnable() {
-                    @Override
-                    public void run() {
-                        character.defend();
-                    }
-                }),
-                new FightOption("Use skill", new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 3; i++) {
-                            final Skill skill = character.getSkills().get(i);
-                            options[i] = new FightOption(skill.getName(), new Runnable() {
-                                @Override
-                                public void run() {
-                                    character.useSkill(skill);
-                                }
-                            });
-                        }
-                    }
-                }),
-                new FightOption("Use item", new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                }),
-                new FightOption("Run", new Runnable() {
-                    @Override
-                    public void run() {
-                        HarmonicMoon harmonicMoon = FightOptionBox.this.harmonicMoon;
-                        harmonicMoon.getFightPanel().endFight();
-                        harmonicMoon.getFightPanel().setActive(false);
-                        harmonicMoon.setPanel("map_" + harmonicMoon.getWorldPanel().getWorld().getName());
-                        harmonicMoon.getWorldPanel().setActive(true);
-                    }
-                })
-        };
+        resetOptions();
         fightPanel.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent event) {
@@ -155,6 +101,64 @@ public class FightOptionBox {
 
     public void setCharacter(FightCharacter character) {
         this.character = character;
+    }
+
+    public void resetOptions() {
+        this.options = new FightOption[] {
+                new FightOption("Attack", new Runnable() {
+                    @Override
+                    public void run() {
+                        EnemyParty enemyParty = FightOptionBox.this.harmonicMoon.getFightPanel().getFight().getEnemyParty();
+                        options = new FightOption[enemyParty.getMembers().size()];
+                        int i = 0;
+                        for (final Enemy enemy : enemyParty.getMembers()) {
+                            options[i] = new FightOption(enemy.getName(), new Runnable() {
+                                @Override
+                                public void run() {
+                                    character.attack(enemy);
+                                }
+                            });
+                            i++;
+                        }
+                    }
+                }),
+                new FightOption("Defend", new Runnable() {
+                    @Override
+                    public void run() {
+                        character.defend();
+                    }
+                }),
+                new FightOption("Use skill", new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 3; i++) {
+                            final Skill skill = character.getSkills().get(i);
+                            options[i] = new FightOption(skill.getName(), new Runnable() {
+                                @Override
+                                public void run() {
+                                    character.useSkill(skill);
+                                }
+                            });
+                        }
+                    }
+                }),
+                new FightOption("Use item", new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                }),
+                new FightOption("Run", new Runnable() {
+                    @Override
+                    public void run() {
+                        HarmonicMoon harmonicMoon = FightOptionBox.this.harmonicMoon;
+                        harmonicMoon.getFightPanel().endFight();
+                        harmonicMoon.getFightPanel().setActive(false);
+                        harmonicMoon.setPanel("map_" + harmonicMoon.getWorldPanel().getWorld().getName());
+                        harmonicMoon.getWorldPanel().setActive(true);
+                    }
+                })
+        };
     }
 
 }

@@ -44,6 +44,7 @@ public class FightPanel extends JPanel {
 
     public void startFight() {
         if (prepared && !active) {
+            optionBox.resetOptions();
             active = true;
             harmonicMoon.getMusicPlayer().loop("/music/battle_theme.ogg");
             repaint();
@@ -52,6 +53,8 @@ public class FightPanel extends JPanel {
 
     public void endFight() {
         prepared = false;
+        active = false;
+        harmonicMoon.getMusicPlayer().stopAll();
         harmonicMoon.setPanel("world");
     }
 
