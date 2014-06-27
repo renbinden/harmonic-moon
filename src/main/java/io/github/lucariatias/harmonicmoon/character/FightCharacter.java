@@ -1,6 +1,8 @@
 package io.github.lucariatias.harmonicmoon.character;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
+import io.github.lucariatias.harmonicmoon.event.sprite.SpriteAnimationCompleteEvent;
+import io.github.lucariatias.harmonicmoon.event.sprite.SpriteAnimationCompleteListener;
 import io.github.lucariatias.harmonicmoon.fight.Combatant;
 import io.github.lucariatias.harmonicmoon.skill.Skill;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
@@ -25,7 +27,7 @@ public class FightCharacter extends Combatant {
     private Sprite injuredSprite;
     private boolean spriteTemporary;
 
-    public FightCharacter(HarmonicMoon harmonicMoon, Character character, SpriteSheet spriteSheet) {
+    public FightCharacter(HarmonicMoon harmonicMoon, Character character, final SpriteSheet spriteSheet) {
         this.harmonicMoon = harmonicMoon;
         this.character = character;
         this.spriteSheet = spriteSheet;
@@ -34,6 +36,20 @@ public class FightCharacter extends Combatant {
         this.injuredSprite = spriteSheet.getSprite(0, 2, 8, 5);
         this.sprite = waitingSprite;
         setHealth(getMaxHealth());
+        harmonicMoon.getEventManager().registerListener(new SpriteAnimationCompleteListener() {
+            @Override
+            public void onSpriteAnimationComplete(SpriteAnimationCompleteEvent event) {
+                HarmonicMoon harmonicMoon = FightCharacter.this.harmonicMoon;
+                if (spriteTemporary && event.getSprite() == sprite) {
+                    if (sprite == getAttackingSprite()) {
+                        setSprite(getWaitingSprite());
+                        spriteTemporary = false;
+                    } else if (sprite == getInjuredSprite()) {
+                        harmonicMoon.getFightPanel().getFight().getCharacterParty().removeMember(FightCharacter.this);
+                    }
+                }
+            }
+        });
     }
 
     public String getName() {
@@ -46,10 +62,6 @@ public class FightCharacter extends Combatant {
 
     @Override
     public void onTick() {
-        if (spriteTemporary && sprite.isFinished()) {
-            setSprite(getWaitingSprite());
-            spriteTemporary = false;
-        }
         sprite.onTick();
     }
 

@@ -30,6 +30,9 @@ public abstract class Character {
     private WorldCharacter worldInfo;
     private FightCharacter fightInfo;
 
+    private SpriteSheet spriteSheet;
+    private SpriteSheet fightSpriteSheet;
+
     public Character(HarmonicMoon harmonicMoon, String name, int age, Gender gender, Job job, SpriteSheet spriteSheet, SpriteSheet fightSpriteSheet) {
         this.harmonicMoon = harmonicMoon;
         this.name = name;
@@ -40,8 +43,8 @@ public abstract class Character {
         this.health = getMaxHealth();
         this.mana = getMaxMana();
         this.money = new HashMap<>();
-        this.worldInfo = new WorldCharacter(harmonicMoon, this, spriteSheet);
-        this.fightInfo = new FightCharacter(harmonicMoon, this, fightSpriteSheet);
+        this.spriteSheet = spriteSheet;
+        this.fightSpriteSheet = fightSpriteSheet;
     }
 
     public String getName() {
@@ -134,10 +137,12 @@ public abstract class Character {
     }
 
     public WorldCharacter world() {
+        if (worldInfo == null) worldInfo = new WorldCharacter(harmonicMoon, this, spriteSheet);
         return worldInfo;
     }
 
     public FightCharacter fight() {
+        if (fightInfo == null) fightInfo = new FightCharacter(harmonicMoon, this, fightSpriteSheet);
         return fightInfo;
     }
 }

@@ -1,6 +1,8 @@
 package io.github.lucariatias.harmonicmoon.enemy;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
+import io.github.lucariatias.harmonicmoon.event.sprite.SpriteAnimationCompleteEvent;
+import io.github.lucariatias.harmonicmoon.event.sprite.SpriteAnimationCompleteListener;
 import io.github.lucariatias.harmonicmoon.fight.Combatant;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
@@ -30,6 +32,20 @@ public abstract class Enemy extends Combatant {
         this.injuredSprite = injuredSprite;
         this.sprite = waitingSprite;
         setHealth(getMaxHealth());
+        harmonicMoon.getEventManager().registerListener(new SpriteAnimationCompleteListener() {
+            @Override
+            public void onSpriteAnimationComplete(SpriteAnimationCompleteEvent event) {
+                HarmonicMoon harmonicMoon = Enemy.this.harmonicMoon;
+                if (spriteTemporary && event.getSprite() == sprite) {
+                    if (sprite == getAttackingSprite()) {
+                        setSprite(getWaitingSprite());
+                        spriteTemporary = false;
+                    } else if (sprite == getInjuredSprite()) {
+                        harmonicMoon.getFightPanel().getFight().getCharacterParty().removeMember(Enemy.this);
+                    }
+                }
+            }
+        });
     }
 
     public String getName() {
@@ -53,10 +69,6 @@ public abstract class Enemy extends Combatant {
 
     @Override
     public void onTick() {
-        if (spriteTemporary && sprite.isFinished()) {
-            setSprite(getWaitingSprite());
-            spriteTemporary = false;
-        }
         sprite.onTick();
     }
 
