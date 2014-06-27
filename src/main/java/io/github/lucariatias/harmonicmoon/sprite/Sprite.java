@@ -10,6 +10,11 @@ public class Sprite {
     private final int frameDelay;
     private int frameTicks;
 
+    public Sprite(Sprite sprite) {
+        this.frames = sprite.frames;
+        this.frameDelay = sprite.frameDelay;
+    }
+
     public Sprite(int frameDelay, BufferedImage... frames) {
         this.frameDelay = frameDelay;
         this.frames = frames;

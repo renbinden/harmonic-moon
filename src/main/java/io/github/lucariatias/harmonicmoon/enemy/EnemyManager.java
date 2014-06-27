@@ -38,15 +38,15 @@ public class EnemyManager {
     }
 
     public Sprite getWaitSprite(Class<? extends Enemy> enemy) {
-        return enemyWaitSprites.get(enemy);
+        return new Sprite(enemyWaitSprites.get(enemy));
     }
 
     public Sprite getAttackSprite(Class<? extends Enemy> enemy) {
-        return enemyAttackSprites.get(enemy);
+        return new Sprite(enemyAttackSprites.get(enemy));
     }
 
     public Sprite getInjuredSprite(Class<? extends Enemy> enemy) {
-        return enemyInjuredSprites.get(enemy);
+        return new Sprite(enemyInjuredSprites.get(enemy));
     }
 
 }
