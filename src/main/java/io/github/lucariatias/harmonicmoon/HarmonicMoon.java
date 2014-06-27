@@ -119,12 +119,10 @@ public class HarmonicMoon extends JPanel implements Runnable {
         add(fightPanel, "fight");
         getLogger().info("Set up fight panel (" + (System.currentTimeMillis() - startTime) + "ms)");
         setPanel("menu");
-        if (!argsList.contains("--no-music")) {
-            startTime = System.currentTimeMillis();
-            musicPlayer = new MusicPlayer();
-            musicPlayer.loop("/music/prelude_to_adventure.ogg");
-            getLogger().info("Set up thread for music (" + (System.currentTimeMillis() - startTime) + "ms)");
-        }
+        startTime = System.currentTimeMillis();
+        musicPlayer = new MusicPlayer(!argsList.contains("--no-music"));
+        musicPlayer.loop("/music/prelude_to_adventure.ogg");
+        getLogger().info("Set up thread for music (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
         messageBox = new MessageBox(this);
         frame.addKeyListener(new MessageKeyListener(messageBox));

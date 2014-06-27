@@ -11,10 +11,17 @@ import static javax.sound.sampled.AudioSystem.getAudioInputStream;
 
 public class MusicPlayer {
 
+    private boolean enabled;
+
     private List<SourceDataLine> lines = Collections.synchronizedList(new ArrayList<SourceDataLine>());
     private Set<String> looping = Collections.synchronizedSet(new HashSet<String>());
 
+    public MusicPlayer(boolean musicEnabled) {
+        this.enabled = musicEnabled;
+    }
+
     public void loop(final String path) {
+        if (!enabled) return;
         stopAll();
         looping.add(path);
         new Thread(new Runnable() {
@@ -28,6 +35,7 @@ public class MusicPlayer {
     }
 
     public void playNonBlocking(final InputStream inputStream) {
+        if (!enabled) return;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -54,6 +62,7 @@ public class MusicPlayer {
     }
 
     public void playBlocking(InputStream inputStream) {
+        if (!enabled) return;
         try (final AudioInputStream in = getAudioInputStream(inputStream)) {
             final AudioFormat outFormat = getOutFormat(in.getFormat());
             final Info info = new Info(SourceDataLine.class, outFormat);
@@ -75,6 +84,7 @@ public class MusicPlayer {
     }
 
     public void stopAll() {
+        if (!enabled) return;
         looping.clear();
         for (Iterator<SourceDataLine> iterator = lines.iterator(); iterator.hasNext(); ) {
             SourceDataLine line = iterator.next();
