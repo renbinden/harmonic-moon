@@ -30,4 +30,12 @@ public class Sprite {
         return frames[currentFrame];
     }
 
+    public boolean isFinished() {
+        return currentFrame + 1 == frames.length - 1;
+    }
+
+    public void reset() {
+        currentFrame = 0;
+    }
+
 }

@@ -38,11 +38,15 @@ public class SpriteSheet {
     }
 
     public Sprite getSprite(int x, int y, int images) {
+        return getSprite(x, y, images, 10);
+    }
+
+    public Sprite getSprite(int x, int y, int images, int frameDelay) {
         BufferedImage[] frames = new BufferedImage[images + 1];
         for (int i = 0; i < images; i++) {
             frames[i] = getImage(x + i, y);
         }
-        return new Sprite(10, frames);
+        return new Sprite(frameDelay, frames);
     }
 
 }

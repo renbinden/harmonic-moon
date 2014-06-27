@@ -23,14 +23,15 @@ public class FightCharacter extends Combatant {
     private Sprite waitingSprite;
     private Sprite attackingSprite;
     private Sprite injuredSprite;
+    private boolean spriteTemporary;
 
     public FightCharacter(HarmonicMoon harmonicMoon, Character character, SpriteSheet spriteSheet) {
         this.harmonicMoon = harmonicMoon;
         this.character = character;
         this.spriteSheet = spriteSheet;
         this.waitingSprite = spriteSheet.getSprite(0, 0, 8);
-        this.attackingSprite = spriteSheet.getSprite(0, 1, 8);
-        this.injuredSprite = spriteSheet.getSprite(0, 2, 8);
+        this.attackingSprite = spriteSheet.getSprite(0, 1, 8, 5);
+        this.injuredSprite = spriteSheet.getSprite(0, 2, 8, 5);
         this.sprite = waitingSprite;
         setHealth(getMaxHealth());
     }
@@ -45,6 +46,10 @@ public class FightCharacter extends Combatant {
 
     @Override
     public void onTick() {
+        if (spriteTemporary && sprite.isFinished()) {
+            setSprite(getWaitingSprite());
+            spriteTemporary = false;
+        }
         sprite.onTick();
     }
 
@@ -92,9 +97,42 @@ public class FightCharacter extends Combatant {
         return character.getMaxHealth();
     }
 
+    @Override
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    @Override
+    public void setSprite(Sprite sprite) {
+        this.sprite.reset();
+        this.sprite = sprite;
+    }
+
+    @Override
+    public void playSpriteOnce(Sprite sprite) {
+        spriteTemporary = true;
+        setSprite(sprite);
+    }
+
+    @Override
+    public Sprite getAttackingSprite() {
+        return attackingSprite;
+    }
+
+    @Override
+    public Sprite getWaitingSprite() {
+        return waitingSprite;
+    }
+
+    @Override
+    public Sprite getInjuredSprite() {
+        return injuredSprite;
+    }
+
     public void attack(Combatant combatant) {
         if (harmonicMoon.getFightPanel().isActive()) {
             combatant.setHealth(combatant.getHealth() - 5);
+            playSpriteOnce(getAttackingSprite());
         }
     }
 

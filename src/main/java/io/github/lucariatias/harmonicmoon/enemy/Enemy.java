@@ -18,6 +18,7 @@ public abstract class Enemy extends Combatant {
     private Sprite waitingSprite;
     private Sprite attackingSprite;
     private Sprite injuredSprite;
+    private boolean spriteTemporary;
 
     private int health;
 
@@ -52,6 +53,10 @@ public abstract class Enemy extends Combatant {
 
     @Override
     public void onTick() {
+        if (spriteTemporary && sprite.isFinished()) {
+            setSprite(getWaitingSprite());
+            spriteTemporary = false;
+        }
         sprite.onTick();
     }
 
@@ -63,5 +68,37 @@ public abstract class Enemy extends Combatant {
     @Override
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    @Override
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    @Override
+    public void setSprite(Sprite sprite) {
+        this.sprite.reset();
+        this.sprite = sprite;
+    }
+
+    @Override
+    public void playSpriteOnce(Sprite sprite) {
+        spriteTemporary = true;
+        setSprite(sprite);
+    }
+
+    @Override
+    public Sprite getWaitingSprite() {
+        return waitingSprite;
+    }
+
+    @Override
+    public Sprite getAttackingSprite() {
+        return attackingSprite;
+    }
+
+    @Override
+    public Sprite getInjuredSprite() {
+        return injuredSprite;
     }
 }
