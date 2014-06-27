@@ -32,6 +32,7 @@ public class FightCharacter extends Combatant {
         this.attackingSprite = spriteSheet.getSprite(0, 1, 8);
         this.injuredSprite = spriteSheet.getSprite(0, 2, 8);
         this.sprite = waitingSprite;
+        setHealth(getMaxHealth());
     }
 
     public String getName() {

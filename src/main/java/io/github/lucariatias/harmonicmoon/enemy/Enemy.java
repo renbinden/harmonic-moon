@@ -28,6 +28,7 @@ public abstract class Enemy extends Combatant {
         this.attackingSprite = attackingSprite;
         this.injuredSprite = injuredSprite;
         this.sprite = waitingSprite;
+        setHealth(getMaxHealth());
     }
 
     public String getName() {
