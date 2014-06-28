@@ -7,6 +7,7 @@ import io.github.lucariatias.harmonicmoon.fight.Combatant;
 import io.github.lucariatias.harmonicmoon.skill.Skill;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
+import io.github.lucariatias.harmonicmoon.stat.Stat;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -100,7 +101,7 @@ public class FightCharacter extends Combatant {
         return skills;
     }
 
-    public void useSkill(Skill skill) {
+    public void useSkill(Skill skill, Combatant target) {
 
     }
 
@@ -141,6 +142,12 @@ public class FightCharacter extends Combatant {
         return injuredSprite;
     }
 
+    @Override
+    public int getStatValue(Stat stat) {
+        return character.getStatValue(stat);
+    }
+
+    @Override
     public void attack(Combatant combatant) {
         if (harmonicMoon.getFightPanel().isActive()) {
             combatant.setHealth(combatant.getHealth() - 5);
@@ -148,6 +155,7 @@ public class FightCharacter extends Combatant {
         }
     }
 
+    @Override
     public void defend() {
     }
 

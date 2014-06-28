@@ -3,6 +3,7 @@ package io.github.lucariatias.harmonicmoon.fight;
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.character.FightCharacter;
 import io.github.lucariatias.harmonicmoon.enemy.Enemy;
+import io.github.lucariatias.harmonicmoon.party.CharacterParty;
 import io.github.lucariatias.harmonicmoon.party.EnemyParty;
 import io.github.lucariatias.harmonicmoon.skill.Skill;
 
@@ -30,7 +31,6 @@ public class FightOptionBox {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        resetOptions();
         fightPanel.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent event) {
@@ -104,6 +104,7 @@ public class FightOptionBox {
     }
 
     public void resetOptions() {
+        final Fight fight = harmonicMoon.getFightPanel().getFight();
         this.options = new FightOption[] {
                 new FightOption("Attack", new Runnable() {
                     @Override
@@ -115,7 +116,13 @@ public class FightOptionBox {
                             options[i] = new FightOption(enemy.getName(), new Runnable() {
                                 @Override
                                 public void run() {
-                                    character.attack(enemy);
+                                    fight.addTurnAction(new TurnAction(character, new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            character.attack(enemy);
+                                        }
+                                    }, 2500L));
+                                    showNext(fight);
                                 }
                             });
                             i++;
@@ -125,7 +132,13 @@ public class FightOptionBox {
                 new FightOption("Defend", new Runnable() {
                     @Override
                     public void run() {
-                        character.defend();
+                        fight.addTurnAction(new TurnAction(character, new Runnable() {
+                            @Override
+                            public void run() {
+                                character.defend();
+                            }
+                        }, 2500L));
+                        showNext(fight);
                     }
                 }),
                 new FightOption("Use skill", new Runnable() {
@@ -136,7 +149,24 @@ public class FightOptionBox {
                             options[i] = new FightOption(skill.getName(), new Runnable() {
                                 @Override
                                 public void run() {
-                                    character.useSkill(skill);
+                                    EnemyParty enemyParty = FightOptionBox.this.harmonicMoon.getFightPanel().getFight().getEnemyParty();
+                                    options = new FightOption[enemyParty.getMembers().size()];
+                                    int i = 0;
+                                    for (final Enemy enemy : enemyParty.getMembers()) {
+                                        options[i] = new FightOption(enemy.getName(), new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                fight.addTurnAction(new TurnAction(character, new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        character.useSkill(skill, enemy);
+                                                    }
+                                                }, 2500L));
+                                                showNext(fight);
+                                            }
+                                        });
+                                        i++;
+                                    }
                                 }
                             });
                         }
@@ -145,7 +175,7 @@ public class FightOptionBox {
                 new FightOption("Use item", new Runnable() {
                     @Override
                     public void run() {
-
+                        showNext(fight);
                     }
                 }),
                 new FightOption("Run", new Runnable() {
@@ -159,6 +189,17 @@ public class FightOptionBox {
                     }
                 })
         };
+    }
+
+    private void showNext(Fight fight) {
+        CharacterParty party = fight.getCharacterParty();
+        int memberIndex = party.getMembers().indexOf(character);
+        if (memberIndex < party.getMembers().size() - 1) {
+            setCharacter(party.getMembers().get(memberIndex + 1));
+            resetOptions();
+        } else {
+            fight.doTurn();
+        }
     }
 
 }

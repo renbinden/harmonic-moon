@@ -1,6 +1,7 @@
 package io.github.lucariatias.harmonicmoon.fight;
 
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
+import io.github.lucariatias.harmonicmoon.stat.Stat;
 
 public abstract class Combatant extends FightObject {
 
@@ -26,4 +27,9 @@ public abstract class Combatant extends FightObject {
 
     public abstract Sprite getInjuredSprite();
 
+    public abstract int getStatValue(Stat stat);
+
+    public abstract void attack(Combatant combatant);
+
+    public abstract void defend();
 }

@@ -62,6 +62,10 @@ public class FightPanel extends JPanel {
         return fight;
     }
 
+    public FightOptionBox getOptionBox() {
+        return optionBox;
+    }
+
     @Override
     public void paintComponent(Graphics graphics) {
         if (prepared) {
