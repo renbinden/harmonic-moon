@@ -43,16 +43,18 @@ public class MessageBox {
             @Override
             public void mouseClicked(MouseEvent event) {
                 if (message instanceof Question) {
+                    HarmonicMoon harmonicMoon = MessageBox.this.harmonicMoon;
+                    int responseX = harmonicMoon.getWidth() - responseBoxImage.getWidth() + 35;
+                    int responseY = responseBoxY + 27;
                     Question question = (Question) message;
-                    int responseX = MessageBox.this.harmonicMoon.getWidth() - responseBoxImage.getWidth() + 16;
-                    int responseY = responseBoxY + 16;
                     for (String response : question.getResponses()) {
-                        int mouseX = event.getX();
-                        int mouseY = event.getY();
-                        if (mouseX >= responseX - 16
-                                && mouseX <= responseX - 16 + responseBoxImage.getWidth()
-                                && mouseY >= responseY
-                                && mouseY <= responseY + 16) {
+                        Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+                        int mouseXInWindow = (int) (mouseLocation.getX() - harmonicMoon.getLocationOnScreen().getX());
+                        int mouseYInWindow = (int) (mouseLocation.getY() - harmonicMoon.getLocationOnScreen().getY());
+                        if (mouseXInWindow >= responseX - 8
+                                && mouseXInWindow <= responseX - 62 + responseBoxImage.getWidth()
+                                && mouseYInWindow >= responseY
+                                && mouseYInWindow <= responseY + 16) {
                             MessageBoxResponseSelectEvent messageBoxResponseSelectEvent = new MessageBoxResponseSelectEvent(MessageBox.this, message, response);
                             MessageBox.this.harmonicMoon.getEventManager().dispatchEvent(messageBoxResponseSelectEvent);
                         }
@@ -146,21 +148,21 @@ public class MessageBox {
 
     private void renderResponseBox(Graphics graphics) {
         graphics.drawImage(responseBoxImage, harmonicMoon.getWidth() - responseBoxImage.getWidth(), responseBoxY, null);
-        int responseX = harmonicMoon.getWidth() - responseBoxImage.getWidth() + 16;
-        int responseY = responseBoxY + 16;
+        int responseX = harmonicMoon.getWidth() - responseBoxImage.getWidth() + 35;
+        int responseY = responseBoxY + 27;
         Question question = (Question) message;
         for (String response : question.getResponses()) {
             Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
             int mouseXInWindow = (int) (mouseLocation.getX() - harmonicMoon.getLocationOnScreen().getX());
             int mouseYInWindow = (int) (mouseLocation.getY() - harmonicMoon.getLocationOnScreen().getY());
-            if (mouseXInWindow >= responseX - 16
-                    && mouseXInWindow <= responseX - 16 + responseBoxImage.getWidth()
+            if (mouseXInWindow >= responseX - 8
+                    && mouseXInWindow <= responseX - 62 + responseBoxImage.getWidth()
                     && mouseYInWindow >= responseY
                     && mouseYInWindow <= responseY + 16) {
                 graphics.setColor(Color.GRAY);
-                graphics.drawRect(responseX - 16, responseY, responseBoxImage.getWidth(), 16);
+                graphics.drawRect(responseX - 8, responseY, responseBoxImage.getWidth() - 54, 16);
             }
-            graphics.drawString(response, responseX, responseY + graphics.getFontMetrics().getLeading() + graphics.getFontMetrics().getMaxAscent());
+            graphics.drawString(response, responseX, responseY + 2 + graphics.getFontMetrics().getLeading() + graphics.getFontMetrics().getMaxAscent());
             responseY += 16;
             graphics.setColor(Color.WHITE);
         }
