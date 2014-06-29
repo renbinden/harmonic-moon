@@ -65,11 +65,11 @@ public abstract class Enemy extends Combatant {
     @Override
     public void render(Graphics graphics) {
         graphics.setColor(Color.GREEN);
-        graphics.fillRect(getLocation().getX(), getLocation().getY() - 16, health, 8);
+        graphics.fillRect(getLocation().getX(), getLocation().getY() - 16, (int) Math.round(64D * ((double) getHealth() / (double) getMaxHealth())), 8);
         graphics.setColor(Color.RED);
-        graphics.fillRect(getLocation().getX() + health, getLocation().getY() - 16, getMaxHealth() - health, 8);
+        graphics.fillRect(getLocation().getX() + (int) Math.round(64 * ((double) getHealth() / (double) getMaxHealth())), getLocation().getY() - 16, (int) Math.round(64D * (((double) getMaxHealth() - (double) getHealth()) / (double) getMaxHealth())), 8);
         graphics.setColor(Color.BLACK);
-        graphics.drawRect(getLocation().getX(), getLocation().getY() - 16, getMaxHealth(), 8);
+        graphics.drawRect(getLocation().getX(), getLocation().getY() - 16, 64, 8);
         graphics.drawImage(sprite.getImage(), getLocation().getX(), getLocation().getY(), null);
     }
 
