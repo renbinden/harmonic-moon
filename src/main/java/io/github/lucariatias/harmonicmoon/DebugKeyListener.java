@@ -34,7 +34,7 @@ public class DebugKeyListener extends KeyAdapter {
                 graphics.setColor(Color.YELLOW);
                 graphics.fillRect(0, 0, 64, 64);
                 graphics.dispose();
-                harmonicMoon.getParticleManager().addEffect(new SparksEffect(harmonicMoon.getParticleManager(), (int) MouseInfo.getPointerInfo().getLocation().getX(), (int) MouseInfo.getPointerInfo().getLocation().getY(), new BufferedImage[] {yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow}));
+                harmonicMoon.getParticleManager().addEffect(new SparksEffect(harmonicMoon.getParticleManager(), (int) Math.round(MouseInfo.getPointerInfo().getLocation().getX() - harmonicMoon.getLocationOnScreen().getX()), (int) Math.round(MouseInfo.getPointerInfo().getLocation().getY() - harmonicMoon.getLocationOnScreen().getY()), new BufferedImage[] {yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow, yellow}));
             }
             if (event.getKeyCode() == KeyEvent.VK_N) {
                 BufferedImage red = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
@@ -49,7 +49,7 @@ public class DebugKeyListener extends KeyAdapter {
                 orangeGraphics.fillOval(0, 0, 64, 64);
                 orangeGraphics.dispose();
                 BufferedImage[] oranges = new BufferedImage[] {orange, orange, orange, orange, orange, orange, orange, orange, orange, orange};
-                harmonicMoon.getParticleManager().addEffect(new ExplosionEffect(harmonicMoon.getParticleManager(), (int) MouseInfo.getPointerInfo().getLocation().getX(), (int) MouseInfo.getPointerInfo().getLocation().getY(), reds, oranges, 8));
+                harmonicMoon.getParticleManager().addEffect(new ExplosionEffect(harmonicMoon.getParticleManager(), (int) Math.round(MouseInfo.getPointerInfo().getLocation().getX() - harmonicMoon.getLocationOnScreen().getX()), (int) Math.round(MouseInfo.getPointerInfo().getLocation().getY() - harmonicMoon.getLocationOnScreen().getY()), reds, oranges, 8));
             }
             if (event.getKeyCode() == KeyEvent.VK_C) {
                 harmonicMoon.getWorldPanel().getPlayer().setCharacter(harmonicMoon.getCharacterManager().getCharacter(JOptionPane.showInputDialog("Character: ")));
