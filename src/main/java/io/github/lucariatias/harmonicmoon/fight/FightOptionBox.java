@@ -191,14 +191,19 @@ public class FightOptionBox {
         };
     }
 
+    public void clearOptions() {
+        this.options = new FightOption[0];
+    }
+
     private void showNext(Fight fight) {
         CharacterParty party = fight.getCharacterParty();
         int memberIndex = party.getMembers().indexOf(character);
-        if (memberIndex < party.getMembers().size() - 1) {
+        if (memberIndex + 1 < party.getMembers().size()) {
             setCharacter(party.getMembers().get(memberIndex + 1));
             resetOptions();
         } else {
             fight.doTurn();
+            clearOptions();
         }
     }
 
