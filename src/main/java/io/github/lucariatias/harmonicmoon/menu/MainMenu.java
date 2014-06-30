@@ -15,7 +15,7 @@ public class MainMenu extends Menu {
                 harmonicMoon.setPanel("map_palace_1_2f");
                 harmonicMoon.getWorldPanel().reset();
                 harmonicMoon.getWorldPanel().setActive(true);
-                harmonicMoon.getMusicPlayer().loop("/music/escape_from_avirnyr.ogg");
+                harmonicMoon.getMusicPlayer().loop("/music/avirnyr.ogg");
             }
         });
         addMenuItem("Continue", new Runnable() {
