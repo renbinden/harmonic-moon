@@ -94,7 +94,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
         particleManager = new ParticleManager(this);
         getLogger().info("Set up particle systems (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
-        skillManager = new SkillManager();
+        skillManager = new SkillManager(this);
         getLogger().info("Set up skills (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
         add(new MainMenu(this), "menu");

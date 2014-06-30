@@ -96,6 +96,7 @@ public class FightPanel extends JPanel {
         for (Enemy enemy : fight.getEnemyParty().getMembers()) {
             enemy.render(graphics);
         }
+        harmonicMoon.getParticleManager().render(graphics);
         optionBox.render(graphics);
     }
 

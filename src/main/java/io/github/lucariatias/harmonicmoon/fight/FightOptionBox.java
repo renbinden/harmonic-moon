@@ -144,7 +144,8 @@ public class FightOptionBox {
                 new FightOption("Use skill", new Runnable() {
                     @Override
                     public void run() {
-                        for (int i = 0; i < 3; i++) {
+                        options = new FightOption[character.getSkills().size()];
+                        for (int i = 0; i < character.getSkills().size(); i++) {
                             final Skill skill = character.getSkills().get(i);
                             options[i] = new FightOption(skill.getName(), new Runnable() {
                                 @Override
@@ -159,7 +160,7 @@ public class FightOptionBox {
                                                 fight.addTurnAction(new TurnAction(character, new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        character.useSkill(skill, enemy);
+                                                        character.useSkill(fight, skill, enemy, null);
                                                     }
                                                 }, 2500L));
                                                 showNext(fight);

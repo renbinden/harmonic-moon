@@ -4,6 +4,8 @@ import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.event.sprite.SpriteAnimationCompleteEvent;
 import io.github.lucariatias.harmonicmoon.event.sprite.SpriteAnimationCompleteListener;
 import io.github.lucariatias.harmonicmoon.fight.Combatant;
+import io.github.lucariatias.harmonicmoon.fight.Fight;
+import io.github.lucariatias.harmonicmoon.item.Weapon;
 import io.github.lucariatias.harmonicmoon.skill.Skill;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
@@ -101,8 +103,8 @@ public class FightCharacter extends Combatant {
         return skills;
     }
 
-    public void useSkill(Skill skill, Combatant target) {
-
+    public void useSkill(Fight fight, Skill skill, Combatant target, Weapon weapon) {
+        skill.doSkill(fight, this, target, weapon);
     }
 
     @Override
