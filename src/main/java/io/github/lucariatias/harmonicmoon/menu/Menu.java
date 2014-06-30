@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class Menu extends JPanel {
 
     private HarmonicMoon harmonicMoon;
 
+    private BufferedImage logo;
     private String title;
     private List<MenuItem> menuItems = new ArrayList<>();
 
@@ -21,8 +23,9 @@ public class Menu extends JPanel {
 
     private static final int MENU_ITEM_WIDTH = 384;
 
-    public Menu(final HarmonicMoon harmonicMoon) {
+    public Menu(final HarmonicMoon harmonicMoon, BufferedImage logo) {
         this.harmonicMoon = harmonicMoon;
+        this.logo = logo;
         addMouseListener(new MouseInputAdapter() {
             @Override
             public void mouseClicked(MouseEvent event) {
@@ -62,9 +65,13 @@ public class Menu extends JPanel {
     public void paintComponent(Graphics graphics) {
         graphics.setColor(Color.BLACK);
         graphics.fillRect(0, 0, getWidth(), getHeight());
-        graphics.setFont(harmonicMoon.getTitleFont().deriveFont(48.0F));
-        graphics.setColor(Color.WHITE);
-        graphics.drawString(title, (getWidth() - graphics.getFontMetrics().charsWidth(title.toCharArray(), 0, title.length())) / 2, (graphics.getFontMetrics().getLeading() + graphics.getFontMetrics().getMaxAscent()) * 2);
+        if (getTitle() == null || getTitle().isEmpty()) {
+            graphics.drawImage(logo, 0, 0, null);
+        } else {
+            graphics.setFont(harmonicMoon.getTitleFont().deriveFont(48.0F));
+            graphics.setColor(Color.WHITE);
+            graphics.drawString(title, (getWidth() - graphics.getFontMetrics().charsWidth(title.toCharArray(), 0, title.length())) / 2, (graphics.getFontMetrics().getLeading() + graphics.getFontMetrics().getMaxAscent()) * 2);
+        }
         graphics.setFont(harmonicMoon.getTitleFont().deriveFont(16.0F));
         int x = (getWidth() - MENU_ITEM_WIDTH) / 2;
         int y = 128;

@@ -2,12 +2,13 @@ package io.github.lucariatias.harmonicmoon.menu;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 
+import java.awt.image.BufferedImage;
+
 public class MainMenu extends Menu {
 
 
-    public MainMenu(final HarmonicMoon harmonicMoon) {
-        super(harmonicMoon);
-        setTitle("HARMONIC MOON");
+    public MainMenu(final HarmonicMoon harmonicMoon, BufferedImage logo) {
+        super(harmonicMoon, logo);
         addMenuItem("New game", new Runnable() {
             @Override
             public void run() {

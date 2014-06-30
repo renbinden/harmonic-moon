@@ -18,13 +18,15 @@ import io.github.lucariatias.harmonicmoon.skill.SkillManager;
 import io.github.lucariatias.harmonicmoon.world.World;
 import io.github.lucariatias.harmonicmoon.world.WorldPanel;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class HarmonicMoon extends JPanel implements Runnable {
@@ -36,6 +38,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
 
     private static final long DELAY = 25L;
 
+    private BufferedImage logo;
     private Font titleFont;
     private Font messageFont;
 
@@ -97,7 +100,12 @@ public class HarmonicMoon extends JPanel implements Runnable {
         skillManager = new SkillManager(this);
         getLogger().info("Set up skills (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
-        add(new MainMenu(this), "menu");
+        try {
+            logo = ImageIO.read(getClass().getResourceAsStream("/logo.png"));
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        add(new MainMenu(this, logo), "menu");
         getLogger().info("Set up main menu (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
         player = new Player(this);
