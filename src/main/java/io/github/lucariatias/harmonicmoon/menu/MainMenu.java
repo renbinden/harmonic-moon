@@ -12,7 +12,7 @@ public class MainMenu extends Menu {
         addMenuItem("New game", new Runnable() {
             @Override
             public void run() {
-                harmonicMoon.setPanel("map_palace_1_2f");
+                harmonicMoon.setPanel(/*"map_palace_1_2f"*/"map_world_test");
                 harmonicMoon.getWorldPanel().reset();
                 harmonicMoon.getWorldPanel().setActive(true);
                 harmonicMoon.getMusicPlayer().loop("/music/avirnyr.ogg");

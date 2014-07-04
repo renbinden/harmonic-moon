@@ -4,6 +4,7 @@ import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.world.MovementState;
 import io.github.lucariatias.harmonicmoon.world.WorldLocation;
 import io.github.lucariatias.harmonicmoon.world.WorldObject;
+import io.github.lucariatias.harmonicmoon.world.WorldObjectMetadata;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -20,7 +21,7 @@ public class Door extends WorldObject {
 
     private HarmonicMoon harmonicMoon;
 
-    public Door(HarmonicMoon harmonicMoon) {
+    public Door(HarmonicMoon harmonicMoon, WorldObjectMetadata metadata) {
         this.harmonicMoon = harmonicMoon;
         setSolid(true);
     }

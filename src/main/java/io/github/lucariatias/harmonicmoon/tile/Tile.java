@@ -1,7 +1,7 @@
 package io.github.lucariatias.harmonicmoon.tile;
 
+import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.world.WorldLocation;
-import io.github.lucariatias.harmonicmoon.world.WorldPanel;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,20 +11,20 @@ import java.util.Map;
 
 public class Tile {
 
-    private WorldPanel worldPanel;
+    private HarmonicMoon harmonicMoon;
 
     private Map<TileLayer, List<WorldLocation>> locations = new HashMap<>();
     private Image image;
 
-    public Tile(WorldPanel worldPanel, Image image) {
-        this.worldPanel = worldPanel;
+    public Tile(HarmonicMoon harmonicMoon, Image image) {
+        this.harmonicMoon = harmonicMoon;
         this.image = image;
     }
 
     public void render(Graphics graphics, TileLayer layer) {
         for (WorldLocation location : getLocations(layer)) {
-            if (worldPanel.getCamera().getLocation().distanceSquared(location) > 713728) continue;
-            if (!(location.getX() >= worldPanel.getCamera().getLocation().getX() - 32 && location.getY() >= worldPanel.getCamera().getLocation().getY() - 32)) continue;
+            if (harmonicMoon.getWorldPanel().getCamera().getLocation().distanceSquared(location) > 713728) continue;
+            if (!(location.getX() >= harmonicMoon.getWorldPanel().getCamera().getLocation().getX() - 32 && location.getY() >= harmonicMoon.getWorldPanel().getCamera().getLocation().getY() - 32)) continue;
             graphics.drawImage(image, location.getX(), location.getY(), null);
         }
     }

@@ -1,6 +1,6 @@
 package io.github.lucariatias.harmonicmoon.tile;
 
-import io.github.lucariatias.harmonicmoon.world.WorldPanel;
+import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class TileSheet {
 
-    private WorldPanel worldPanel;
+    private HarmonicMoon harmonicMoon;
 
     private BufferedImage image;
     private int tileHeight;
@@ -16,8 +16,8 @@ public class TileSheet {
 
     private Tile[][] tileCache;
 
-    public TileSheet(WorldPanel worldPanel, BufferedImage image, int tileHeight, int tileWidth) {
-        this.worldPanel = worldPanel;
+    public TileSheet(HarmonicMoon harmonicMoon, BufferedImage image, int tileHeight, int tileWidth) {
+        this.harmonicMoon = harmonicMoon;
         this.image = image;
         this.tileHeight = tileHeight;
         this.tileWidth = tileWidth;
@@ -37,7 +37,7 @@ public class TileSheet {
     public Tile getTile(int col, int row) {
         Tile tile;
         if (tileCache[col][row] == null) {
-            tile = new Tile(worldPanel, image.getSubimage(tileWidth * col, tileHeight * row, tileWidth, tileHeight));
+            tile = new Tile(harmonicMoon, image.getSubimage(tileWidth * col, tileHeight * row, tileWidth, tileHeight));
             tileCache[col][row] = tile;
         } else {
             tile = tileCache[col][row];
@@ -45,4 +45,11 @@ public class TileSheet {
         return tile;
     }
 
+    public int getTileWidth() {
+        return tileWidth;
+    }
+
+    public int getTileHeight() {
+        return tileHeight;
+    }
 }

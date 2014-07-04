@@ -1,5 +1,6 @@
 package io.github.lucariatias.harmonicmoon.world;
 
+import com.google.gson.Gson;
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.block.Block;
 import io.github.lucariatias.harmonicmoon.character.WorldCharacter;
@@ -9,30 +10,25 @@ import io.github.lucariatias.harmonicmoon.tile.Tile;
 import io.github.lucariatias.harmonicmoon.tile.TileLayer;
 import io.github.lucariatias.harmonicmoon.tile.TileSheet;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 public class World {
 
     private HarmonicMoon harmonicMoon;
     private String name;
-    private Map<TileLayer, BufferedImage> tileMaps;
-    private BufferedImage objectMap;
-    private TileSheet tileSheet;
+    private WorldMetadata worldMetadata;
+    private EnumMap<TileLayer, Set<Tile>> tiles;
+    private Set<WorldObject> objects;
+    private Map<Integer, TileSheet> tileSheets;
 
-    private Map<TileLayer, Set<Tile>> tiles = new EnumMap<>(TileLayer.class);
-    private Set<WorldObject> objects = new HashSet<>();
-
-    public World(HarmonicMoon harmonicMoon, String name, Map<TileLayer, BufferedImage> tileMaps, BufferedImage objectMap, TileSheet tileSheet) {
+    private World(HarmonicMoon harmonicMoon, String name) {
         this.harmonicMoon = harmonicMoon;
         this.name = name;
-        this.tileMaps = tileMaps;
-        this.objectMap = objectMap;
-        this.tileSheet = tileSheet;
     }
 
     public String getName() {
@@ -43,10 +39,6 @@ public class World {
         for (WorldObject object : objects) {
             object.onTick();
         }
-    }
-
-    public BufferedImage getTileMap(TileLayer layer) {
-        return tileMaps.get(layer);
     }
 
     public Set<Tile> getTiles(TileLayer layer) {
@@ -120,50 +112,7 @@ public class World {
         quickSort(objects, 0, objects.length - 1);
     }
 
-    public void populate() {
-        populateTiles(TileLayer.BACK);
-        populateTiles(TileLayer.BACK_TOP);
-        populateObjects();
-        populateTiles(TileLayer.FRONT);
-        populateTiles(TileLayer.FRONT_TOP);
-    }
-
-    private void populateTiles(TileLayer layer) {
-        BufferedImage tileMap = getTileMap(layer);
-        int width = tileMap.getWidth();
-        int height = tileMap.getHeight();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                int pixel = tileMap.getRGB(x, y);
-                Color colour = new Color((pixel >> 16) & 0xff, (pixel >> 8) & 0xff, pixel & 0xff);
-                if (!colour.equals(Color.BLACK) || layer == TileLayer.BACK) {
-                    Tile tile = tileSheet.getTile(colour.getRed(), colour.getGreen());
-                    tile.getLocations(layer).add(new WorldLocation(this, x * 16, y * 16));
-                    getTiles(layer).add(tile);
-                }
-            }
-        }
-        tileMap.flush();
-    }
-
-    private void populateObjects() {
-        int width = objectMap.getWidth();
-        int height = objectMap.getHeight();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                int pixel = objectMap.getRGB(x, y);
-                Color colour = new Color((pixel >> 16) & 0xff, (pixel >> 8) & 0xff, pixel & 0xff);
-                WorldObject object = getObjectFromColour(colour);
-                if (object != null) {
-                    object.setLocation(new WorldLocation(this, x * 16, y * 16));
-                    addObject(object);
-                }
-            }
-        }
-        objectMap.flush();
-    }
-
-    private WorldObject getObjectFromColour(Color colour) {
+    private WorldObject getObject(Color colour, WorldObjectMetadata metadata) {
         switch (colour.getRed()) {
             case 0:
                 switch (colour.getGreen()) {
@@ -171,7 +120,7 @@ public class World {
                         switch (colour.getBlue()) {
                             case 0: return null;
                             case 1: return new Block();
-                            case 2: return new Door(harmonicMoon);
+                            case 2: return new Door(harmonicMoon, metadata);
                             default: return null;
                         }
                     case 1:
@@ -184,7 +133,7 @@ public class World {
                             case 5: return harmonicMoon.getCharacterManager().getCharacter("anaria").world();
                             case 6: return harmonicMoon.getCharacterManager().getCharacter("idain").world();
                             case 7: return harmonicMoon.getCharacterManager().getCharacter("seuri").world();
-                            case 8: return new GuardNPC(harmonicMoon);
+                            case 8: return new GuardNPC(harmonicMoon, metadata);
                         }
                     default: return null;
                 }
@@ -192,4 +141,123 @@ public class World {
         }
     }
 
+    private Class<? extends WorldObjectMetadata> getMetadataClass(Color colour) {
+        switch (colour.getRed()) {
+            case 0:
+                switch (colour.getGreen()) {
+                    case 0:
+                        switch (colour.getBlue()) {
+                            case 2: return DoorMetadata.class;
+                            default: return WorldObjectMetadata.class;
+                        }
+                    case 1:
+                        switch (colour.getBlue()) {
+                            case 8: return NpcMetadata.class;
+                            default: return WorldObjectMetadata.class;
+                        }
+                    default: return WorldObjectMetadata.class;
+                }
+            default: return WorldObjectMetadata.class;
+        }
+    }
+
+    public static World load(HarmonicMoon harmonicMoon, String name) throws MalformedWorldSaveException {
+        Gson gson = new Gson();
+        World world = new World(harmonicMoon, name);
+        InputStream worldMetadataInputStream = World.class.getResourceAsStream("/maps/" + name + "/metadata.json");
+        if (worldMetadataInputStream == null) {
+            throw new MalformedWorldSaveException("World metadata file does not exist.");
+        } else {
+            Scanner scanner = new Scanner(worldMetadataInputStream);
+            StringBuilder builder = new StringBuilder();
+            while (scanner.hasNextLine()) {
+                builder.append(scanner.nextLine()).append("\n");
+            }
+            String json = builder.toString();
+            world.worldMetadata = gson.fromJson(json, WorldMetadata.class);
+        }
+        world.tileSheets = new HashMap<>();
+        world.tiles = new EnumMap<>(TileLayer.class);
+        for (TileLayer layer : TileLayer.values()) {
+            InputStream tilesInputStream = World.class.getResourceAsStream("/maps/" + name + "/tiles/" + layer.toString().toLowerCase() + ".png");
+            if (tilesInputStream == null)
+                throw new MalformedWorldSaveException("Tile map does not exist for layer " + layer.toString().toLowerCase() + ".");
+            try {
+                BufferedImage tiles = ImageIO.read(tilesInputStream);
+                for (int x = 0; x < world.getWidth(); x++) {
+                    for (int y = 0; y < world.getHeight(); y++) {
+                        int colour = tiles.getRGB(x, y);
+                        int r = (colour >> 16) & 0xff;
+                        int g = (colour >> 8) & 0xff;
+                        int b = colour & 0xff;
+                        TileSheet tileSheet;
+                        if (!world.getTileSheets().containsKey(b)) {
+                            tileSheet = new TileSheet(harmonicMoon, ImageIO.read(World.class.getResourceAsStream("/maps/" + name + "/tilesheets/" + b + "/tilesheet.png")), 16, 16);
+                            world.getTileSheets().put(b, tileSheet);
+                        } else {
+                            tileSheet = world.getTileSheets().get(b);
+                        }
+                        if (layer == TileLayer.BACK || r != 0 || g != 0 || b != 0) {
+                            Tile tile = tileSheet.getTile(r, g);
+                            tile.getLocations(layer).add(new WorldLocation(world, x * tileSheet.getTileWidth(), y * tileSheet.getTileHeight()));
+                            world.getTiles(layer).add(tile);
+                        }
+                    }
+                }
+                tiles.flush();
+            } catch (IOException exception) {
+                throw new MalformedWorldSaveException("Failed to load tile map for layer " + layer.toString().toLowerCase() + ".", exception);
+            }
+        }
+        world.objects = new HashSet<>();
+        InputStream objectsInputStream = World.class.getResourceAsStream("/maps/" + name + "/objects/objects.png");
+        if (objectsInputStream == null) throw new MalformedWorldSaveException("Objects file does not exist.");
+        try {
+            BufferedImage objects = ImageIO.read(objectsInputStream);
+            for (int x = 0; x < world.getWidth(); x++) {
+                for (int y = 0; y < world.getHeight(); y++) {
+                    int colour = objects.getRGB(x, y);
+                    int r = (colour >> 16) & 0xff;
+                    int g = (colour >> 8) & 0xff;
+                    int b = colour & 0xff;
+                    if (r != 0 || g != 0 || b != 0) {
+                        WorldObjectMetadata metadata = null;
+                        InputStream objectMetadataInputStream = World.class.getResourceAsStream("/maps/" + name + "/metadata/" + x + "/" + y + "/metadata.json");
+                        if (objectMetadataInputStream != null) {
+                            Scanner scanner = new Scanner(objectMetadataInputStream);
+                            StringBuilder builder = new StringBuilder();
+                            while (scanner.hasNextLine()) {
+                                builder.append(scanner.nextLine()).append("\n");
+                            }
+                            String json = builder.toString();
+                            metadata = gson.fromJson(json, world.getMetadataClass(new Color(r, g, b)));
+                        }
+                        WorldObject object = world.getObject(new Color(r, g, b), metadata);
+                        object.setLocation(new WorldLocation(world, x * world.getTileSheets().get(0).getTileWidth(), y * world.getTileSheets().get(0).getTileHeight()));
+                        world.addObject(object);
+                    }
+                }
+            }
+            objects.flush();
+        } catch (IOException exception) {
+            throw new MalformedWorldSaveException("Failed to load objects.", exception);
+        }
+        return world;
+    }
+
+    public Map<Integer, TileSheet> getTileSheets() {
+        return tileSheets;
+    }
+
+    public WorldMetadata getMetadata() {
+        return worldMetadata;
+    }
+
+    public int getWidth() {
+        return getMetadata().getWidth();
+    }
+
+    public int getHeight() {
+        return getMetadata().getHeight();
+    }
 }

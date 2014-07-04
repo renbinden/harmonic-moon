@@ -13,13 +13,14 @@ import io.github.lucariatias.harmonicmoon.npc.path.FollowingPath;
 import io.github.lucariatias.harmonicmoon.party.CharacterParty;
 import io.github.lucariatias.harmonicmoon.party.EnemyParty;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
+import io.github.lucariatias.harmonicmoon.world.WorldObjectMetadata;
 
 public class GuardNPC extends NPC {
 
     private HarmonicMoon harmonicMoon;
     private boolean hasSpoken;
 
-    public GuardNPC(HarmonicMoon harmonicMoon) {
+    public GuardNPC(HarmonicMoon harmonicMoon, WorldObjectMetadata metadata) {
         super(harmonicMoon, new SpriteSheet(harmonicMoon, "/npcs/guard.png", 32, 16));
         this.harmonicMoon = harmonicMoon;
         setPath(new FollowingPath(this, harmonicMoon.getPlayer(), 64));

@@ -12,6 +12,12 @@ public class WorldLocation {
         this.y = y;
     }
 
+    public WorldLocation(WorldLocation original) {
+        this.world = original.world;
+        this.x = original.x;
+        this.y = original.y;
+    }
+
     public World getWorld() {
         return world;
     }

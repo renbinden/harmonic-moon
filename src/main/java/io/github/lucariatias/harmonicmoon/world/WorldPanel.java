@@ -4,16 +4,9 @@ import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.player.Camera;
 import io.github.lucariatias.harmonicmoon.player.Player;
 import io.github.lucariatias.harmonicmoon.player.PlayerController;
-import io.github.lucariatias.harmonicmoon.tile.TileLayer;
-import io.github.lucariatias.harmonicmoon.tile.TileSheet;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.EnumMap;
-import java.util.Map;
 
 public class WorldPanel extends JPanel {
 
@@ -33,19 +26,11 @@ public class WorldPanel extends JPanel {
         setDoubleBuffered(true);
         long startTime = System.currentTimeMillis();
         try {
-            Map<TileLayer, BufferedImage> tileMaps = new EnumMap<>(TileLayer.class);
-            tileMaps.put(TileLayer.BACK, ImageIO.read(getClass().getResourceAsStream("/maps/" + map + "/tiles-back.png")));
-            tileMaps.put(TileLayer.BACK_TOP, ImageIO.read(getClass().getResourceAsStream("/maps/" + map + "/tiles-back-top.png")));
-            tileMaps.put(TileLayer.FRONT, ImageIO.read(getClass().getResourceAsStream("/maps/" + map + "/tiles-front.png")));
-            tileMaps.put(TileLayer.FRONT_TOP, ImageIO.read(getClass().getResourceAsStream("/maps/" + map + "/tiles-front-top.png")));
-            world = new World(harmonicMoon, map, tileMaps, ImageIO.read(getClass().getResourceAsStream("/maps/" + map + "/objects.png")), new TileSheet(this, ImageIO.read(getClass().getResourceAsStream("/maps/" + map + "/tilesheet.png")), 16, 16));
-        } catch (IOException exception) {
+            world = World.load(harmonicMoon, map);
+        } catch (MalformedWorldSaveException exception) {
             exception.printStackTrace();
         }
         harmonicMoon.getLogger().info("Created world '" + map + "' (" + (System.currentTimeMillis() - startTime) + "ms)");
-        startTime = System.currentTimeMillis();
-        world.populate();
-        harmonicMoon.getLogger().info("Populated world '" + map + "' (" + (System.currentTimeMillis() - startTime) + "ms)");
     }
 
     public boolean isActive() {
