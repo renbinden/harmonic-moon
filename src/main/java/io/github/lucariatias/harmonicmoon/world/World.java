@@ -5,7 +5,9 @@ import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.block.Block;
 import io.github.lucariatias.harmonicmoon.character.WorldCharacter;
 import io.github.lucariatias.harmonicmoon.door.Door;
+import io.github.lucariatias.harmonicmoon.door.DoorMetadata;
 import io.github.lucariatias.harmonicmoon.npc.GuardNPC;
+import io.github.lucariatias.harmonicmoon.npc.NPCMetadata;
 import io.github.lucariatias.harmonicmoon.tile.Tile;
 import io.github.lucariatias.harmonicmoon.tile.TileLayer;
 import io.github.lucariatias.harmonicmoon.tile.TileSheet;
@@ -120,7 +122,7 @@ public class World {
                         switch (colour.getBlue()) {
                             case 0: return null;
                             case 1: return new Block();
-                            case 2: return new Door(harmonicMoon, metadata);
+                            case 2: return new Door(harmonicMoon, (DoorMetadata) metadata);
                             default: return null;
                         }
                     case 1:
@@ -133,7 +135,7 @@ public class World {
                             case 5: return harmonicMoon.getCharacterManager().getCharacter("anaria").world();
                             case 6: return harmonicMoon.getCharacterManager().getCharacter("idain").world();
                             case 7: return harmonicMoon.getCharacterManager().getCharacter("seuri").world();
-                            case 8: return new GuardNPC(harmonicMoon, metadata);
+                            case 8: return new GuardNPC(harmonicMoon, (NPCMetadata) metadata);
                         }
                     default: return null;
                 }
@@ -152,7 +154,7 @@ public class World {
                         }
                     case 1:
                         switch (colour.getBlue()) {
-                            case 8: return NpcMetadata.class;
+                            case 8: return NPCMetadata.class;
                             default: return WorldObjectMetadata.class;
                         }
                     default: return WorldObjectMetadata.class;
@@ -222,7 +224,7 @@ public class World {
                     int b = colour & 0xff;
                     if (r != 0 || g != 0 || b != 0) {
                         WorldObjectMetadata metadata = null;
-                        InputStream objectMetadataInputStream = World.class.getResourceAsStream("/maps/" + name + "/metadata/" + x + "/" + y + "/metadata.json");
+                        InputStream objectMetadataInputStream = World.class.getResourceAsStream("/maps/" + name + "/objects/metadata/" + x + "/" + y + "/metadata.json");
                         if (objectMetadataInputStream != null) {
                             Scanner scanner = new Scanner(objectMetadataInputStream);
                             StringBuilder builder = new StringBuilder();

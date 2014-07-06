@@ -10,10 +10,7 @@ import io.github.lucariatias.harmonicmoon.message.Message;
 import io.github.lucariatias.harmonicmoon.npc.path.Path;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
-import io.github.lucariatias.harmonicmoon.world.Direction;
-import io.github.lucariatias.harmonicmoon.world.MovementState;
-import io.github.lucariatias.harmonicmoon.world.WorldLocation;
-import io.github.lucariatias.harmonicmoon.world.WorldObject;
+import io.github.lucariatias.harmonicmoon.world.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -29,11 +26,15 @@ public abstract class NPC extends WorldObject {
     private Sprite sprite;
     private Map<Direction, Sprite> sprites = new EnumMap<>(Direction.class);
 
+    private NPCMetadata metadata;
+
     private MovementState movementState;
 
     private Path path;
 
-    public NPC(HarmonicMoon harmonicMoon, SpriteSheet spriteSheet) {
+    private boolean hasSpoken;
+
+    public NPC(HarmonicMoon harmonicMoon, SpriteSheet spriteSheet, NPCMetadata metadata) {
         this.harmonicMoon = harmonicMoon;
         this.movementState = MovementState.WAITING;
         sprites.put(Direction.DOWN, spriteSheet.getSprite(0, 0, 4));
@@ -41,11 +42,13 @@ public abstract class NPC extends WorldObject {
         sprites.put(Direction.LEFT, spriteSheet.getSprite(8, 0, 4));
         sprites.put(Direction.UP, spriteSheet.getSprite(12, 0, 4));
         this.sprite = sprites.get(Direction.DOWN);
+        this.metadata = metadata;
         setSolid(true);
         harmonicMoon.getEventManager().registerListener(new MessageBoxCloseListener() {
             @Override
             public void onMessageBoxClose(MessageBoxCloseEvent event) {
                 getPath().setFrozen(false);
+                hasSpoken = false;
             }
         });
     }
@@ -162,6 +165,18 @@ public abstract class NPC extends WorldObject {
             for (Message message : messages) {
                 harmonicMoon.getMessageBox().queueMessage(message);
             }
+        }
+    }
+
+    public NPCMetadata getMetadata() {
+        return metadata;
+    }
+
+    @Override
+    public void interact() {
+        if (!hasSpoken) {
+            hasSpoken = true;
+            say(getMetadata().getChatLines());
         }
     }
 

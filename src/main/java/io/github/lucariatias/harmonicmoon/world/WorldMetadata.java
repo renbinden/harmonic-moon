@@ -1,5 +1,7 @@
 package io.github.lucariatias.harmonicmoon.world;
 
+import io.github.lucariatias.harmonicmoon.metadata.Metadata;
+
 public class WorldMetadata extends Metadata {
 
     private int width;

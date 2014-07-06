@@ -1,6 +1,6 @@
 package io.github.lucariatias.harmonicmoon.tile;
 
-import io.github.lucariatias.harmonicmoon.world.Metadata;
+import io.github.lucariatias.harmonicmoon.metadata.Metadata;
 
 public class TileSheetMetadata extends Metadata {
 
