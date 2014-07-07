@@ -23,11 +23,11 @@ public class EnemyManager {
             enemyWaitSprites.put(Slime.class, slimeSpriteSheet.getSprite(0, 0, 8, 10));
             enemyAttackSprites.put(Slime.class, slimeSpriteSheet.getSprite(0, 1, 8, 5));
             enemyInjuredSprites.put(Slime.class, slimeSpriteSheet.getSprite(0, 2, 8, 5));
-            SpriteSheet guardSpriteSheet = new SpriteSheet(harmonicMoon, ImageIO.read(getClass().getResourceAsStream("/enemies/guard.png")), 64, 64);
-            enemySpriteSheets.put(Guard.class, guardSpriteSheet);
-            enemyWaitSprites.put(Guard.class, guardSpriteSheet.getSprite(0, 0, 8, 10));
-            enemyAttackSprites.put(Guard.class, guardSpriteSheet.getSprite(0, 1, 8, 5));
-            enemyInjuredSprites.put(Guard.class, guardSpriteSheet.getSprite(0, 2, 8, 5));
+            SpriteSheet soldierSpriteSheet = new SpriteSheet(harmonicMoon, ImageIO.read(getClass().getResourceAsStream("/enemies/soldier.png")), 64, 64);
+            enemySpriteSheets.put(Soldier.class, soldierSpriteSheet);
+            enemyWaitSprites.put(Soldier.class, soldierSpriteSheet.getSprite(0, 0, 8, 10));
+            enemyAttackSprites.put(Soldier.class, soldierSpriteSheet.getSprite(0, 1, 8, 5));
+            enemyInjuredSprites.put(Soldier.class, soldierSpriteSheet.getSprite(0, 2, 8, 5));
         } catch (IOException exception) {
             exception.printStackTrace();
         }

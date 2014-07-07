@@ -6,7 +6,7 @@ import io.github.lucariatias.harmonicmoon.block.Block;
 import io.github.lucariatias.harmonicmoon.character.WorldCharacter;
 import io.github.lucariatias.harmonicmoon.door.Door;
 import io.github.lucariatias.harmonicmoon.door.DoorMetadata;
-import io.github.lucariatias.harmonicmoon.npc.GuardNPC;
+import io.github.lucariatias.harmonicmoon.npc.SoldierNPC;
 import io.github.lucariatias.harmonicmoon.npc.NPCMetadata;
 import io.github.lucariatias.harmonicmoon.tile.Tile;
 import io.github.lucariatias.harmonicmoon.tile.TileLayer;
@@ -135,7 +135,7 @@ public class World {
                             case 5: return harmonicMoon.getCharacterManager().getCharacter("anaria").world();
                             case 6: return harmonicMoon.getCharacterManager().getCharacter("idain").world();
                             case 7: return harmonicMoon.getCharacterManager().getCharacter("seuri").world();
-                            case 8: return new GuardNPC(harmonicMoon, (NPCMetadata) metadata);
+                            case 8: return new SoldierNPC(harmonicMoon, (NPCMetadata) metadata);
                         }
                     default: return null;
                 }

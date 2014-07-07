@@ -2,7 +2,7 @@ package io.github.lucariatias.harmonicmoon.npc;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.character.WorldCharacter;
-import io.github.lucariatias.harmonicmoon.enemy.Guard;
+import io.github.lucariatias.harmonicmoon.enemy.Soldier;
 import io.github.lucariatias.harmonicmoon.event.collision.CollisionEvent;
 import io.github.lucariatias.harmonicmoon.event.collision.CollisionListener;
 import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseEvent;
@@ -14,19 +14,19 @@ import io.github.lucariatias.harmonicmoon.party.CharacterParty;
 import io.github.lucariatias.harmonicmoon.party.EnemyParty;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 
-public class GuardNPC extends NPC {
+public class SoldierNPC extends NPC {
 
     private HarmonicMoon harmonicMoon;
 
-    public GuardNPC(HarmonicMoon harmonicMoon, NPCMetadata metadata) {
-        super(harmonicMoon, new SpriteSheet(harmonicMoon, "/npcs/guard.png", 32, 16), metadata);
+    public SoldierNPC(HarmonicMoon harmonicMoon, NPCMetadata metadata) {
+        super(harmonicMoon, new SpriteSheet(harmonicMoon, "/npcs/soldier.png", 32, 16), metadata);
         this.harmonicMoon = harmonicMoon;
         setPath(new FollowingPath(this, harmonicMoon.getPlayer(), 64));
         harmonicMoon.getEventManager().registerListener(new CollisionListener() {
             @Override
             public void onCollision(CollisionEvent event) {
-                if (event.getObjects()[0] == GuardNPC.this && event.getObjects()[1] instanceof WorldCharacter ||
-                        event.getObjects()[1] == GuardNPC.this && event.getObjects()[0] instanceof WorldCharacter) {
+                if (event.getObjects()[0] == SoldierNPC.this && event.getObjects()[1] instanceof WorldCharacter ||
+                        event.getObjects()[1] == SoldierNPC.this && event.getObjects()[0] instanceof WorldCharacter) {
                     interact();
                     getPath().setFrozen(true);
                 }
@@ -36,14 +36,14 @@ public class GuardNPC extends NPC {
             @Override
             public void onMessageBoxClose(MessageBoxCloseEvent event) {
                 if (event.getMessageBox().getMessage().getNpc() != null) {
-                    if (event.getMessageBox().getMessage().getNpc() == GuardNPC.this) {
-                        HarmonicMoon harmonicMoon = GuardNPC.this.harmonicMoon;
-                        GuardNPC.this.harmonicMoon.getWorldPanel().setActive(false);
-                        Fight fight = new Fight(harmonicMoon, FightArea.PALACE, new CharacterParty(GuardNPC.this.harmonicMoon.getPlayer().getCharacter().fight()), new EnemyParty(new Guard(GuardNPC.this.harmonicMoon)));
-                        GuardNPC.this.harmonicMoon.getFightPanel().prepareFight(fight);
-                        GuardNPC.this.harmonicMoon.getFightPanel().startFight();
-                        GuardNPC.this.harmonicMoon.setPanel("fight");
-                        getLocation().getWorld().removeObject(GuardNPC.this);
+                    if (event.getMessageBox().getMessage().getNpc() == SoldierNPC.this) {
+                        HarmonicMoon harmonicMoon = SoldierNPC.this.harmonicMoon;
+                        SoldierNPC.this.harmonicMoon.getWorldPanel().setActive(false);
+                        Fight fight = new Fight(harmonicMoon, FightArea.PALACE, new CharacterParty(SoldierNPC.this.harmonicMoon.getPlayer().getCharacter().fight()), new EnemyParty(new Soldier(SoldierNPC.this.harmonicMoon)));
+                        SoldierNPC.this.harmonicMoon.getFightPanel().prepareFight(fight);
+                        SoldierNPC.this.harmonicMoon.getFightPanel().startFight();
+                        SoldierNPC.this.harmonicMoon.setPanel("fight");
+                        getLocation().getWorld().removeObject(SoldierNPC.this);
                     }
                 }
             }

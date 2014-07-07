@@ -5,10 +5,10 @@ import io.github.lucariatias.harmonicmoon.fight.Fight;
 import io.github.lucariatias.harmonicmoon.fight.TurnAction;
 import io.github.lucariatias.harmonicmoon.stat.Stat;
 
-public class Guard extends Enemy {
+public class Soldier extends Enemy {
 
-    public Guard(HarmonicMoon harmonicMoon) {
-        super(harmonicMoon, "Guard", harmonicMoon.getEnemyManager().getWaitSprite(Guard.class), harmonicMoon.getEnemyManager().getAttackSprite(Guard.class), harmonicMoon.getEnemyManager().getInjuredSprite(Guard.class));
+    public Soldier(HarmonicMoon harmonicMoon) {
+        super(harmonicMoon, "Soldier", harmonicMoon.getEnemyManager().getWaitSprite(Soldier.class), harmonicMoon.getEnemyManager().getAttackSprite(Soldier.class), harmonicMoon.getEnemyManager().getInjuredSprite(Soldier.class));
     }
 
     @Override
