@@ -19,6 +19,8 @@ import io.github.lucariatias.harmonicmoon.world.World;
 import io.github.lucariatias.harmonicmoon.world.WorldPanel;
 
 import javax.imageio.ImageIO;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -57,6 +59,8 @@ public class HarmonicMoon extends JPanel implements Runnable {
     private JobManager jobManager;
     private ParticleManager particleManager;
     private SkillManager skillManager;
+
+    private ScriptEngine scriptEngine;
 
     private MusicPlayer musicPlayer;
     private MessageBox messageBox;
@@ -99,6 +103,9 @@ public class HarmonicMoon extends JPanel implements Runnable {
         startTime = System.currentTimeMillis();
         skillManager = new SkillManager(this);
         getLogger().info("Set up skills (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
+        scriptEngine = new ScriptEngineManager().getEngineByName("javascript");
+        getLogger().info("Set up script engine (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
         try {
             logo = ImageIO.read(getClass().getResourceAsStream("/logo.png"));
@@ -234,6 +241,10 @@ public class HarmonicMoon extends JPanel implements Runnable {
 
     public SkillManager getSkillManager() {
         return skillManager;
+    }
+
+    public ScriptEngine getScriptEngine() {
+        return scriptEngine;
     }
 
     @Override

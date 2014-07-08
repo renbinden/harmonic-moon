@@ -4,15 +4,23 @@ import io.github.lucariatias.harmonicmoon.world.WorldObjectMetadata;
 
 public class NPCMetadata extends WorldObjectMetadata {
 
-    private String[] chatLines;
+    private String initialiseScript;
+    private String interactScript;
 
     public NPCMetadata(NPCMetadata original) {
-        this.chatLines = original.chatLines;
+        this.initialiseScript = original.initialiseScript;
+        this.interactScript = original.interactScript;
     }
 
     public NPCMetadata() {}
 
-    public String[] getChatLines() {
-        return chatLines;
+
+    public String getInitialiseScript() {
+        return initialiseScript;
     }
+
+    public String getInteractScript() {
+        return interactScript;
+    }
+
 }

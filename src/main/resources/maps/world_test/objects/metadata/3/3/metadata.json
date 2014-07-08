@@ -1,0 +1,1 @@
+{"initialiseScript":"","interactScript":"npc.say(\"blah\");\nif (npc.x \u003e npc.y) npc.say(\"x\u003ey\");\nelse npc.say(\"y\u003e\u003dx\");"}

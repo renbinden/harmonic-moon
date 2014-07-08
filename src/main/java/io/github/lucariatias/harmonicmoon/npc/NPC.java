@@ -10,8 +10,12 @@ import io.github.lucariatias.harmonicmoon.message.Message;
 import io.github.lucariatias.harmonicmoon.npc.path.Path;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
-import io.github.lucariatias.harmonicmoon.world.*;
+import io.github.lucariatias.harmonicmoon.world.Direction;
+import io.github.lucariatias.harmonicmoon.world.MovementState;
+import io.github.lucariatias.harmonicmoon.world.WorldLocation;
+import io.github.lucariatias.harmonicmoon.world.WorldObject;
 
+import javax.script.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -32,7 +36,7 @@ public abstract class NPC extends WorldObject {
 
     private Path path;
 
-    private boolean hasSpoken;
+    private boolean hasInteracted;
 
     public NPC(HarmonicMoon harmonicMoon, SpriteSheet spriteSheet, NPCMetadata metadata) {
         this.harmonicMoon = harmonicMoon;
@@ -48,9 +52,19 @@ public abstract class NPC extends WorldObject {
             @Override
             public void onMessageBoxClose(MessageBoxCloseEvent event) {
                 getPath().setFrozen(false);
-                hasSpoken = false;
+                hasInteracted = false;
             }
         });
+        if (getMetadata() != null && getMetadata().getInitialiseScript() != null) {
+            Bindings bindings = new SimpleBindings();
+            bindings.put("npc", this);
+            bindings.put("game", harmonicMoon);
+            try {
+                harmonicMoon.getScriptEngine().eval(getMetadata().getInitialiseScript(), bindings);
+            } catch (ScriptException exception) {
+                exception.printStackTrace();
+            }
+        }
     }
 
     public BufferedImage getImage() {
@@ -174,9 +188,18 @@ public abstract class NPC extends WorldObject {
 
     @Override
     public void interact() {
-        if (!hasSpoken) {
-            hasSpoken = true;
-            say(getMetadata().getChatLines());
+        if (!hasInteracted) {
+            hasInteracted = true;
+            if (getMetadata() != null && getMetadata().getInteractScript() != null) {
+                Bindings bindings = new SimpleBindings();
+                bindings.put("npc", this);
+                bindings.put("game", harmonicMoon);
+                try {
+                    harmonicMoon.getScriptEngine().eval(getMetadata().getInteractScript(), bindings);
+                } catch (ScriptException exception) {
+                    exception.printStackTrace();
+                }
+            }
         }
     }
 

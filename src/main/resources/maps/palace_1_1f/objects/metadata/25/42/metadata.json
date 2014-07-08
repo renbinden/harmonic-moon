@@ -1,1 +1,1 @@
-{"chatLines":["Soldier: You are not permitted to leave.","Lonyre: I am allowed to do as I wish, I am the princess.","Soldier: I cannot allow you to do that."]}
+{"initialiseScript":"","interactScript":"chatLines = java.lang.reflect.Array.newInstance(java.lang.String, 3);\nchatLines[0] = \"Soldier: You are not permitted to leave.\";\nchatLines[1] = \"Lonyre: I am allowed to do as I wish, I am the princess.\";\nchatLines[2] = \"Soldier: I cannot allow you to do that.\";\nnpc.say(chatLines);"}
