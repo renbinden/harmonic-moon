@@ -13,11 +13,11 @@ public class CharacterManager {
         characters = new HashMap<>();
         //addCharacter(new Anaria(harmonicMoon));
         //addCharacter(new Idain(harmonicMoon));
+        //addCharacter(new Kesowa(harmonicMoon));
         addCharacter(new Lonyre(harmonicMoon));
         //addCharacter(new Namapo(harmonicMoon));
         //addCharacter(new Seuri(harmonicMoon));
         //addCharacter(new Syalae(harmonicMoon));
-        //addCharacter(new Tesowa(harmonicMoon));
         //addCharacter(new Tivor(harmonicMoon));
     }
 

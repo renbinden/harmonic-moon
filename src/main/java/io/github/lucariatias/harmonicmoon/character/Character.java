@@ -17,6 +17,7 @@ public abstract class Character {
     private String name;
     private int age;
     private Gender gender;
+    private Personality personality;
 
     // Job stuff
     private Job job;
@@ -33,11 +34,12 @@ public abstract class Character {
     private SpriteSheet spriteSheet;
     private SpriteSheet fightSpriteSheet;
 
-    public Character(HarmonicMoon harmonicMoon, String name, int age, Gender gender, Job job, SpriteSheet spriteSheet, SpriteSheet fightSpriteSheet) {
+    public Character(HarmonicMoon harmonicMoon, String name, int age, Gender gender, Personality personality, Job job, SpriteSheet spriteSheet, SpriteSheet fightSpriteSheet) {
         this.harmonicMoon = harmonicMoon;
         this.name = name;
         this.age = age;
         this.gender = gender;
+        this.personality = personality;
         this.job = job;
         this.experience = new HashMap<>();
         this.health = getMaxHealth();
@@ -69,6 +71,14 @@ public abstract class Character {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public Personality getPersonality() {
+        return personality;
+    }
+
+    public void setPersonality(Personality personality) {
+        this.personality = personality;
     }
 
     public Job getJob() {
