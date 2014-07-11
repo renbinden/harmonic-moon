@@ -22,16 +22,18 @@ public class MusicPlayer {
 
     public void loop(final String path) {
         if (!enabled) return;
-        stopAll();
-        looping.add(path);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (looping.contains(path)) {
-                    playBlocking(getClass().getResourceAsStream(path));
+        if (!looping.contains(path)) {
+            stopAll();
+            looping.add(path);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (looping.contains(path)) {
+                        playBlocking(getClass().getResourceAsStream(path));
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        }
     }
 
     public void playNonBlocking(final InputStream inputStream) {

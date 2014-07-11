@@ -187,6 +187,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
         }
         setPanel("map_" + map);
         getCamera().setLocation(getPlayer().getCharacter().world().getLocation());
+        worldPanel.getWorld().playMusic();
         worldPanel.setActive(true);
     }
 

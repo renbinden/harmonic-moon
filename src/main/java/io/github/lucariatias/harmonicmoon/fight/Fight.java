@@ -75,8 +75,7 @@ public class Fight {
         if (enemyParty.getMembers().isEmpty()) {
             harmonicMoon.getFightPanel().endFight();
             harmonicMoon.getFightPanel().setActive(false);
-            harmonicMoon.setPanel("map_" + harmonicMoon.getWorldPanel().getWorld().getName());
-            harmonicMoon.getWorldPanel().setActive(true);
+            harmonicMoon.showWorld(harmonicMoon.getWorldPanel().getWorld().getName());
         }
     }
 

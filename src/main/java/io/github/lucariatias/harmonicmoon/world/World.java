@@ -262,4 +262,9 @@ public class World {
     public int getHeight() {
         return getMetadata().getHeight();
     }
+
+    public void playMusic() {
+        harmonicMoon.getMusicPlayer().loop("/music/" + getMetadata().getMusic() + ".ogg");
+    }
+
 }
