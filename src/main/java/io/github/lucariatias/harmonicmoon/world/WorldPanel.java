@@ -24,13 +24,11 @@ public class WorldPanel extends JPanel {
         setBackground(Color.BLACK);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setDoubleBuffered(true);
-        long startTime = System.currentTimeMillis();
         try {
             world = World.load(harmonicMoon, map);
         } catch (MalformedWorldSaveException exception) {
             exception.printStackTrace();
         }
-        harmonicMoon.getLogger().info("Created world '" + map + "' (" + (System.currentTimeMillis() - startTime) + "ms)");
     }
 
     public boolean isActive() {

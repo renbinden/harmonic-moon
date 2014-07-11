@@ -181,7 +181,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
             worldPanel = new WorldPanel(this, map);
             worldPanels.put(map, worldPanel);
             add(worldPanel, "map_" + map);
-            getLogger().info("Loaded world " + map + " (" + (System.currentTimeMillis() - startTime) + "ms)");
+            getLogger().info("Loaded world '" + map + "' (" + (System.currentTimeMillis() - startTime) + "ms)");
         } else {
             worldPanel = worldPanels.get(map);
         }

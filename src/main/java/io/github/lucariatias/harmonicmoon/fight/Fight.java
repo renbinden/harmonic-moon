@@ -65,7 +65,6 @@ public class Fight {
         if (!pendingTurnActions.isEmpty()) {
             if (turnAction == null || turnAction.isFinished()) {
                 turnAction = pendingTurnActions.pop();
-                harmonicMoon.getLogger().info("Performing turn action: " + turnAction.getCombatant().getName());
                 turnAction.doTurn();
             }
         } else if (turnReady && (turnAction == null || turnAction.isFinished())) {
