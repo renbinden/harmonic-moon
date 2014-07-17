@@ -1,7 +1,7 @@
 package io.github.lucariatias.harmonicmoon.npc;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
-import io.github.lucariatias.harmonicmoon.character.WorldCharacter;
+import io.github.lucariatias.harmonicmoon.character.Character;
 import io.github.lucariatias.harmonicmoon.event.collision.CollisionEvent;
 import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseEvent;
 import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseListener;
@@ -15,7 +15,9 @@ import io.github.lucariatias.harmonicmoon.world.MovementState;
 import io.github.lucariatias.harmonicmoon.world.WorldLocation;
 import io.github.lucariatias.harmonicmoon.world.WorldObject;
 
-import javax.script.*;
+import javax.script.Bindings;
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -170,7 +172,7 @@ public abstract class NPC extends WorldObject {
 
     public void say(Message... messages) {
         for (Direction direction : Direction.values()) {
-            if (getCollision(direction) instanceof WorldCharacter) {
+            if (getCollision(direction) instanceof Character.World) {
                 face(direction);
             }
         }

@@ -1,6 +1,6 @@
 package io.github.lucariatias.harmonicmoon.npc.path;
 
-import io.github.lucariatias.harmonicmoon.character.WorldCharacter;
+import io.github.lucariatias.harmonicmoon.character.Character;
 import io.github.lucariatias.harmonicmoon.npc.NPC;
 import io.github.lucariatias.harmonicmoon.player.Player;
 import io.github.lucariatias.harmonicmoon.world.Direction;
@@ -20,7 +20,7 @@ public class FollowingPath extends Path {
     @Override
     public void step() {
         if (!isFrozen()) {
-            WorldCharacter character = player.getCharacter().world();
+            Character.World character = player.getCharacter().world();
             WorldLocation characterLocation = character.getLocation();
             if (getNpc().getLocation().distanceSquared(characterLocation) <= sightDistance * sightDistance) {
                 if (getNpc().getLocation().getX() < characterLocation.getX()) {

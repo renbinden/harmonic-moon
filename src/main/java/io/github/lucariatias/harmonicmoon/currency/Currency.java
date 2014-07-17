@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 
 public enum Currency {
 
-    QOING("Quoing", "Quoing", "Quoing", 40),
+    QOING("Qoing", "Qoing", "Qoing", 40),
     MOLLIR("Mollir", "Mollir", "Mollirs", 60),
     BONVAR("Bonvar", "Bonvar", "Bonvars", 70),
     AURE("Aure", "Aure", "Aures", 1000),

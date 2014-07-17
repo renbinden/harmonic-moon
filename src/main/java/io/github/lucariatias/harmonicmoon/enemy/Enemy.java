@@ -26,6 +26,7 @@ public abstract class Enemy extends Combatant {
     private boolean spriteTemporary;
 
     private int health;
+    private int mana;
 
     public Enemy(HarmonicMoon harmonicMoon, String name, Sprite waitingSprite, Sprite attackingSprite, Sprite injuredSprite) {
         this.harmonicMoon = harmonicMoon;
@@ -87,6 +88,16 @@ public abstract class Enemy extends Combatant {
     public void setHealth(int health) {
         if (health <= 0) die();
         this.health = Math.min(Math.max(health, 0), getMaxHealth());
+    }
+
+    @Override
+    public int getMana() {
+        return mana;
+    }
+
+    @Override
+    public void setMana(int mana) {
+        this.mana = mana;
     }
 
     @Override

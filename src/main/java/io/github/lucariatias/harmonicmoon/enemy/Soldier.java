@@ -17,6 +17,11 @@ public class Soldier extends Enemy {
     }
 
     @Override
+    public int getMaxMana() {
+        return 10;
+    }
+
+    @Override
     public int getStatValue(Stat stat) {
         return 1;
     }

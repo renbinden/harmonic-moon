@@ -3,11 +3,11 @@ package io.github.lucariatias.harmonicmoon.world;
 import com.google.gson.Gson;
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.block.Block;
-import io.github.lucariatias.harmonicmoon.character.WorldCharacter;
+import io.github.lucariatias.harmonicmoon.character.Character;
 import io.github.lucariatias.harmonicmoon.door.Door;
 import io.github.lucariatias.harmonicmoon.door.DoorMetadata;
-import io.github.lucariatias.harmonicmoon.npc.SoldierNPC;
 import io.github.lucariatias.harmonicmoon.npc.NPCMetadata;
+import io.github.lucariatias.harmonicmoon.npc.SoldierNPC;
 import io.github.lucariatias.harmonicmoon.tile.Tile;
 import io.github.lucariatias.harmonicmoon.tile.TileLayer;
 import io.github.lucariatias.harmonicmoon.tile.TileSheet;
@@ -78,12 +78,12 @@ public class World {
 
     public void addObject(WorldObject object) {
         objects.add(object);
-        if (object instanceof WorldCharacter) harmonicMoon.debug(((WorldCharacter) object).getCharacter().getName() + " added to " + getName());
+        if (object instanceof Character.World) harmonicMoon.debug(((Character.World) object).getCharacter().getName() + " added to " + getName());
     }
 
     public void removeObject(WorldObject object) {
         objects.remove(object);
-        if (object instanceof WorldCharacter) harmonicMoon.debug(((WorldCharacter) object).getCharacter().getName() + " removed from " + getName());
+        if (object instanceof Character.World) harmonicMoon.debug(((Character.World) object).getCharacter().getName() + " removed from " + getName());
     }
 
     private int partition(WorldObject[] objects, int left, int right) {

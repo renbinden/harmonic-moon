@@ -3,7 +3,7 @@ package io.github.lucariatias.harmonicmoon.skill;
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.fight.Combatant;
 import io.github.lucariatias.harmonicmoon.fight.Fight;
-import io.github.lucariatias.harmonicmoon.item.Weapon;
+import io.github.lucariatias.harmonicmoon.inventory.item.weapon.Weapon;
 import io.github.lucariatias.harmonicmoon.particle.SplashEffect;
 
 import java.awt.*;

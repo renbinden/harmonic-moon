@@ -15,6 +15,12 @@ public abstract class Combatant extends FightObject {
 
     public abstract int getMaxHealth();
 
+    public abstract int getMana();
+
+    public abstract void setMana(int mana);
+
+    public abstract int getMaxMana();
+
     public abstract Sprite getSprite();
 
     public abstract void setSprite(Sprite sprite);

@@ -55,7 +55,7 @@ public class DebugKeyListener extends KeyAdapter {
                 harmonicMoon.getWorldPanel().getPlayer().setCharacter(harmonicMoon.getCharacterManager().getCharacter(JOptionPane.showInputDialog("Character: ")));
             }
             if (event.getKeyCode() == KeyEvent.VK_B) {
-                Fight fight = new Fight(harmonicMoon, FightArea.GRASS, new CharacterParty(harmonicMoon.getCharacterManager().getCharacter("lonyre").fight()), new EnemyParty(new Slime(harmonicMoon)));
+                Fight fight = new Fight(harmonicMoon, FightArea.GRASS, new CharacterParty(harmonicMoon.getCharacterManager().getCharacter("lonyre")), new EnemyParty(new Slime(harmonicMoon)));
                 harmonicMoon.getFightPanel().prepareFight(fight);
                 harmonicMoon.getFightPanel().startFight();
                 harmonicMoon.setPanel("fight");

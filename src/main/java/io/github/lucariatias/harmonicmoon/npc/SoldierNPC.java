@@ -1,7 +1,7 @@
 package io.github.lucariatias.harmonicmoon.npc;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
-import io.github.lucariatias.harmonicmoon.character.WorldCharacter;
+import io.github.lucariatias.harmonicmoon.character.Character;
 import io.github.lucariatias.harmonicmoon.enemy.Soldier;
 import io.github.lucariatias.harmonicmoon.event.collision.CollisionEvent;
 import io.github.lucariatias.harmonicmoon.event.collision.CollisionListener;
@@ -25,8 +25,8 @@ public class SoldierNPC extends NPC {
         harmonicMoon.getEventManager().registerListener(new CollisionListener() {
             @Override
             public void onCollision(CollisionEvent event) {
-                if (event.getObjects()[0] == SoldierNPC.this && event.getObjects()[1] instanceof WorldCharacter ||
-                        event.getObjects()[1] == SoldierNPC.this && event.getObjects()[0] instanceof WorldCharacter) {
+                if (event.getObjects()[0] == SoldierNPC.this && event.getObjects()[1] instanceof Character.World ||
+                        event.getObjects()[1] == SoldierNPC.this && event.getObjects()[0] instanceof Character.World) {
                     interact();
                     getPath().setFrozen(true);
                 }
@@ -39,7 +39,7 @@ public class SoldierNPC extends NPC {
                     if (event.getMessageBox().getMessage().getNpc() == SoldierNPC.this) {
                         HarmonicMoon harmonicMoon = SoldierNPC.this.harmonicMoon;
                         SoldierNPC.this.harmonicMoon.getWorldPanel().setActive(false);
-                        Fight fight = new Fight(harmonicMoon, FightArea.PALACE, new CharacterParty(SoldierNPC.this.harmonicMoon.getPlayer().getCharacter().fight()), new EnemyParty(new Soldier(SoldierNPC.this.harmonicMoon)));
+                        Fight fight = new Fight(harmonicMoon, FightArea.PALACE, new CharacterParty(SoldierNPC.this.harmonicMoon.getPlayer().getCharacter()), new EnemyParty(new Soldier(SoldierNPC.this.harmonicMoon)));
                         SoldierNPC.this.harmonicMoon.getFightPanel().prepareFight(fight);
                         SoldierNPC.this.harmonicMoon.getFightPanel().startFight();
                         SoldierNPC.this.harmonicMoon.setPanel("fight");

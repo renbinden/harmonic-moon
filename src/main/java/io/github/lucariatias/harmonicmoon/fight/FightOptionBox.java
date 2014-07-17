@@ -1,7 +1,7 @@
 package io.github.lucariatias.harmonicmoon.fight;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
-import io.github.lucariatias.harmonicmoon.character.FightCharacter;
+import io.github.lucariatias.harmonicmoon.character.Character;
 import io.github.lucariatias.harmonicmoon.enemy.Enemy;
 import io.github.lucariatias.harmonicmoon.party.CharacterParty;
 import io.github.lucariatias.harmonicmoon.party.EnemyParty;
@@ -22,7 +22,7 @@ public class FightOptionBox {
 
     private boolean mousePressed;
 
-    private FightCharacter character;
+    private Character.Fight character;
 
     public FightOptionBox(HarmonicMoon harmonicMoon, FightPanel fightPanel) {
         this.harmonicMoon = harmonicMoon;
@@ -95,11 +95,11 @@ public class FightOptionBox {
         }
     }
 
-    public FightCharacter getCharacter() {
+    public Character.Fight getCharacter() {
         return character;
     }
 
-    public void setCharacter(FightCharacter character) {
+    public void setCharacter(Character.Fight character) {
         this.character = character;
     }
 

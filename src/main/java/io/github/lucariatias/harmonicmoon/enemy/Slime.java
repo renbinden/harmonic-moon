@@ -16,6 +16,11 @@ public class Slime extends Monster {
         return 15;
     }
 
+    @Override
+    public int getMaxMana() {
+        return 15;
+    }
+
     public int getStatValue(Stat stat) {
         return 1;
     }

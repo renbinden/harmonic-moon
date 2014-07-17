@@ -1,7 +1,7 @@
 package io.github.lucariatias.harmonicmoon.fight;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
-import io.github.lucariatias.harmonicmoon.character.FightCharacter;
+import io.github.lucariatias.harmonicmoon.character.Character;
 import io.github.lucariatias.harmonicmoon.enemy.Enemy;
 import io.github.lucariatias.harmonicmoon.party.CharacterParty;
 import io.github.lucariatias.harmonicmoon.party.EnemyParty;
@@ -56,7 +56,7 @@ public class Fight {
     }
 
     public void onTick() {
-        for (FightCharacter character : characterParty.getMembers()) {
+        for (Character.Fight character : characterParty.getMembers()) {
             character.onTick();
         }
         for (Enemy enemy : enemyParty.getMembers()) {
