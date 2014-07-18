@@ -16,7 +16,7 @@ public class Message {
         this.text = text;
     }
 
-    public NPC getNpc() {
+    public NPC getNPC() {
         return npc;
     }
 

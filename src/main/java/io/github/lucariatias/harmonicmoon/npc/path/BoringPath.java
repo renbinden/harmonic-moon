@@ -17,57 +17,57 @@ public class BoringPath extends Path {
     }
 
     public void setNeutralPosition() {
-        this.neutralPosition = getNpc().getLocation();
+        this.neutralPosition = getNPC().getLocation();
     }
 
     @Override
     public void step() {
         if (!isFrozen()) {
-            if (getNpc().getLocation().distanceSquared(neutralPosition) <= 8) {
+            if (getNPC().getLocation().distanceSquared(neutralPosition) <= 8) {
                 if (tickDelay >= 40) {
                     Random random = new Random();
                     switch (random.nextInt(4)) {
                         case 0:
-                            getNpc().move(Direction.UP);
+                            getNPC().move(Direction.UP);
                             break;
                         case 1:
-                            getNpc().move(Direction.DOWN);
+                            getNPC().move(Direction.DOWN);
                             break;
                         case 2:
-                            getNpc().move(Direction.LEFT);
+                            getNPC().move(Direction.LEFT);
                             break;
                         case 3:
-                            getNpc().move(Direction.RIGHT);
+                            getNPC().move(Direction.RIGHT);
                             break;
                     }
                     tickDelay = 0;
                 } else {
                     tickDelay++;
                 }
-            } else if (getNpc().getLocation().getRelative(Direction.UP, 16).distanceSquared(neutralPosition) <= 8) {
+            } else if (getNPC().getLocation().getRelative(Direction.UP, 16).distanceSquared(neutralPosition) <= 8) {
                 if (tickDelay >= 40) {
-                    getNpc().move(Direction.UP);
+                    getNPC().move(Direction.UP);
                     tickDelay = 0;
                 } else {
                     tickDelay++;
                 }
-            } else if (getNpc().getLocation().getRelative(Direction.DOWN, 16).distanceSquared(neutralPosition) <= 8) {
+            } else if (getNPC().getLocation().getRelative(Direction.DOWN, 16).distanceSquared(neutralPosition) <= 8) {
                 if (tickDelay >= 40) {
-                    getNpc().move(Direction.DOWN);
+                    getNPC().move(Direction.DOWN);
                     tickDelay = 0;
                 } else {
                     tickDelay++;
                 }
-            } else if (getNpc().getLocation().getRelative(Direction.RIGHT, 16).distanceSquared(neutralPosition) <= 8) {
+            } else if (getNPC().getLocation().getRelative(Direction.RIGHT, 16).distanceSquared(neutralPosition) <= 8) {
                 if (tickDelay >= 40) {
-                    getNpc().move(Direction.RIGHT);
+                    getNPC().move(Direction.RIGHT);
                     tickDelay = 0;
                 } else {
                     tickDelay++;
                 }
-            } else if (getNpc().getLocation().getRelative(Direction.LEFT, 16).distanceSquared(neutralPosition) <= 8) {
+            } else if (getNPC().getLocation().getRelative(Direction.LEFT, 16).distanceSquared(neutralPosition) <= 8) {
                 if (tickDelay >= 40) {
-                    getNpc().move(Direction.LEFT);
+                    getNPC().move(Direction.LEFT);
                     tickDelay = 0;
                 } else {
                     tickDelay++;

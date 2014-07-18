@@ -22,15 +22,15 @@ public class FollowingPath extends Path {
         if (!isFrozen()) {
             Character.World character = player.getCharacter().world();
             WorldLocation characterLocation = character.getLocation();
-            if (getNpc().getLocation().distanceSquared(characterLocation) <= sightDistance * sightDistance) {
-                if (getNpc().getLocation().getX() < characterLocation.getX()) {
-                    getNpc().move(Direction.RIGHT);
-                } else if (getNpc().getLocation().getX() > characterLocation.getX()) {
-                    getNpc().move(Direction.LEFT);
-                } else if (getNpc().getLocation().getY() < characterLocation.getY()) {
-                    getNpc().move(Direction.DOWN);
-                } else if (getNpc().getLocation().getY() > characterLocation.getY()) {
-                    getNpc().move(Direction.UP);
+            if (getNPC().getLocation().distanceSquared(characterLocation) <= sightDistance * sightDistance) {
+                if (getNPC().getLocation().getX() < characterLocation.getX()) {
+                    getNPC().move(Direction.RIGHT);
+                } else if (getNPC().getLocation().getX() > characterLocation.getX()) {
+                    getNPC().move(Direction.LEFT);
+                } else if (getNPC().getLocation().getY() < characterLocation.getY()) {
+                    getNPC().move(Direction.DOWN);
+                } else if (getNPC().getLocation().getY() > characterLocation.getY()) {
+                    getNPC().move(Direction.UP);
                 }
             }
         }

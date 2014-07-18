@@ -6,6 +6,7 @@ import io.github.lucariatias.harmonicmoon.block.Block;
 import io.github.lucariatias.harmonicmoon.character.Character;
 import io.github.lucariatias.harmonicmoon.door.Door;
 import io.github.lucariatias.harmonicmoon.door.DoorMetadata;
+import io.github.lucariatias.harmonicmoon.npc.AvirnyrItemMerchantNPC;
 import io.github.lucariatias.harmonicmoon.npc.NPCMetadata;
 import io.github.lucariatias.harmonicmoon.npc.SoldierNPC;
 import io.github.lucariatias.harmonicmoon.tile.Tile;
@@ -136,6 +137,7 @@ public class World {
                             case 6: return harmonicMoon.getCharacterManager().getCharacter("idain").world();
                             case 7: return harmonicMoon.getCharacterManager().getCharacter("seuri").world();
                             case 8: return new SoldierNPC(harmonicMoon, (NPCMetadata) metadata);
+                            case 9: return new AvirnyrItemMerchantNPC(harmonicMoon, (NPCMetadata) metadata);
                         }
                     default: return null;
                 }
@@ -155,6 +157,7 @@ public class World {
                     case 1:
                         switch (colour.getBlue()) {
                             case 8: return NPCMetadata.class;
+                            case 9: return NPCMetadata.class;
                             default: return WorldObjectMetadata.class;
                         }
                     default: return WorldObjectMetadata.class;

@@ -21,7 +21,7 @@ public abstract class Path {
         return frozen;
     }
 
-    public NPC getNpc() {
+    public NPC getNPC() {
         return npc;
     }
 }

@@ -35,8 +35,8 @@ public class SoldierNPC extends NPC {
         harmonicMoon.getEventManager().registerListener(new MessageBoxCloseListener() {
             @Override
             public void onMessageBoxClose(MessageBoxCloseEvent event) {
-                if (event.getMessageBox().getMessage().getNpc() != null) {
-                    if (event.getMessageBox().getMessage().getNpc() == SoldierNPC.this) {
+                if (event.getMessageBox().getMessage().getNPC() != null) {
+                    if (event.getMessageBox().getMessage().getNPC() == SoldierNPC.this) {
                         HarmonicMoon harmonicMoon = SoldierNPC.this.harmonicMoon;
                         SoldierNPC.this.harmonicMoon.getWorldPanel().setActive(false);
                         Fight fight = new Fight(harmonicMoon, FightArea.PALACE, new CharacterParty(SoldierNPC.this.harmonicMoon.getPlayer().getCharacter()), new EnemyParty(new Soldier(SoldierNPC.this.harmonicMoon)));

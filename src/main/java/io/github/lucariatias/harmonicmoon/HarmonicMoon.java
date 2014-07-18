@@ -1,10 +1,13 @@
 package io.github.lucariatias.harmonicmoon;
 
 import io.github.lucariatias.harmonicmoon.character.CharacterManager;
+import io.github.lucariatias.harmonicmoon.currency.Currency;
 import io.github.lucariatias.harmonicmoon.enemy.EnemyManager;
 import io.github.lucariatias.harmonicmoon.event.EventManager;
 import io.github.lucariatias.harmonicmoon.event.tick.TickEvent;
 import io.github.lucariatias.harmonicmoon.fight.FightPanel;
+import io.github.lucariatias.harmonicmoon.inventory.item.Item;
+import io.github.lucariatias.harmonicmoon.inventory.item.consumable.Consumable;
 import io.github.lucariatias.harmonicmoon.job.JobManager;
 import io.github.lucariatias.harmonicmoon.menu.MainMenu;
 import io.github.lucariatias.harmonicmoon.message.MessageBox;
@@ -14,6 +17,8 @@ import io.github.lucariatias.harmonicmoon.particle.ParticleManager;
 import io.github.lucariatias.harmonicmoon.player.Camera;
 import io.github.lucariatias.harmonicmoon.player.KeyboardPlayerController;
 import io.github.lucariatias.harmonicmoon.player.Player;
+import io.github.lucariatias.harmonicmoon.shop.Shop;
+import io.github.lucariatias.harmonicmoon.shop.ShopPanel;
 import io.github.lucariatias.harmonicmoon.skill.SkillManager;
 import io.github.lucariatias.harmonicmoon.world.World;
 import io.github.lucariatias.harmonicmoon.world.WorldPanel;
@@ -52,6 +57,9 @@ public class HarmonicMoon extends JPanel implements Runnable {
     private WorldPanel worldPanel;
     private Map<String, WorldPanel> worldPanels = new HashMap<>();
     private FightPanel fightPanel;
+    private Map<String, ShopPanel> shopPanels = new HashMap<>();
+
+    private Map<String, Shop> shops = new HashMap<>();
 
     private CharacterManager characterManager;
     private EnemyManager enemyManager;
@@ -135,6 +143,14 @@ public class HarmonicMoon extends JPanel implements Runnable {
         fightPanel = new FightPanel(this);
         add(fightPanel, "fight");
         getLogger().info("Set up fight panel (" + (System.currentTimeMillis() - startTime) + "ms)");
+        startTime = System.currentTimeMillis();
+        shops = new HashMap<>();
+        Map<Item, Integer> avirnyrShopItems = new HashMap<>();
+        avirnyrShopItems.put(Consumable.POTION, 30);
+        avirnyrShopItems.put(Consumable.ETHER, 250);
+        Shop avirnyrShop = new Shop(Currency.MOLLIR, avirnyrShopItems);
+        shops.put("avirnyr", avirnyrShop);
+        getLogger().info("Set up shops (" + (System.currentTimeMillis() - startTime) + "ms)");
         setPanel("menu");
         startTime = System.currentTimeMillis();
         musicPlayer = new MusicPlayer(!argsList.contains("--no-music"));
@@ -189,6 +205,19 @@ public class HarmonicMoon extends JPanel implements Runnable {
         getCamera().setLocation(getPlayer().getCharacter().world().getLocation());
         worldPanel.getWorld().playMusic();
         worldPanel.setActive(true);
+    }
+
+    public void showShop(String name) {
+        if (worldPanel != null) worldPanel.setActive(false);
+        if (fightPanel != null) fightPanel.setActive(false);
+        if (!shopPanels.containsKey(name)) {
+            long startTime = System.currentTimeMillis();
+            ShopPanel shopPanel = new ShopPanel(shops.get(name));
+            shopPanels.put(name, shopPanel);
+            add(shopPanel, "shop_" + name);
+            getLogger().info("Loaded shop '" + name + "' (" + (System.currentTimeMillis() - startTime) + "ms)");
+        }
+        setPanel("shop_" + name);
     }
 
     public World getWorld(String name) {
