@@ -1,4 +1,4 @@
-package io.github.lucariatias.harmonicmoon.party;
+package io.github.lucariatias.harmonicmoon.fight.party;
 
 import io.github.lucariatias.harmonicmoon.enemy.Enemy;
 import io.github.lucariatias.harmonicmoon.fight.Combatant;
@@ -7,11 +7,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class EnemyParty extends Party {
+public class EnemyFightParty extends FightParty {
 
     private List<Enemy> members;
 
-    public EnemyParty(Enemy... members) {
+    public EnemyFightParty(Enemy... members) {
         this.members = new CopyOnWriteArrayList<>(Arrays.asList(members));
     }
 

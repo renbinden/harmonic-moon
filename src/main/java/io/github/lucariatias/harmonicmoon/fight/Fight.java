@@ -3,8 +3,8 @@ package io.github.lucariatias.harmonicmoon.fight;
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.character.Character;
 import io.github.lucariatias.harmonicmoon.enemy.Enemy;
-import io.github.lucariatias.harmonicmoon.party.CharacterParty;
-import io.github.lucariatias.harmonicmoon.party.EnemyParty;
+import io.github.lucariatias.harmonicmoon.fight.party.CharacterFightParty;
+import io.github.lucariatias.harmonicmoon.fight.party.EnemyFightParty;
 import io.github.lucariatias.harmonicmoon.util.sort.Sorter;
 
 import java.util.ArrayList;
@@ -16,15 +16,15 @@ public class Fight {
     private HarmonicMoon harmonicMoon;
 
     private FightArea area;
-    private CharacterParty characterParty;
-    private EnemyParty enemyParty;
+    private CharacterFightParty characterParty;
+    private EnemyFightParty enemyParty;
 
     private List<TurnAction> turnActions = new ArrayList<>();
     private Stack<TurnAction> pendingTurnActions = new Stack<>();
     private TurnAction turnAction;
     private boolean turnReady;
 
-    public Fight(HarmonicMoon harmonicMoon, FightArea area, CharacterParty characterParty, EnemyParty enemyParty) {
+    public Fight(HarmonicMoon harmonicMoon, FightArea area, CharacterFightParty characterParty, EnemyFightParty enemyParty) {
         this.harmonicMoon = harmonicMoon;
         this.area = area;
         this.characterParty = characterParty;
@@ -39,19 +39,19 @@ public class Fight {
         this.area = area;
     }
 
-    public CharacterParty getCharacterParty() {
+    public CharacterFightParty getCharacterParty() {
         return characterParty;
     }
 
-    public void setCharacterParty(CharacterParty characterParty) {
+    public void setCharacterParty(CharacterFightParty characterParty) {
         this.characterParty = characterParty;
     }
 
-    public EnemyParty getEnemyParty() {
+    public EnemyFightParty getEnemyParty() {
         return enemyParty;
     }
 
-    public void setEnemyParty(EnemyParty enemyParty) {
+    public void setEnemyParty(EnemyFightParty enemyParty) {
         this.enemyParty = enemyParty;
     }
 

@@ -1,15 +1,15 @@
-package io.github.lucariatias.harmonicmoon.party;
+package io.github.lucariatias.harmonicmoon.fight.party;
 
 import io.github.lucariatias.harmonicmoon.fight.Combatant;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Party {
+public abstract class FightParty {
 
     private List<Combatant> members;
 
-    public Party(Combatant... members) {
+    public FightParty(Combatant... members) {
         this.members = Arrays.asList(members);
     }
 

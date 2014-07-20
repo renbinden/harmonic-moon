@@ -3,10 +3,9 @@ package io.github.lucariatias.harmonicmoon;
 import io.github.lucariatias.harmonicmoon.enemy.Slime;
 import io.github.lucariatias.harmonicmoon.fight.Fight;
 import io.github.lucariatias.harmonicmoon.fight.FightArea;
+import io.github.lucariatias.harmonicmoon.fight.party.EnemyFightParty;
 import io.github.lucariatias.harmonicmoon.particle.ExplosionEffect;
 import io.github.lucariatias.harmonicmoon.particle.SparksEffect;
-import io.github.lucariatias.harmonicmoon.party.CharacterParty;
-import io.github.lucariatias.harmonicmoon.party.EnemyParty;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,7 +54,7 @@ public class DebugKeyListener extends KeyAdapter {
                 harmonicMoon.getWorldPanel().getPlayer().setCharacter(harmonicMoon.getCharacterManager().getCharacter(JOptionPane.showInputDialog("Character: ")));
             }
             if (event.getKeyCode() == KeyEvent.VK_B) {
-                Fight fight = new Fight(harmonicMoon, FightArea.GRASS, new CharacterParty(harmonicMoon.getCharacterManager().getCharacter("lonyre")), new EnemyParty(new Slime(harmonicMoon)));
+                Fight fight = new Fight(harmonicMoon, FightArea.GRASS, harmonicMoon.getCharacterManager().getParty(harmonicMoon.getCharacterManager().getCharacter("lonyre")).asFightParty(), new EnemyFightParty(new Slime(harmonicMoon)));
                 harmonicMoon.getFightPanel().prepareFight(fight);
                 harmonicMoon.getFightPanel().startFight();
                 harmonicMoon.setPanel("fight");

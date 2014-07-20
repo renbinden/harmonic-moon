@@ -3,8 +3,8 @@ package io.github.lucariatias.harmonicmoon.fight;
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.character.Character;
 import io.github.lucariatias.harmonicmoon.enemy.Enemy;
-import io.github.lucariatias.harmonicmoon.party.CharacterParty;
-import io.github.lucariatias.harmonicmoon.party.EnemyParty;
+import io.github.lucariatias.harmonicmoon.fight.party.CharacterFightParty;
+import io.github.lucariatias.harmonicmoon.fight.party.EnemyFightParty;
 import io.github.lucariatias.harmonicmoon.skill.Skill;
 
 import javax.imageio.ImageIO;
@@ -109,7 +109,7 @@ public class FightOptionBox {
                 new FightOption("Attack", new Runnable() {
                     @Override
                     public void run() {
-                        EnemyParty enemyParty = FightOptionBox.this.harmonicMoon.getFightPanel().getFight().getEnemyParty();
+                        EnemyFightParty enemyParty = FightOptionBox.this.harmonicMoon.getFightPanel().getFight().getEnemyParty();
                         options = new FightOption[enemyParty.getMembers().size()];
                         int i = 0;
                         for (final Enemy enemy : enemyParty.getMembers()) {
@@ -150,7 +150,7 @@ public class FightOptionBox {
                             options[i] = new FightOption(skill.getName(), new Runnable() {
                                 @Override
                                 public void run() {
-                                    EnemyParty enemyParty = FightOptionBox.this.harmonicMoon.getFightPanel().getFight().getEnemyParty();
+                                    EnemyFightParty enemyParty = FightOptionBox.this.harmonicMoon.getFightPanel().getFight().getEnemyParty();
                                     options = new FightOption[enemyParty.getMembers().size()];
                                     int i = 0;
                                     for (final Enemy enemy : enemyParty.getMembers()) {
@@ -197,7 +197,7 @@ public class FightOptionBox {
     }
 
     private void showNext(Fight fight) {
-        CharacterParty party = fight.getCharacterParty();
+        CharacterFightParty party = fight.getCharacterParty();
         int memberIndex = party.getMembers().indexOf(character);
         if (memberIndex + 1 < party.getMembers().size()) {
             setCharacter(party.getMembers().get(memberIndex + 1));

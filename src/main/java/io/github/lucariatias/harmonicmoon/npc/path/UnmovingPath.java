@@ -11,7 +11,7 @@ public class UnmovingPath extends Path {
 
     @Override
     public void step() {
-        getNPC().face(Direction.DOWN);
+        if (!isFrozen()) getNPC().face(Direction.DOWN);
     }
 
 }

@@ -3,14 +3,14 @@ package io.github.lucariatias.harmonicmoon.shop;
 import io.github.lucariatias.harmonicmoon.currency.Currency;
 import io.github.lucariatias.harmonicmoon.inventory.item.Item;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class Shop {
 
     private Currency currency;
-    private Map<Item, Integer> items;
+    private LinkedHashMap<Item, Integer> items;
 
-    public Shop(Currency currency, Map<Item, Integer> items) {
+    public Shop(Currency currency, LinkedHashMap<Item, Integer> items) {
         this.currency = currency;
         this.items = items;
     }

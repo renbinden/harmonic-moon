@@ -4,8 +4,7 @@ import io.github.lucariatias.harmonicmoon.HarmonicMoon;
 import io.github.lucariatias.harmonicmoon.enemy.Slime;
 import io.github.lucariatias.harmonicmoon.event.character.CharacterMoveEvent;
 import io.github.lucariatias.harmonicmoon.event.character.CharacterMoveListener;
-import io.github.lucariatias.harmonicmoon.party.CharacterParty;
-import io.github.lucariatias.harmonicmoon.party.EnemyParty;
+import io.github.lucariatias.harmonicmoon.fight.party.EnemyFightParty;
 
 import java.util.Random;
 
@@ -21,7 +20,7 @@ public class FightCharacterMoveListener extends CharacterMoveListener {
     public void onPlayerMove(CharacterMoveEvent event) {
         Random random = new Random();
         if (random.nextInt(100) < 2) {
-            Fight fight = new Fight(harmonicMoon, FightArea.GRASS, new CharacterParty(event.getCharacter()), new EnemyParty(new Slime(harmonicMoon)));
+            Fight fight = new Fight(harmonicMoon, FightArea.GRASS, harmonicMoon.getCharacterManager().getParty(event.getCharacter()).asFightParty(), new EnemyFightParty(new Slime(harmonicMoon)));
             harmonicMoon.getFightPanel().prepareFight(fight);
             harmonicMoon.getFightPanel().startFight();
             harmonicMoon.setPanel("fight");

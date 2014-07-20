@@ -6,7 +6,7 @@ import io.github.lucariatias.harmonicmoon.event.sprite.SpriteAnimationCompleteLi
 import io.github.lucariatias.harmonicmoon.fight.Combatant;
 import io.github.lucariatias.harmonicmoon.fight.Fight;
 import io.github.lucariatias.harmonicmoon.fight.TurnAction;
-import io.github.lucariatias.harmonicmoon.party.EnemyParty;
+import io.github.lucariatias.harmonicmoon.fight.party.EnemyFightParty;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 
@@ -45,7 +45,7 @@ public abstract class Enemy extends Combatant {
                         setSprite(getWaitingSprite());
                         spriteTemporary = false;
                     } else if (sprite == getInjuredSprite()) {
-                        EnemyParty party = harmonicMoon.getFightPanel().getFight().getEnemyParty();
+                        EnemyFightParty party = harmonicMoon.getFightPanel().getFight().getEnemyParty();
                         synchronized (party.getMembers()) {
                             party.removeMember(Enemy.this);
                         }

@@ -9,9 +9,8 @@ import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseEvent;
 import io.github.lucariatias.harmonicmoon.event.messagebox.MessageBoxCloseListener;
 import io.github.lucariatias.harmonicmoon.fight.Fight;
 import io.github.lucariatias.harmonicmoon.fight.FightArea;
+import io.github.lucariatias.harmonicmoon.fight.party.EnemyFightParty;
 import io.github.lucariatias.harmonicmoon.npc.path.FollowingPath;
-import io.github.lucariatias.harmonicmoon.party.CharacterParty;
-import io.github.lucariatias.harmonicmoon.party.EnemyParty;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 
 public class SoldierNPC extends NPC {
@@ -39,7 +38,7 @@ public class SoldierNPC extends NPC {
                     if (event.getMessageBox().getMessage().getNPC() == SoldierNPC.this) {
                         HarmonicMoon harmonicMoon = SoldierNPC.this.harmonicMoon;
                         SoldierNPC.this.harmonicMoon.getWorldPanel().setActive(false);
-                        Fight fight = new Fight(harmonicMoon, FightArea.PALACE, new CharacterParty(SoldierNPC.this.harmonicMoon.getPlayer().getCharacter()), new EnemyParty(new Soldier(SoldierNPC.this.harmonicMoon)));
+                        Fight fight = new Fight(harmonicMoon, FightArea.PALACE, harmonicMoon.getCharacterManager().getParty(SoldierNPC.this.harmonicMoon.getPlayer().getCharacter()).asFightParty(), new EnemyFightParty(new Soldier(SoldierNPC.this.harmonicMoon)));
                         SoldierNPC.this.harmonicMoon.getFightPanel().prepareFight(fight);
                         SoldierNPC.this.harmonicMoon.getFightPanel().startFight();
                         SoldierNPC.this.harmonicMoon.setPanel("fight");

@@ -30,10 +30,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class HarmonicMoon extends JPanel implements Runnable {
@@ -57,6 +55,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
     private WorldPanel worldPanel;
     private Map<String, WorldPanel> worldPanels = new HashMap<>();
     private FightPanel fightPanel;
+    private ShopPanel shopPanel;
     private Map<String, ShopPanel> shopPanels = new HashMap<>();
 
     private Map<String, Shop> shops = new HashMap<>();
@@ -145,7 +144,7 @@ public class HarmonicMoon extends JPanel implements Runnable {
         getLogger().info("Set up fight panel (" + (System.currentTimeMillis() - startTime) + "ms)");
         startTime = System.currentTimeMillis();
         shops = new HashMap<>();
-        Map<Item, Integer> avirnyrShopItems = new HashMap<>();
+        LinkedHashMap<Item, Integer> avirnyrShopItems = new LinkedHashMap<>();
         avirnyrShopItems.put(Consumable.POTION, 30);
         avirnyrShopItems.put(Consumable.ETHER, 250);
         Shop avirnyrShop = new Shop(Currency.MOLLIR, avirnyrShopItems);
@@ -192,6 +191,8 @@ public class HarmonicMoon extends JPanel implements Runnable {
 
     public void showWorld(String map) {
         if (worldPanel != null) worldPanel.setActive(false);
+        if (fightPanel != null) fightPanel.setActive(false);
+        if (shopPanel != null) shopPanel.setActive(false);
         if (!worldPanels.containsKey(map)) {
             long startTime = System.currentTimeMillis();
             worldPanel = new WorldPanel(this, map);
@@ -210,14 +211,18 @@ public class HarmonicMoon extends JPanel implements Runnable {
     public void showShop(String name) {
         if (worldPanel != null) worldPanel.setActive(false);
         if (fightPanel != null) fightPanel.setActive(false);
+        if (shopPanel != null) shopPanel.setActive(false);
         if (!shopPanels.containsKey(name)) {
             long startTime = System.currentTimeMillis();
-            ShopPanel shopPanel = new ShopPanel(shops.get(name));
+            shopPanel = new ShopPanel(this, shops.get(name));
             shopPanels.put(name, shopPanel);
             add(shopPanel, "shop_" + name);
             getLogger().info("Loaded shop '" + name + "' (" + (System.currentTimeMillis() - startTime) + "ms)");
+        } else {
+            shopPanel = shopPanels.get(name);
         }
         setPanel("shop_" + name);
+        shopPanel.setActive(true);
     }
 
     public World getWorld(String name) {
@@ -286,8 +291,9 @@ public class HarmonicMoon extends JPanel implements Runnable {
 
     private void doTick() {
         getEventManager().dispatchEvent(new TickEvent());
-        worldPanel.onTick();
-        fightPanel.onTick();
+        if (worldPanel != null) worldPanel.onTick();
+        if (fightPanel != null) fightPanel.onTick();
+        if (shopPanel != null) shopPanel.onTick();
         particleManager.update();
     }
 
