@@ -5,8 +5,8 @@ import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 
 public abstract class Monster extends Enemy {
 
-    public Monster(HarmonicMoon harmonicMoon, String name, Sprite waitingSprite, Sprite attackingSprite, Sprite injuredSprite) {
-        super(harmonicMoon, name, waitingSprite, attackingSprite, injuredSprite);
+    public Monster(HarmonicMoon harmonicMoon, String name, Sprite waitingSprite, Sprite attackingSprite, Sprite damagedSprite, Sprite injuredSprite) {
+        super(harmonicMoon, name, waitingSprite, attackingSprite, damagedSprite, injuredSprite);
     }
 
 }

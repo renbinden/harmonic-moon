@@ -8,7 +8,7 @@ import io.github.lucariatias.harmonicmoon.stat.Stat;
 public class Slime extends Monster {
 
     public Slime(HarmonicMoon harmonicMoon) {
-        super(harmonicMoon, "Slime", harmonicMoon.getEnemyManager().getWaitSprite(Slime.class), harmonicMoon.getEnemyManager().getAttackSprite(Slime.class), harmonicMoon.getEnemyManager().getInjuredSprite(Slime.class));
+        super(harmonicMoon, "Slime", harmonicMoon.getEnemyManager().getWaitSprite(Slime.class), harmonicMoon.getEnemyManager().getAttackSprite(Slime.class), harmonicMoon.getEnemyManager().getDamagedSprite(Slime.class), harmonicMoon.getEnemyManager().getInjuredSprite(Slime.class));
     }
 
     @Override
@@ -27,11 +27,6 @@ public class Slime extends Monster {
 
     @Override
     public TurnAction chooseTurnAction(final Fight fight) {
-        return new TurnAction(this, new Runnable() {
-            @Override
-            public void run() {
-                attack(fight.getCharacterParty().getMembers().get(0));
-            }
-        }, 2500L);
+        return attack(fight.getCharacterParty().getMembers().get(0));
     }
 }

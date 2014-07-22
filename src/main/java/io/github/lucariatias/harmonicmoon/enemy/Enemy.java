@@ -1,16 +1,17 @@
 package io.github.lucariatias.harmonicmoon.enemy;
 
 import io.github.lucariatias.harmonicmoon.HarmonicMoon;
-import io.github.lucariatias.harmonicmoon.event.sprite.SpriteAnimationCompleteEvent;
-import io.github.lucariatias.harmonicmoon.event.sprite.SpriteAnimationCompleteListener;
+import io.github.lucariatias.harmonicmoon.character.Character;
 import io.github.lucariatias.harmonicmoon.fight.Combatant;
 import io.github.lucariatias.harmonicmoon.fight.Fight;
 import io.github.lucariatias.harmonicmoon.fight.TurnAction;
-import io.github.lucariatias.harmonicmoon.fight.party.EnemyFightParty;
+import io.github.lucariatias.harmonicmoon.fight.TurnActionProcess;
 import io.github.lucariatias.harmonicmoon.sprite.Sprite;
 import io.github.lucariatias.harmonicmoon.sprite.SpriteSheet;
 
 import java.awt.*;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public abstract class Enemy extends Combatant {
 
@@ -22,37 +23,21 @@ public abstract class Enemy extends Combatant {
     private Sprite sprite;
     private Sprite waitingSprite;
     private Sprite attackingSprite;
+    private Sprite damagedSprite;
     private Sprite injuredSprite;
-    private boolean spriteTemporary;
 
     private int health;
     private int mana;
 
-    public Enemy(HarmonicMoon harmonicMoon, String name, Sprite waitingSprite, Sprite attackingSprite, Sprite injuredSprite) {
+    public Enemy(HarmonicMoon harmonicMoon, String name, Sprite waitingSprite, Sprite attackingSprite, Sprite damagedSprite, Sprite injuredSprite) {
         this.harmonicMoon = harmonicMoon;
         this.name = name;
         this.waitingSprite = waitingSprite;
         this.attackingSprite = attackingSprite;
+        this.damagedSprite = damagedSprite;
         this.injuredSprite = injuredSprite;
         this.sprite = waitingSprite;
         setHealth(getMaxHealth());
-        harmonicMoon.getEventManager().registerListener(new SpriteAnimationCompleteListener() {
-            @Override
-            public void onSpriteAnimationComplete(SpriteAnimationCompleteEvent event) {
-                HarmonicMoon harmonicMoon = Enemy.this.harmonicMoon;
-                if (spriteTemporary && event.getSprite() == sprite) {
-                    if (sprite == getAttackingSprite()) {
-                        setSprite(getWaitingSprite());
-                        spriteTemporary = false;
-                    } else if (sprite == getInjuredSprite()) {
-                        EnemyFightParty party = harmonicMoon.getFightPanel().getFight().getEnemyParty();
-                        synchronized (party.getMembers()) {
-                            party.removeMember(Enemy.this);
-                        }
-                    }
-                }
-            }
-        });
     }
 
     public String getName() {
@@ -86,7 +71,6 @@ public abstract class Enemy extends Combatant {
 
     @Override
     public void setHealth(int health) {
-        if (health <= 0) die();
         this.health = Math.min(Math.max(health, 0), getMaxHealth());
     }
 
@@ -112,12 +96,6 @@ public abstract class Enemy extends Combatant {
     }
 
     @Override
-    public void playSpriteOnce(Sprite sprite) {
-        spriteTemporary = true;
-        setSprite(sprite);
-    }
-
-    @Override
     public Sprite getWaitingSprite() {
         return waitingSprite;
     }
@@ -128,27 +106,113 @@ public abstract class Enemy extends Combatant {
     }
 
     @Override
-    public Sprite getInjuredSprite() {
-        return injuredSprite;
+    public Sprite getDamagedSprite() {
+        return damagedSprite;
     }
 
-    public void die() {
-        playSpriteOnce(getInjuredSprite());
+    @Override
+    public Sprite getInjuredSprite() {
+        return injuredSprite;
     }
 
     public abstract TurnAction chooseTurnAction(Fight fight);
 
     @Override
-    public void attack(Combatant combatant) {
-        if (harmonicMoon.getFightPanel().isActive()) {
-            combatant.setHealth(combatant.getHealth() - 5);
-            playSpriteOnce(getAttackingSprite());
-        }
+    public TurnAction attack(final Combatant combatant) {
+        Queue<TurnActionProcess> turnActionProcesses = new LinkedBlockingQueue<>();
+        turnActionProcesses.add(new TurnActionProcess() {
+            private boolean finished;
+
+            @Override
+            public void onStart() {
+                setSprite(getAttackingSprite());
+            }
+
+            @Override
+            public void onTick() {
+                if (getSprite().isFinished()) {
+                    setSprite(getWaitingSprite());
+                    finished = true;
+                }
+            }
+
+            @Override
+            public boolean isFinished() {
+                return finished;
+            }
+        });
+        turnActionProcesses.add(new TurnActionProcess() {
+            private boolean finished;
+
+            @Override
+            public void onStart() {
+                combatant.setSprite(combatant.getDamagedSprite());
+            }
+
+            @Override
+            public void onTick() {
+                if (combatant.getSprite().isFinished()) {
+                    combatant.setSprite(combatant.getWaitingSprite());
+                    finished = true;
+                }
+            }
+
+            @Override
+            public boolean isFinished() {
+                return finished;
+            }
+        });
+        turnActionProcesses.add(new TurnActionProcess() {
+            @Override
+            public void onStart() {
+                combatant.setHealth(combatant.getHealth() - 5);
+            }
+
+            @Override
+            public void onTick() {
+
+            }
+
+            @Override
+            public boolean isFinished() {
+                return true;
+            }
+        });
+        turnActionProcesses.add(new TurnActionProcess() {
+            private boolean finished;
+
+            @Override
+            public void onStart() {
+                if (combatant.getHealth() <= 0) {
+                    combatant.setSprite(combatant.getInjuredSprite());
+                } else {
+                    finished = true;
+                }
+            }
+
+            @Override
+            public void onTick() {
+                if (combatant.getSprite() == combatant.getInjuredSprite() && combatant.getSprite().isFinished()) {
+                    if (combatant instanceof Enemy) {
+                        harmonicMoon.getFightPanel().getFight().getEnemyParty().removeMember(combatant);
+                    } else if (combatant instanceof Character.Fight) {
+                        harmonicMoon.getFightPanel().getFight().getCharacterParty().removeMember(combatant);
+                    }
+                    finished = true;
+                }
+            }
+
+            @Override
+            public boolean isFinished() {
+                return finished;
+            }
+        });
+        return new TurnAction(this, turnActionProcesses);
     }
 
     @Override
-    public void defend() {
-
+    public TurnAction defend() {
+        return new TurnAction(this, new LinkedBlockingQueue<TurnActionProcess>());
     }
 
 }

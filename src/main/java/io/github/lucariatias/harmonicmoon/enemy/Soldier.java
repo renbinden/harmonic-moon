@@ -8,7 +8,7 @@ import io.github.lucariatias.harmonicmoon.stat.Stat;
 public class Soldier extends Enemy {
 
     public Soldier(HarmonicMoon harmonicMoon) {
-        super(harmonicMoon, "Soldier", harmonicMoon.getEnemyManager().getWaitSprite(Soldier.class), harmonicMoon.getEnemyManager().getAttackSprite(Soldier.class), harmonicMoon.getEnemyManager().getInjuredSprite(Soldier.class));
+        super(harmonicMoon, "Soldier", harmonicMoon.getEnemyManager().getWaitSprite(Soldier.class), harmonicMoon.getEnemyManager().getAttackSprite(Soldier.class), harmonicMoon.getEnemyManager().getDamagedSprite(Soldier.class), harmonicMoon.getEnemyManager().getInjuredSprite(Soldier.class));
     }
 
     @Override
@@ -28,12 +28,7 @@ public class Soldier extends Enemy {
 
     @Override
     public TurnAction chooseTurnAction(final Fight fight) {
-        return new TurnAction(this, new Runnable() {
-            @Override
-            public void run() {
-                attack(fight.getCharacterParty().getMembers().get(0));
-            }
-        }, 2500L);
+        return attack(fight.getCharacterParty().getMembers().get(0));
     }
 
 }

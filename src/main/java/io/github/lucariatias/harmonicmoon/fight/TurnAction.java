@@ -1,31 +1,43 @@
 package io.github.lucariatias.harmonicmoon.fight;
 
+import java.util.Queue;
+
 public class TurnAction {
 
     private Combatant combatant;
-    private Runnable runnable;
-    private long duration;
-    private long startTime;
+    private TurnActionProcess activeProcess;
+    private Queue<TurnActionProcess> processes;
     private boolean hasStarted;
 
-    public TurnAction(Combatant combatant, Runnable runnable, long duration) {
+    public TurnAction(Combatant combatant, Queue<TurnActionProcess> processes) {
         this.combatant = combatant;
-        this.runnable = runnable;
-        this.duration = duration;
+        this.processes = processes;
     }
 
     public Combatant getCombatant() {
         return combatant;
     }
 
-    public void doTurn() {
-        startTime = System.currentTimeMillis();
+    public void onStart() {
         hasStarted = true;
-        runnable.run();
+    }
+
+    public void onTick() {
+        if (hasStarted) {
+            if (activeProcess == null || activeProcess.isFinished()) {
+                activeProcess = processes.poll();
+                if (activeProcess != null) {
+                    activeProcess.onStart();
+                    activeProcess.onTick();
+                }
+            } else {
+                activeProcess.onTick();
+            }
+        }
     }
 
     public boolean isFinished() {
-        return hasStarted && startTime + duration <= System.currentTimeMillis();
+        return hasStarted && processes.isEmpty() && (activeProcess == null || activeProcess.isFinished());
     }
 
 }

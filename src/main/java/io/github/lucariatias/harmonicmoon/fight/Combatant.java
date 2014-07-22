@@ -25,17 +25,17 @@ public abstract class Combatant extends FightObject {
 
     public abstract void setSprite(Sprite sprite);
 
-    public abstract void playSpriteOnce(Sprite sprite);
-
     public abstract Sprite getAttackingSprite();
 
     public abstract Sprite getWaitingSprite();
+
+    public abstract Sprite getDamagedSprite();
 
     public abstract Sprite getInjuredSprite();
 
     public abstract int getStatValue(Stat stat);
 
-    public abstract void attack(Combatant combatant);
+    public abstract TurnAction attack(Combatant combatant);
 
-    public abstract void defend();
+    public abstract TurnAction defend();
 }

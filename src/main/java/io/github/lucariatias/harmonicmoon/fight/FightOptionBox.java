@@ -116,12 +116,7 @@ public class FightOptionBox {
                             options[i] = new FightOption(enemy.getName(), new Runnable() {
                                 @Override
                                 public void run() {
-                                    fight.addTurnAction(new TurnAction(character, new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            character.attack(enemy);
-                                        }
-                                    }, 2500L));
+                                    fight.addTurnAction(character.attack(enemy));
                                     showNext(fight);
                                 }
                             });
@@ -132,12 +127,7 @@ public class FightOptionBox {
                 new FightOption("Defend", new Runnable() {
                     @Override
                     public void run() {
-                        fight.addTurnAction(new TurnAction(character, new Runnable() {
-                            @Override
-                            public void run() {
-                                character.defend();
-                            }
-                        }, 2500L));
+                        fight.addTurnAction(character.defend());
                         showNext(fight);
                     }
                 }),
@@ -157,12 +147,7 @@ public class FightOptionBox {
                                         options[i] = new FightOption(enemy.getName(), new Runnable() {
                                             @Override
                                             public void run() {
-                                                fight.addTurnAction(new TurnAction(character, new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        character.useSkill(fight, skill, enemy, null);
-                                                    }
-                                                }, 2500L));
+                                                fight.addTurnAction(character.useSkill(fight, skill, enemy, null));
                                                 showNext(fight);
                                             }
                                         });

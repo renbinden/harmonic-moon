@@ -54,6 +54,10 @@ public class ParticleManager {
         }
     }
 
+    public int getCurrentParticles() {
+        return currentParticles;
+    }
+
     /**
      * Updates the particle system
      */

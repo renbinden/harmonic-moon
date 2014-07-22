@@ -64,10 +64,24 @@ public class Fight {
         }
         if (!pendingTurnActions.isEmpty()) {
             if (turnAction == null || turnAction.isFinished()) {
+                if (turnAction != null) {
+                    harmonicMoon.getLogger().info("Completed " + turnAction.getCombatant().getName() + "'s turn action.");
+                }
                 turnAction = pendingTurnActions.pop();
-                turnAction.doTurn();
+                if (turnAction != null) {
+                    turnAction.onStart();
+                    turnAction.onTick();
+                }
+            } else {
+                turnAction.onTick();
             }
-        } else if (turnReady && (turnAction == null || turnAction.isFinished())) {
+        } else if (turnReady && turnAction != null && !turnAction.isFinished()) {
+            turnAction.onTick();
+        } else if (turnReady) {
+            if (turnAction != null) {
+                harmonicMoon.getLogger().info("Completed " + turnAction.getCombatant().getName() + "'s turn action.");
+            }
+            turnAction = null;
             harmonicMoon.getFightPanel().getOptionBox().resetOptions();
             turnReady = false;
         }
@@ -91,11 +105,13 @@ public class Fight {
             sortableTurns.add(new TurnSortableWrapper(turnAction));
         }
         turnActions.clear();
+        long startTime = System.currentTimeMillis();
         Sorter<TurnSortableWrapper> sorter = new Sorter<>(sortableTurns);
         List<TurnSortableWrapper> sortedTurns = sorter.sortAscending();
         for (TurnSortableWrapper wrapper : sortedTurns) {
             pendingTurnActions.push(wrapper.getTurnAction());
         }
+        harmonicMoon.getLogger().info("Sorted " + pendingTurnActions.size() + " turn actions (" + (System.currentTimeMillis() - startTime) + "ms)");
         turnReady = true;
     }
 
