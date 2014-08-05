@@ -20,7 +20,7 @@ public class Fight {
     private EnemyFightParty enemyParty;
 
     private List<TurnAction> turnActions = new ArrayList<>();
-    private Stack<TurnAction> pendingTurnActions = new Stack<>();
+    private final Stack<TurnAction> pendingTurnActions = new Stack<>();
     private TurnAction turnAction;
     private boolean turnReady;
 
@@ -55,7 +55,7 @@ public class Fight {
         this.enemyParty = enemyParty;
     }
 
-    public void onTick() {
+    public synchronized void onTick() {
         for (Character.Fight character : characterParty.getMembers()) {
             character.onTick();
         }
@@ -92,11 +92,11 @@ public class Fight {
         }
     }
 
-    public void addTurnAction(TurnAction turnAction) {
+    public synchronized void addTurnAction(TurnAction turnAction) {
         turnActions.add(turnAction);
     }
 
-    public void doTurn() {
+    public synchronized void doTurn() {
         for (Enemy enemy : getEnemyParty().getMembers()) {
             turnActions.add(enemy.chooseTurnAction(this));
         }
