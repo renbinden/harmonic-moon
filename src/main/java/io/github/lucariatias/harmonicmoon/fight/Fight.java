@@ -10,7 +10,6 @@ import io.github.lucariatias.harmonicmoon.util.sort.Sorter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class Fight {
@@ -21,7 +20,7 @@ public class Fight {
     private CharacterFightParty characterParty;
     private EnemyFightParty enemyParty;
 
-    private AtomicReference<TurnState> turnState = new AtomicReference<>(new TurnState(new ArrayList<>(), new Stack<>(), null, false));
+    private TurnState turnState = new TurnState(new ArrayList<>(), new Stack<>(), null, false);
 
     public Fight(HarmonicMoon harmonicMoon, FightArea area, CharacterFightParty characterParty, EnemyFightParty enemyParty) {
         this.harmonicMoon = harmonicMoon;
@@ -117,10 +116,10 @@ public class Fight {
     }
 
     private synchronized TurnState getTurnState() {
-        return turnState.get();
+        return turnState;
     }
 
     private synchronized void setTurnState(TurnState turnState) {
-        this.turnState.set(turnState);
+        this.turnState = turnState;
     }
 }
