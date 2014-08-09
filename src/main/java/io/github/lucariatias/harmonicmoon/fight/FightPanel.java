@@ -26,20 +26,22 @@ public class FightPanel extends JPanel {
     }
 
     public void prepareFight(Fight fight) {
-        this.fight = fight;
-        this.background = fight.getArea().getBackground();
-        int x = 16;
-        for (Character.Fight character : fight.getCharacterParty().getMembers()) {
-            character.setLocation(new FightLocation(x, 224));
-            x += 144;
+        if (!prepared) {
+            this.fight = fight;
+            this.background = fight.getArea().getBackground();
+            int x = 16;
+            for (Character.Fight character : fight.getCharacterParty().getMembers()) {
+                character.setLocation(new FightLocation(x, 224));
+                x += 144;
+            }
+            optionBox.setCharacter(fight.getCharacterParty().getMembers().get(0));
+            x = 16;
+            for (Enemy enemy : fight.getEnemyParty().getMembers()) {
+                enemy.setLocation(new FightLocation(x, 96));
+                x += 144;
+            }
+            prepared = true;
         }
-        optionBox.setCharacter(fight.getCharacterParty().getMembers().get(0));
-        x = 16;
-        for (Enemy enemy : fight.getEnemyParty().getMembers()) {
-            enemy.setLocation(new FightLocation(x, 96));
-            x += 144;
-        }
-        prepared = true;
     }
 
     public void startFight() {

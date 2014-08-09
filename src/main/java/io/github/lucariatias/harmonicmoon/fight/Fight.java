@@ -10,6 +10,8 @@ import io.github.lucariatias.harmonicmoon.util.sort.Sorter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class Fight {
 
@@ -19,10 +21,7 @@ public class Fight {
     private CharacterFightParty characterParty;
     private EnemyFightParty enemyParty;
 
-    private List<TurnAction> turnActions = new ArrayList<>();
-    private final Stack<TurnAction> pendingTurnActions = new Stack<>();
-    private TurnAction turnAction;
-    private boolean turnReady;
+    private AtomicReference<TurnState> turnState = new AtomicReference<>(new TurnState(new ArrayList<>(), new Stack<>(), null, false));
 
     public Fight(HarmonicMoon harmonicMoon, FightArea area, CharacterFightParty characterParty, EnemyFightParty enemyParty) {
         this.harmonicMoon = harmonicMoon;
@@ -55,64 +54,73 @@ public class Fight {
         this.enemyParty = enemyParty;
     }
 
-    public synchronized void onTick() {
+    public void onTick() {
         for (Character.Fight character : characterParty.getMembers()) {
             character.onTick();
         }
         for (Enemy enemy : enemyParty.getMembers()) {
             enemy.onTick();
         }
-        if (!pendingTurnActions.isEmpty()) {
-            if (turnAction == null || turnAction.isFinished()) {
-                if (turnAction != null) {
-                    harmonicMoon.getLogger().info("Completed " + turnAction.getCombatant().getName() + "'s turn action.");
+        TurnState newTurnState = new TurnState(getTurnState());
+        if (!newTurnState.getPendingTurnActions().isEmpty()) {
+            if (newTurnState.getTurnAction() == null || newTurnState.getTurnAction().isFinished()) {
+                if (newTurnState.getTurnAction() != null) {
+                    harmonicMoon.getLogger().info("Completed " + newTurnState.getTurnAction().getCombatant().getName() + "'s turn action.");
                 }
-                turnAction = pendingTurnActions.pop();
+                TurnAction turnAction = newTurnState.getPendingTurnActions().pop();
                 if (turnAction != null) {
                     turnAction.onStart();
                     turnAction.onTick();
                 }
+                newTurnState.setTurnAction(turnAction);
             } else {
-                turnAction.onTick();
+                newTurnState.getTurnAction().onTick();
             }
-        } else if (turnReady && turnAction != null && !turnAction.isFinished()) {
-            turnAction.onTick();
-        } else if (turnReady) {
-            if (turnAction != null) {
-                harmonicMoon.getLogger().info("Completed " + turnAction.getCombatant().getName() + "'s turn action.");
+        } else if (newTurnState.isTurnReady() && newTurnState.getTurnAction() != null && !newTurnState.getTurnAction().isFinished()) {
+            newTurnState.getTurnAction().onTick();
+        } else if (newTurnState.isTurnReady()) {
+            if (newTurnState.getTurnAction() != null) {
+                harmonicMoon.getLogger().info("Completed " + newTurnState.getTurnAction().getCombatant().getName() + "'s turn action.");
             }
-            turnAction = null;
+            newTurnState.setTurnAction(null);
             harmonicMoon.getFightPanel().getOptionBox().resetOptions();
-            turnReady = false;
+            newTurnState.setTurnReady(false);
         }
         if (enemyParty.getMembers().isEmpty()) {
             harmonicMoon.getFightPanel().endFight();
             harmonicMoon.getFightPanel().setActive(false);
             harmonicMoon.showWorld(harmonicMoon.getWorldPanel().getWorld().getName());
         }
+        setTurnState(newTurnState);
     }
 
-    public synchronized void addTurnAction(TurnAction turnAction) {
-        turnActions.add(turnAction);
+    public void addTurnAction(TurnAction turnAction) {
+        getTurnState().getTurnActions().add(turnAction);
     }
 
-    public synchronized void doTurn() {
+    public void doTurn() {
+        TurnState newTurnState = new TurnState(getTurnState());
         for (Enemy enemy : getEnemyParty().getMembers()) {
-            turnActions.add(enemy.chooseTurnAction(this));
+            newTurnState.getTurnActions().add(enemy.chooseTurnAction(this));
         }
-        List<TurnSortableWrapper> sortableTurns = new ArrayList<>();
-        for (TurnAction turnAction : turnActions) {
-            sortableTurns.add(new TurnSortableWrapper(turnAction));
-        }
-        turnActions.clear();
+        List<TurnSortableWrapper> sortableTurns = newTurnState.getTurnActions().stream().map(TurnSortableWrapper::new).collect(Collectors.toList());
+        newTurnState.getTurnActions().clear();
         long startTime = System.currentTimeMillis();
         Sorter<TurnSortableWrapper> sorter = new Sorter<>(sortableTurns);
         List<TurnSortableWrapper> sortedTurns = sorter.sortAscending();
         for (TurnSortableWrapper wrapper : sortedTurns) {
-            pendingTurnActions.push(wrapper.getTurnAction());
+            newTurnState.getPendingTurnActions().push(wrapper.getTurnAction());
         }
-        harmonicMoon.getLogger().info("Sorted " + pendingTurnActions.size() + " turn actions (" + (System.currentTimeMillis() - startTime) + "ms)");
-        turnReady = true;
+        harmonicMoon.getLogger().info("Sorted " + newTurnState.getPendingTurnActions().size() + " turn actions (" + (System.currentTimeMillis() - startTime) + "ms)");
+        newTurnState.setTurnReady(true);
+        setTurnState(newTurnState);
     }
 
+    private synchronized TurnState getTurnState() {
+        return turnState.get();
+    }
+
+    private synchronized void setTurnState(TurnState turnState) {
+        this.turnState.set(turnState);
+    }
 }
