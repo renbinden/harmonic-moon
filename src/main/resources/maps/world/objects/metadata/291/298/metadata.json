@@ -1,0 +1,1 @@
+{"interactScript":"var StringArray \u003d Java.type(\"java.lang.String[]\")\nvar chatLines \u003d new StringArray(1)\nchatLines[0] \u003d \"Item Merchant: Come to buy some items have we?\"\nnpc.say(chatLines)"}
