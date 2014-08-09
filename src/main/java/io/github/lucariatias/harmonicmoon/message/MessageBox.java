@@ -89,11 +89,11 @@ public class MessageBox {
             MessageBoxShowMessageEvent messageBoxShowMessageEvent = new MessageBoxShowMessageEvent(this, queuedMessages.poll());
             harmonicMoon.getEventManager().dispatchEvent(messageBoxShowMessageEvent);
             if (!messageBoxShowMessageEvent.isCancelled()) {
-                this.message = messageBoxShowMessageEvent.getMessage();
+                message = messageBoxShowMessageEvent.getMessage();
             } else {
                 queuedMessages.remove(messageBoxShowMessageEvent.getMessage());
             }
-        } else {
+        } else if (!isHidden()) {
             MessageBoxCloseEvent event = new MessageBoxCloseEvent(this);
             harmonicMoon.getEventManager().dispatchEvent(event);
             setHidden(true);
