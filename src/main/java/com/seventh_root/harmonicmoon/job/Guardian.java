@@ -1,6 +1,6 @@
 package com.seventh_root.harmonicmoon.job;
 
-import static com.seventh_root.harmonicmoon.stat.Stat.EVASION;
+import static com.seventh_root.harmonicmoon.stat.Stat.*;
 
 public class Guardian extends Job {
 

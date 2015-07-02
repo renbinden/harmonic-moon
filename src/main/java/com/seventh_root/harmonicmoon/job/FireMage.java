@@ -1,5 +1,7 @@
 package com.seventh_root.harmonicmoon.job;
 
+import static com.seventh_root.harmonicmoon.stat.Stat.*;
+
 public class FireMage extends Job {
 
     public FireMage() {

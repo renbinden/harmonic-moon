@@ -3,6 +3,7 @@ package com.seventh_root.harmonicmoon.player;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import static com.seventh_root.harmonicmoon.player.PlayerAction.*;
 import static java.awt.event.KeyEvent.*;
 
 public class KeyboardPlayerController extends PlayerController implements KeyListener {
