@@ -31,7 +31,7 @@
         <dependency>
             <groupId>com.insightfullogic</groupId>
             <artifactId>lambda-behave</artifactId>
-            <version>0.3-SNAPSHOT</version>
+            <version>0.3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
